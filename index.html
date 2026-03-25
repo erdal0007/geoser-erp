@@ -1,16 +1,1162 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GEOSER ERP / CRM</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEOSER ERP / CRM — Geosentetik İmalat A.Ş.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0a0f1e;--ink2:#111827;--ink3:#1c2536;--ink4:#243047;
+  --rim:#2a3a52;--rim2:#344766;
+  --sky:#eef4ff;--sky2:#d4e2f8;--sky3:#9fb8e4;
+  --mist:#6b84a8;--mist2:#4a6080;
+  --amber:#f5a623;--amber2:#e8960f;--amber3:rgba(245,166,35,.12);
+  --jade:#22d3a0;--rose:#f43f5e;--azure:#60a5fa;--violet:#a78bfa;--coral:#fb7185;
+  --font-h:'Sora',sans-serif;
+  --font-b:'DM Sans',sans-serif;
+  --font-m:'DM Mono',monospace;
+}
+html,body{height:100%;background:var(--ink)}
+body{font-family:var(--font-b);font-size:13px;color:var(--sky);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:2px}
+#root{height:100%}
+
+/* ── LAYOUT ── */
+.shell{display:flex;height:100vh;overflow:hidden}
+.nav{width:220px;background:var(--ink2);border-right:1px solid var(--rim);display:flex;flex-direction:column;flex-shrink:0;transition:width .2s}
+.nav.collapsed{width:56px}
+.nav-logo{padding:18px 16px 14px;border-bottom:1px solid var(--rim);display:flex;align-items:center;gap:10px;overflow:hidden}
+.nav-logo-mark{width:32px;height:32px;border-radius:8px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:800;font-size:14px;color:var(--ink);flex-shrink:0}
+.nav-logo-text{overflow:hidden;white-space:nowrap}
+.nav-logo-title{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--sky)}
+.nav-logo-sub{font-size:9px;color:var(--mist);letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+.nav-body{flex:1;padding:8px;overflow-y:auto}
+.nav-section{padding:10px 8px 4px;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--mist2);white-space:nowrap;overflow:hidden}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--mist);font-size:12px;font-weight:500;transition:all .12s;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-decoration:none}
+.nav-item:hover{color:var(--sky);background:var(--ink3)}
+.nav-item.active{color:var(--amber);background:var(--amber3);font-weight:600}
+.nav-icon{font-size:15px;flex-shrink:0;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--rose);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;font-family:var(--font-m)}
+.nav-foot{padding:12px;border-top:1px solid var(--rim)}
+.user-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:var(--ink3);cursor:pointer;overflow:hidden}
+.user-av{width:28px;height:28px;border-radius:50%;background:var(--amber3);border:1.5px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:700;font-size:11px;color:var(--amber);flex-shrink:0}
+.user-info{flex:1;overflow:hidden}
+.user-name{font-weight:600;font-size:11px;color:var(--sky);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:9px;color:var(--mist);text-transform:uppercase;letter-spacing:.8px}
+.logout-btn{background:none;border:none;cursor:pointer;color:var(--mist);font-size:13px;padding:2px;flex-shrink:0}
+.logout-btn:hover{color:var(--rose)}
+
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:10px 20px;background:var(--ink2);border-bottom:1px solid var(--rim);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.hamburger{background:none;border:none;cursor:pointer;color:var(--mist);font-size:18px;padding:4px;line-height:1}
+.breadcrumb{font-family:var(--font-h);font-size:14px;font-weight:600;color:var(--sky)}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;background:var(--ink3);border:1px solid var(--rim2);font-size:11px;color:var(--mist);cursor:pointer;transition:all .12s}
+.topbar-chip:hover{color:var(--sky)}
+.content{flex:1;overflow-y:auto;padding:20px}
+
+/* ── AUTH ── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px;position:relative;overflow:hidden}
+.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 20%,rgba(245,166,35,.06),transparent),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(96,165,250,.05),transparent)}
+.auth-card{background:var(--ink2);border:1px solid var(--rim);border-radius:16px;padding:36px 32px;width:100%;max-width:400px;position:relative;z-index:1}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo-mark{width:52px;height:52px;border-radius:14px;background:var(--amber);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:800;font-size:20px;color:var(--ink)}
+.auth-title{font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--sky)}
+.auth-sub{font-size:11px;color:var(--mist);margin-top:3px;letter-spacing:.5px}
+.auth-tabs{display:flex;background:var(--ink3);border-radius:8px;padding:3px;margin-bottom:20px}
+.auth-tab{flex:1;text-align:center;padding:7px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:var(--mist);transition:all .12s}
+.auth-tab.on{background:var(--ink2);color:var(--amber);font-weight:700}
+.role-select{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
+.role-opt{padding:8px;border-radius:8px;border:1px solid var(--rim);cursor:pointer;text-align:center;transition:all .12s}
+.role-opt:hover{border-color:var(--rim2)}
+.role-opt.on{border-color:var(--amber);background:var(--amber3)}
+.role-opt-icon{font-size:18px;margin-bottom:3px}
+.role-opt-name{font-size:11px;font-weight:600;color:var(--sky)}
+.role-opt-desc{font-size:9px;color:var(--mist);margin-top:1px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+.field input,.field select,.field textarea{background:var(--ink3);border:1px solid var(--rim2);border-radius:8px;color:var(--sky);padding:9px 12px;font-family:var(--font-b);font-size:13px;outline:none;transition:border .12s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--amber)}
+.field input::placeholder{color:var(--mist2)}
+select option{background:var(--ink2)}
+textarea{resize:vertical;min-height:72px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-family:var(--font-b);font-size:12px;font-weight:600;transition:all .13s;text-decoration:none;white-space:nowrap}
+.btn-amber{background:var(--amber);color:var(--ink)}.btn-amber:hover{background:var(--amber2)}
+.btn-amber:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--mist);border:1px solid var(--rim2)}.btn-ghost:hover{color:var(--sky);background:var(--ink3)}
+.btn-danger{background:transparent;color:var(--rose);border:1px solid rgba(244,63,94,.2)}.btn-danger:hover{background:rgba(244,63,94,.08)}
+.btn-full{width:100%;justify-content:center;padding:11px}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:10px}
+.err-box{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);color:var(--rose);padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:12px}
+.ok-box{background:rgba(34,211,160,.06);border:1px solid rgba(34,211,160,.2);color:var(--jade);padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:12px}
+
+/* ── CARDS ── */
+.card{background:var(--ink2);border:1px solid var(--rim);border-radius:12px;padding:16px}
+.card-title{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--sky)}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--ink2);border:1px solid var(--rim);border-radius:12px;padding:14px 16px;border-top:2px solid transparent;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.06;transform:translate(20px,-20px)}
+.kpi-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
+.kpi-val{font-family:var(--font-h);font-size:22px;font-weight:800;line-height:1;margin-bottom:3px}
+.kpi-sub{font-size:10px;color:var(--mist)}
+.kpi-amber{border-top-color:var(--amber)}.kpi-amber .kpi-val{color:var(--amber)}.kpi-amber::before{background:var(--amber)}
+.kpi-jade{border-top-color:var(--jade)}.kpi-jade .kpi-val{color:var(--jade)}.kpi-jade::before{background:var(--jade)}
+.kpi-azure{border-top-color:var(--azure)}.kpi-azure .kpi-val{color:var(--azure)}.kpi-azure::before{background:var(--azure)}
+.kpi-violet{border-top-color:var(--violet)}.kpi-violet .kpi-val{color:var(--violet)}.kpi-violet::before{background:var(--violet)}
+.kpi-rose{border-top-color:var(--rose)}.kpi-rose .kpi-val{color:var(--rose)}.kpi-rose::before{background:var(--rose)}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--rim)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--ink3);color:var(--mist);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid var(--rim);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid rgba(42,58,82,.5);vertical-align:middle;color:var(--sky)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.01)}
+.mono{font-family:var(--font-m);font-size:11px}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;font-family:var(--font-m);white-space:nowrap}
+.b-amber{background:rgba(245,166,35,.12);color:var(--amber)}
+.b-jade{background:rgba(34,211,160,.1);color:var(--jade)}
+.b-rose{background:rgba(244,63,94,.1);color:var(--rose)}
+.b-azure{background:rgba(96,165,250,.1);color:var(--azure)}
+.b-violet{background:rgba(167,139,250,.1);color:var(--violet)}
+.b-mist{background:rgba(107,132,168,.12);color:var(--mist)}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:var(--ink2);border:1px solid var(--rim);border-radius:14px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.modal.wide{max-width:780px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--rim);position:sticky;top:0;background:var(--ink2);z-index:1}
+.modal-title{font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--sky)}
+.modal-body{padding:20px;flex:1}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--rim);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--ink2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid.g3{grid-template-columns:1fr 1fr 1fr}
+.span2{grid-column:1/-1}
+
+/* ── MISC ── */
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.page-title{font-family:var(--font-h);font-size:16px;font-weight:700;color:var(--sky)}
+.page-sub{font-size:11px;color:var(--mist);margin-top:2px}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.search-box{position:relative;flex:1;min-width:160px;max-width:260px}
+.search-box input{padding-left:30px}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--mist2);font-size:13px}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--mist2)}
+.empty-icon{font-size:48px;margin-bottom:10px;opacity:.3}
+.empty-text{font-size:13px}
+.loading{display:flex;align-items:center;justify-content:center;height:200px}
+.spin{width:32px;height:32px;border:2.5px solid var(--rim2);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.alert{display:flex;align-items:flex-start;gap:8px;padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:12px}
+.alert-warn{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);color:var(--amber)}
+.alert-err{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);color:var(--rose)}
+.divider{height:1px;background:var(--rim);margin:14px 0}
+.tag-vip{display:inline-flex;align-items:center;gap:2px;padding:1px 6px;background:rgba(245,166,35,.12);color:var(--amber);border-radius:4px;font-size:9px;font-weight:700}
+.progress-bar{height:4px;background:var(--ink3);border-radius:2px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:2px;transition:width .4s}
+.currency-tabs{display:flex;gap:4px}
+.currency-tab{padding:4px 10px;border-radius:6px;border:1px solid var(--rim2);cursor:pointer;font-size:11px;font-weight:600;font-family:var(--font-m);color:var(--mist);transition:all .12s}
+.currency-tab.on{background:var(--amber3);border-color:var(--amber);color:var(--amber)}
+.sync-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+.sync-ok{background:var(--jade)}.sync-busy{background:var(--amber);animation:pulse 1s infinite}.sync-err{background:var(--rose)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── DASHBOARD CHARTS ── */
+.chart-bar{display:flex;flex-direction:column;gap:8px}
+.chart-bar-row{display:flex;align-items:center;gap:8px}
+.chart-bar-label{width:90px;font-size:11px;color:var(--mist);text-align:right;flex-shrink:0}
+.chart-bar-track{flex:1;height:14px;background:var(--ink3);border-radius:4px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.chart-bar-val{width:60px;font-family:var(--font-m);font-size:11px;color:var(--sky);text-align:right;flex-shrink:0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav{position:fixed;top:0;left:0;height:100vh;z-index:200;transform:translateX(-100%);width:220px!important}
+  .nav.mobile-open{transform:translateX(0)}
+  .mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199}
+  .form-grid,.form-grid.g3{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .content{padding:14px}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo,useCallback,createContext,useContext}=React;
+
+/* ═══════════════════════════════════════
+   FIREBASE CONFIG — geoser-erp project
+   ═══════════════════════════════════════ */
+const FB_CONFIG={
+  apiKey:"AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI",
+  authDomain:"geoser-erp.firebaseapp.com",
+  projectId:"geoser-erp",
+  storageBucket:"geoser-erp.firebasestorage.app",
+  messagingSenderId:"454700808333",
+  appId:"1:454700808333:web:7286ea3f972ff4e843cac4"
+};
+
+let db,auth;
+try{
+  if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+  db=firebase.firestore();
+  auth=firebase.auth();
+}catch(e){console.error("Firebase init:",e)}
+
+/* ═══════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════ */
+const FX={USD:32.8,EUR:35.6,TRY:1};
+const fmtMoney=(n,cur="TRY")=>{
+  const v=Number(n||0)/FX[cur]*FX.TRY;
+  const rates={TRY:32.8,USD:1,EUR:0.92};
+  const display=Number(n||0);
+  const syms={TRY:"₺",USD:"$",EUR:"€"};
+  return syms[cur]+display.toLocaleString("tr-TR",{minimumFractionDigits:0,maximumFractionDigits:0});
+};
+const convertCurrency=(try_amount,to)=>{
+  const rates={TRY:1,USD:1/32.8,EUR:1/35.6};
+  const syms={TRY:"₺",USD:"$",EUR:"€"};
+  return syms[to]+(try_amount*rates[to]).toLocaleString("tr-TR",{minimumFractionDigits:0,maximumFractionDigits:0});
+};
+const fmtDate=d=>{if(!d)return"-";const dt=d?.toDate?d.toDate():new Date(d);return dt.toLocaleDateString("tr-TR",{day:"2-digit",month:"short",year:"numeric"})};
+const today=()=>new Date().toISOString().split("T")[0];
+const uid=()=>Math.random().toString(36).slice(2,9).toUpperCase();
+
+/* ═══════════════════════════════════════
+   MOCK/SEED DATA
+   ═══════════════════════════════════════ */
+const SEED={
+  products:[
+    {id:"P1",name:"HDPE Membran 1mm Eco",cat:"HDPE Membran",unit:"Rulo",price:8500,stock:45,code:"GS-HD-1E",desc:"1mm kalınlık, 200cm en, 20m/rulo"},
+    {id:"P2",name:"HDPE Membran 1.5mm Gold",cat:"HDPE Membran",unit:"Rulo",price:12400,stock:30,code:"GS-HD-15G",desc:"1.5mm premium serisi"},
+    {id:"P3",name:"HDPE Membran 2mm Diamond",cat:"HDPE Membran",unit:"Rulo",price:16800,stock:20,code:"GS-HD-2D",desc:"2mm endüstriyel kullanım"},
+    {id:"P4",name:"20/8 Su Tutucu Bant",cat:"Su Tutucu Bant",unit:"Rulo",price:280,stock:155,code:"GS-STB-20",desc:"20mm×8mm, PVC bazlı"},
+    {id:"P5",name:"PP Dokusuz Jeotekstil 200g",cat:"Jeotekstil",unit:"m²",price:18,stock:5000,code:"GS-JT-200",desc:"200g/m² PP dokusuz"},
+    {id:"P6",name:"PP Dokusuz Jeotekstil 300g",cat:"Jeotekstil",unit:"m²",price:26,stock:3200,code:"GS-JT-300",desc:"300g/m² PP dokusuz"},
+    {id:"P7",name:"HDPE Geonet 200kN",cat:"Geonet",unit:"m²",price:45,stock:2000,code:"GS-GN-200",desc:"Biaxial 200kN/m"},
+    {id:"P8",name:"Drene Kompozit Membran",cat:"Drene",unit:"m²",price:38,stock:1500,code:"GS-DR-01",desc:"HDPE+filtre kombinasyonu"},
+  ],
+  customers:[
+    {id:"C1",name:"Tram Anh Company",contact:"Nguyen Van A",country:"Vietnam",phone:"+84 123 456 789",email:"info@tramanh.vn",type:"İhracat",isVip:true,totalOrders:4,note:"Düzenli müşteri"},
+    {id:"C2",name:"Lorencic d.o.o.",contact:"Jan Novak",country:"Slovenya",phone:"+386 1 234 5678",email:"procurement@lorencic.si",type:"İhracat",isVip:true,totalOrders:7,note:"Yıllık kontrat"},
+    {id:"C3",name:"DunaSava Inženjering",contact:"Marko Petrović",country:"Sırbistan",phone:"+381 11 234 5678",email:"info@dunasava.rs",type:"İhracat",isVip:false,totalOrders:2,note:""},
+    {id:"C4",name:"Karayolu İnşaat A.Ş.",contact:"Ahmet Yıldız",country:"Türkiye",phone:"0532 123 4567",email:"satin@karayolu.com.tr",type:"Yurtiçi",isVip:false,totalOrders:5,note:"KGM ana yüklenicisi"},
+    {id:"C5",name:"Delta Su Yapıları",contact:"Fatma Kaya",country:"Türkiye",phone:"0533 987 6543",email:"fatma@deltasuya.com",type:"Yurtiçi",isVip:true,totalOrders:11,note:"Baraj projeleri"},
+    {id:"C6",name:"GeoArab FZE",contact:"Ali Hassan",country:"BAE",phone:"+971 4 123 4567",email:"ali@geoarab.ae",type:"İhracat",isVip:false,totalOrders:1,note:"Yeni müşteri"},
+  ],
+  orders:[
+    {id:"O1",orderNo:"GYI-0636",customerId:"C1",customerName:"Tram Anh Company",items:[{productId:"P4",productName:"20/8 Su Tutucu Bant",qty:55,unit:"Rulo",unitPrice:280}],status:"Tamamlandı",orderDate:"2026-03-01",deliveryDate:"2026-04-05",currency:"USD",note:""},
+    {id:"O2",orderNo:"GYI-0637",customerId:"C2",customerName:"Lorencic d.o.o.",items:[{productId:"P2",productName:"HDPE Membran 1.5mm Gold",qty:30,unit:"Rulo",unitPrice:12400}],status:"Üretimde",orderDate:"2026-03-10",deliveryDate:"2026-04-20",currency:"EUR",note:""},
+    {id:"O3",orderNo:"GYI-0638",customerId:"C4",customerName:"Karayolu İnşaat A.Ş.",items:[{productId:"P5",productName:"PP Dokusuz Jeotekstil 200g",qty:5000,unit:"m²",unitPrice:18}],status:"Bekliyor",orderDate:"2026-03-20",deliveryDate:"2026-04-30",currency:"TRY",note:"Acil sipariş"},
+    {id:"O4",orderNo:"GYI-0639",customerId:"C5",customerName:"Delta Su Yapıları",items:[{productId:"P1",productName:"HDPE Membran 1mm Eco",qty:100,unit:"Rulo",unitPrice:8500}],status:"Hazır",orderDate:"2026-03-15",deliveryDate:"2026-03-28",currency:"TRY",note:""},
+    {id:"O5",orderNo:"GYI-0640",customerId:"C3",customerName:"DunaSava Inženjering",items:[{productId:"P3",productName:"HDPE Membran 2mm Diamond",qty:15,unit:"Rulo",unitPrice:16800}],status:"Sevk Edildi",orderDate:"2026-02-28",deliveryDate:"2026-03-25",currency:"EUR",note:""},
+  ],
+  quotes:[
+    {id:"Q1",quoteNo:"TKL-2026-001",customerId:"C6",customerName:"GeoArab FZE",items:[{productName:"HDPE Membran 1mm Eco",qty:200,unitPrice:8500,unit:"Rulo"}],status:"Gönderildi",validUntil:"2026-04-30",currency:"USD",discount:5,note:"Dubai projesi için"},
+    {id:"Q2",quoteNo:"TKL-2026-002",customerId:"C2",customerName:"Lorencic d.o.o.",items:[{productName:"HDPE Membran 2mm Diamond",qty:50,unitPrice:16800,unit:"Rulo"},{productName:"PP Dokusuz Jeotekstil 300g",qty:10000,unitPrice:26,unit:"m²"}],status:"Hazırlanıyor",validUntil:"2026-05-15",currency:"EUR",discount:3,note:""},
+  ],
+};
+
+/* ═══════════════════════════════════════
+   DATA HOOK
+   ═══════════════════════════════════════ */
+function useCol(col){
+  const [items,setItems]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const lsKey=`geoser_${col}`;
+  const loadLocal=()=>{try{return JSON.parse(localStorage.getItem(lsKey)||"[]")}catch{return[]}};
+  useEffect(()=>{
+    if(!db){setItems(SEED[col]||loadLocal());setLoading(false);return}
+    setLoading(true);
+    const q=firebase.firestore().collection(col).orderBy("_ts","desc");
+    const unsub=q.onSnapshot(snap=>{
+      if(snap.empty&&SEED[col]){
+        // seed
+        const batch=db.batch();
+        (SEED[col]||[]).forEach(d=>{const r=db.collection(col).doc(d.id);batch.set(r,{...d,_ts:firebase.firestore.FieldValue.serverTimestamp()})});
+        batch.commit().catch(()=>{});
+        setItems(SEED[col]||[]);
+      }else{
+        const data=snap.docs.map(d=>({...d.data(),id:d.id}));
+        setItems(data);
+        localStorage.setItem(lsKey,JSON.stringify(data));
+      }
+      setLoading(false);
+    },err=>{
+      console.warn(col,"fallback:",err.message);
+      setItems(SEED[col]||loadLocal());
+      setLoading(false);
+    });
+    return unsub;
+  },[col]);
+  const save=async(data)=>{
+    try{
+      const ref=data.id?db.collection(col).doc(data.id):db.collection(col).doc();
+      await ref.set({...data,id:ref.id,_ts:firebase.firestore.FieldValue.serverTimestamp()});
+      return ref.id;
+    }catch{
+      const newItems=items.some(i=>i.id===data.id)?items.map(i=>i.id===data.id?data:i):[...items,{...data,id:data.id||uid()}];
+      setItems(newItems);
+      localStorage.setItem(lsKey,JSON.stringify(newItems));
+      return data.id;
+    }
+  };
+  const remove=async(id)=>{
+    try{await db.collection(col).doc(id).delete()}
+    catch{
+      const newItems=items.filter(i=>i.id!==id);
+      setItems(newItems);
+      localStorage.setItem(lsKey,JSON.stringify(newItems));
+    }
+  };
+  return{items,loading,save,remove};
+}
+
+/* ═══════════════════════════════════════
+   AUTH CONTEXT
+   ═══════════════════════════════════════ */
+const AuthCtx=createContext(null);
+const ROLES={
+  admin:{label:"Yönetici",icon:"👑",desc:"Tüm yetkiler",color:"var(--amber)",pages:["dashboard","customers","products","orders","quotes","reports","settings"]},
+  sales:{label:"Satış",icon:"💼",desc:"Müşteri + Sipariş",color:"var(--azure)",pages:["dashboard","customers","orders","quotes"]},
+  production:{label:"Üretim",icon:"⚙️",desc:"Sipariş + Stok",color:"var(--jade)",pages:["dashboard","products","orders"]},
+  accounting:{label:"Muhasebe",icon:"📊",desc:"Finans görünümü",color:"var(--violet)",pages:["dashboard","orders","reports"]},
+};
+function AuthProvider({children}){
+  const [user,setUser]=useState(undefined);
+  useEffect(()=>{
+    if(!auth){setUser(null);return}
+    return auth.onAuthStateChanged(async u=>{
+      if(u){
+        let profile={role:"admin",name:u.displayName||u.email};
+        try{const snap=await db.collection("users").doc(u.uid).get();if(snap.exists)profile=snap.data()}catch{}
+        setUser({...u,...profile,uid:u.uid});
+      }else setUser(null);
+    });
+  },[]);
+  const login=async(email,pw)=>{
+    const cred=await auth.signInWithEmailAndPassword(email,pw);
+    return cred.user;
+  };
+  const register=async(email,pw,name,role)=>{
+    const cred=await auth.createUserWithEmailAndPassword(email,pw);
+    await cred.user.updateProfile({displayName:name});
+    await db.collection("users").doc(cred.user.uid).set({name,email,role,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    return cred.user;
+  };
+  const logout=()=>auth.signOut();
+  const hasPage=(page)=>{
+    if(!user)return false;
+    return ROLES[user.role]?.pages.includes(page)||user.role==="admin";
+  };
+  return <AuthCtx.Provider value={{user,login,register,logout,hasPage}}>{children}</AuthCtx.Provider>;
+}
+const useAuth=()=>useContext(AuthCtx);
+
+/* ═══════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════ */
+const ToastCtx=createContext(null);
+function ToastProvider({children}){
+  const [toasts,setToasts]=useState([]);
+  const toast=(msg,type="ok")=>{
+    const id=Date.now();
+    setToasts(t=>[...t,{id,msg,type}]);
+    setTimeout(()=>setToasts(t=>t.filter(x=>x.id!==id)),3500);
+  };
+  return <ToastCtx.Provider value={toast}>
+    {children}
+    <div style={{position:"fixed",bottom:20,right:20,zIndex:9999,display:"flex",flexDirection:"column",gap:8}}>
+      {toasts.map(t=>(
+        <div key={t.id} style={{padding:"10px 16px",borderRadius:8,fontSize:12,fontWeight:600,background:t.type==="ok"?"rgba(34,211,160,.9)":t.type==="err"?"rgba(244,63,94,.9)":"rgba(245,166,35,.9)",color:"#fff",boxShadow:"0 4px 20px rgba(0,0,0,.4)",animation:"slideIn .2s ease"}}>
+          {t.type==="ok"?"✓ ":t.type==="err"?"✗ ":"⚠ "}{t.msg}
+        </div>
+      ))}
+    </div>
+  </ToastCtx.Provider>;
+}
+const useToast=()=>useContext(ToastCtx);
+
+/* ═══════════════════════════════════════
+   UI COMPONENTS
+   ═══════════════════════════════════════ */
+function Modal({title,onClose,onSave,saveLabel="Kaydet",wide,children}){
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className={`modal${wide?" wide":""}`}>
+      <div className="modal-head">
+        <span className="modal-title">{title}</span>
+        <button className="btn btn-ghost btn-xs" onClick={onClose}>✕</button>
+      </div>
+      <div className="modal-body">{children}</div>
+      {onSave&&<div className="modal-foot">
+        <button className="btn btn-ghost btn-sm" onClick={onClose}>İptal</button>
+        <button className="btn btn-amber btn-sm" onClick={onSave}>💾 {saveLabel}</button>
+      </div>}
+    </div>
+  </div>;
+}
+function Confirm({msg,onYes,onNo}){
+  return <div className="overlay">
+    <div className="modal" style={{maxWidth:380}}>
+      <div className="modal-head"><span className="modal-title">Onay</span></div>
+      <div className="modal-body"><p style={{fontSize:13,color:"var(--sky2)"}}>{msg}</p></div>
+      <div className="modal-foot">
+        <button className="btn btn-ghost btn-sm" onClick={onNo}>Hayır</button>
+        <button className="btn btn-danger btn-sm" onClick={onYes}>Evet, Sil</button>
+      </div>
+    </div>
+  </div>;
+}
+function Search({value,onChange,placeholder="Ara…"}){
+  return <div className="search-box">
+    <span className="search-icon">🔍</span>
+    <input className="field" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{width:"100%"}}/>
+  </div>;
+}
+function Empty({icon="📭",text="Kayıt bulunamadı."}){
+  return <div className="empty"><div className="empty-icon">{icon}</div><div className="empty-text">{text}</div></div>;
+}
+function Spinner(){return <div className="loading"><div className="spin"/></div>}
+function StatusBadge({status}){
+  const map={"Tamamlandı":"b-jade","Üretimde":"b-azure","Bekliyor":"b-amber","Hazır":"b-violet","Sevk Edildi":"b-amber","İptal":"b-rose","Gönderildi":"b-jade","Hazırlanıyor":"b-amber"};
+  return <span className={`badge ${map[status]||"b-mist"}`}>{status}</span>;
+}
+function CurrencyTabs({cur,onChange}){
+  return <div className="currency-tabs">
+    {["TRY","USD","EUR"].map(c=><button key={c} className={`currency-tab${cur===c?" on":""}`} onClick={()=>onChange(c)}>{c}</button>)}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   LOGIN PAGE
+   ═══════════════════════════════════════ */
+function LoginPage(){
+  const {login,register}=useAuth();
+  const toast=useToast();
+  const [tab,setTab]=useState("login");
+  const [email,setEmail]=useState("");
+  const [pass,setPass]=useState("");
+  const [name,setName]=useState("");
+  const [role,setRole]=useState("admin");
+  const [loading,setLoading]=useState(false);
+  const [err,setErr]=useState("");
+  const ERR={"auth/user-not-found":"E-posta kayıtlı değil.","auth/wrong-password":"Şifre hatalı.","auth/invalid-credential":"E-posta veya şifre hatalı.","auth/email-already-in-use":"Bu e-posta zaten kayıtlı.","auth/weak-password":"Şifre en az 6 karakter olmalı."};
+  const handle=async()=>{
+    if(!email||!pass){setErr("E-posta ve şifre gerekli.");return}
+    setLoading(true);setErr("");
+    try{
+      if(tab==="login")await login(email,pass);
+      else{if(!name){setErr("Ad gerekli.");setLoading(false);return}await register(email,pass,name,role);}
+      toast("Giriş yapıldı. Hoş geldiniz!");
+    }catch(e){setErr(ERR[e.code]||e.message);}
+    setLoading(false);
+  };
+  return <div className="auth-wrap">
+    <div className="auth-bg"/>
+    <div className="auth-card">
+      <div className="auth-logo">
+        <div className="auth-logo-mark">G</div>
+        <div className="auth-title">GEOSER ERP / CRM</div>
+        <div className="auth-sub" style={{fontFamily:"var(--font-m)",fontSize:10}}>GEOSENTETİK İMALAT A.Ş.</div>
+      </div>
+      <div className="auth-tabs">
+        <div className={`auth-tab${tab==="login"?" on":""}`} onClick={()=>{setTab("login");setErr("")}}>Giriş Yap</div>
+        <div className={`auth-tab${tab==="register"?" on":""}`} onClick={()=>{setTab("register");setErr("")}}>Kayıt Ol</div>
+      </div>
+      {err&&<div className="err-box">{err}</div>}
+      {tab==="register"&&<>
+        <div className="field"><label>Ad Soyad</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Geoser Yöneticisi"/></div>
+        <div style={{marginBottom:12}}>
+          <div className="field" style={{marginBottom:6}}><label>Kullanıcı Rolü</label></div>
+          <div className="role-select">
+            {Object.entries(ROLES).map(([k,v])=><div key={k} className={`role-opt${role===k?" on":""}`} onClick={()=>setRole(k)}>
+              <div className="role-opt-icon">{v.icon}</div>
+              <div className="role-opt-name">{v.label}</div>
+              <div className="role-opt-desc">{v.desc}</div>
+            </div>)}
+          </div>
+        </div>
+      </>}
+      <div className="field"><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ornek@geoser.com"/></div>
+      <div className="field"><label>Şifre</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+      <button className="btn btn-amber btn-full" onClick={handle} disabled={loading}>
+        {loading?"Bekleniyor…":tab==="login"?"Giriş Yap →":"Hesap Oluştur →"}
+      </button>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   DASHBOARD
+   ═══════════════════════════════════════ */
+function Dashboard(){
+  const {items:products}=useCol("products");
+  const {items:customers}=useCol("customers");
+  const {items:orders}=useCol("orders");
+  const {items:quotes}=useCol("quotes");
+  const [cur,setCur]=useState("TRY");
+  const totalRev=orders.filter(o=>o.status==="Tamamlandı").reduce((a,o)=>{
+    const total=(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+    return a+total;
+  },0);
+  const pending=orders.filter(o=>o.status==="Bekliyor"||o.status==="Üretimde");
+  const overdue=orders.filter(o=>o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status));
+  const statusCounts=orders.reduce((a,o)=>{a[o.status]=(a[o.status]||0)+1;return a},{});
+  const recentOrders=[...orders].slice(0,5);
+  const topCustomers=[...customers].sort((a,b)=>(b.totalOrders||0)-(a.totalOrders||0)).slice(0,5);
+  const productsByRevenue=products.slice(0,6);
+  return <div>
+    {overdue.length>0&&<div className="alert alert-err">⚠️ <strong>{overdue.length} sipariş</strong> teslim tarihini geçti: {overdue.map(o=>o.orderNo).join(", ")}</div>}
+    <div className="page-head">
+      <div><div className="page-title">Genel Bakış</div><div className="page-sub">GEOSER ERP Yönetim Paneli</div></div>
+      <CurrencyTabs cur={cur} onChange={setCur}/>
+    </div>
+    <div className="kpi-grid">
+      <div className="kpi kpi-jade"><div className="kpi-label">Tamamlanan Gelir</div><div className="kpi-val">{convertCurrency(totalRev,cur)}</div><div className="kpi-sub">Tamamlanan siparişler</div></div>
+      <div className="kpi kpi-amber"><div className="kpi-label">Aktif Siparişler</div><div className="kpi-val">{pending.length}</div><div className="kpi-sub">Bekliyor + Üretimde</div></div>
+      <div className="kpi kpi-azure"><div className="kpi-label">Müşteri Sayısı</div><div className="kpi-val">{customers.length}</div><div className="kpi-sub">{customers.filter(c=>c.isVip).length} VIP müşteri</div></div>
+      <div className="kpi kpi-violet"><div className="kpi-label">Ürün Çeşidi</div><div className="kpi-val">{products.length}</div><div className="kpi-sub">Aktif ürün</div></div>
+      <div className="kpi kpi-amber"><div className="kpi-label">Açık Teklifler</div><div className="kpi-val">{quotes.filter(q=>q.status!=="İptal").length}</div><div className="kpi-sub">Bekleyen onay</div></div>
+      <div className="kpi kpi-rose"><div className="kpi-label">Geciken</div><div className="kpi-val">{overdue.length}</div><div className="kpi-sub">Teslim geçmiş</div></div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:14}}>
+      <div className="card">
+        <div className="card-head"><div className="card-title">📋 Son Siparişler</div><span className="badge b-amber">{orders.length}</span></div>
+        <div className="tbl-wrap"><table>
+          <thead><tr><th>No</th><th>Müşteri</th><th>Tutar</th><th>Durum</th></tr></thead>
+          <tbody>
+            {recentOrders.map(o=>{
+              const total=(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+              return <tr key={o.id}>
+                <td><span className="mono" style={{color:"var(--amber)"}}>{o.orderNo}</span></td>
+                <td style={{fontSize:12}}>{o.customerName}</td>
+                <td><span className="mono" style={{color:"var(--jade)"}}>{convertCurrency(total,cur)}</span></td>
+                <td><StatusBadge status={o.status}/></td>
+              </tr>
+            })}
+          </tbody>
+        </table></div>
+      </div>
+      <div className="card">
+        <div className="card-head"><div className="card-title">🏆 En İyi Müşteriler</div></div>
+        <div className="chart-bar">
+          {topCustomers.map((c,i)=><div key={c.id} className="chart-bar-row">
+            <div className="chart-bar-label" style={{textAlign:"left"}}>{c.name.slice(0,14)}</div>
+            <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${(c.totalOrders||1)*10}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)"][i]}}/></div>
+            <div className="chart-bar-val">{c.totalOrders} sipariş</div>
+          </div>)}
+        </div>
+      </div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+      <div className="card">
+        <div className="card-head"><div className="card-title">📊 Sipariş Durumları</div></div>
+        {Object.entries(statusCounts).map(([s,n])=><div key={s} style={{marginBottom:9}}>
+          <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}><span style={{fontSize:12}}>{s}</span><span className="mono" style={{fontSize:11,color:"var(--mist)"}}>{n}</span></div>
+          <div className="progress-bar"><div className="progress-fill" style={{width:`${(n/orders.length)*100}%`,background:"var(--amber)"}}/></div>
+        </div>)}
+      </div>
+      <div className="card">
+        <div className="card-head"><div className="card-title">📦 Ürün Stok Özeti</div></div>
+        {productsByRevenue.map(p=>{
+          const pct=Math.min(100,Math.round(p.stock/300*100));
+          const color=pct<20?"var(--rose)":pct<50?"var(--amber)":"var(--jade)";
+          return <div key={p.id} style={{marginBottom:8}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontSize:11}}>{p.name.slice(0,22)}</span><span className="mono" style={{fontSize:11,color}}>{p.stock} {p.unit}</span></div>
+            <div className="progress-bar"><div className="progress-fill" style={{width:pct+"%",background:color}}/></div>
+          </div>
+        })}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   CUSTOMERS PAGE
+   ═══════════════════════════════════════ */
+const EMPTY_CUST={name:"",contact:"",country:"Türkiye",phone:"",email:"",type:"Yurtiçi",isVip:false,note:""};
+const CUST_TYPES=["Yurtiçi","İhracat","Bayi","Proje"];
+function CustomersPage(){
+  const {items,loading,save,remove}=useCol("customers");
+  const toast=useToast();
+  const [q,setQ]=useState("");
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState(EMPTY_CUST);
+  const [editId,setEditId]=useState(null);
+  const [delId,setDelId]=useState(null);
+  const F=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const filtered=items.filter(c=>[c.name,c.contact,c.country,c.email].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
+  const openAdd=()=>{setForm(EMPTY_CUST);setEditId(null);setModal(true)};
+  const openEdit=c=>{setForm({...c});setEditId(c.id);setModal(true)};
+  const handleSave=async()=>{
+    if(!form.name){toast("Firma adı gerekli.","err");return}
+    await save({...form,id:editId||uid()});
+    toast(editId?"Müşteri güncellendi.":"Müşteri eklendi.");
+    setModal(false);
+  };
+  const handleDel=async()=>{await remove(delId);toast("Silindi.");setDelId(null)};
+  if(loading)return <Spinner/>;
+  return <div>
+    <div className="page-head">
+      <div><div className="page-title">👥 Müşteri Yönetimi</div><div className="page-sub">{items.length} müşteri kayıtlı</div></div>
+      <button className="btn btn-amber" onClick={openAdd}>＋ Yeni Müşteri</button>
+    </div>
+    <div className="toolbar"><Search value={q} onChange={setQ} placeholder="Müşteri ara…"/></div>
+    {filtered.length===0?<Empty icon="👥" text="Müşteri bulunamadı."/>:
+    <div className="tbl-wrap"><table>
+      <thead><tr><th>Firma</th><th>Yetkili</th><th>Ülke</th><th>Tip</th><th>E-posta</th><th>VIP</th><th>Siparişler</th><th></th></tr></thead>
+      <tbody>{filtered.map(c=><tr key={c.id}>
+        <td><span style={{fontWeight:600}}>{c.name}</span></td>
+        <td style={{fontSize:12,color:"var(--sky2)"}}>{c.contact}</td>
+        <td><span className="mono" style={{fontSize:11}}>🌍 {c.country}</span></td>
+        <td><span className="badge b-azure">{c.type}</span></td>
+        <td style={{fontSize:11,color:"var(--mist)"}}>{c.email}</td>
+        <td>{c.isVip?<span className="tag-vip">★ VIP</span>:"-"}</td>
+        <td><span className="badge b-amber">{c.totalOrders||0}</span></td>
+        <td><div style={{display:"flex",gap:4}}>
+          <button className="btn btn-ghost btn-xs" onClick={()=>openEdit(c)}>✏</button>
+          <button className="btn btn-danger btn-xs" onClick={()=>setDelId(c.id)}>🗑</button>
+        </div></td>
+      </tr>)}</tbody>
+    </table></div>}
+    {modal&&<Modal title={editId?"Müşteri Düzenle":"Yeni Müşteri"} onClose={()=>setModal(false)} onSave={handleSave} wide>
+      <div className="form-grid">
+        <div className="field span2"><label>Firma Adı *</label><input value={form.name} onChange={e=>F("name",e.target.value)}/></div>
+        <div className="field"><label>Yetkili Kişi</label><input value={form.contact} onChange={e=>F("contact",e.target.value)}/></div>
+        <div className="field"><label>Ülke</label><input value={form.country} onChange={e=>F("country",e.target.value)}/></div>
+        <div className="field"><label>Telefon</label><input value={form.phone} onChange={e=>F("phone",e.target.value)}/></div>
+        <div className="field"><label>E-posta</label><input type="email" value={form.email} onChange={e=>F("email",e.target.value)}/></div>
+        <div className="field"><label>Müşteri Tipi</label><select value={form.type} onChange={e=>F("type",e.target.value)}>{CUST_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+        <div className="field" style={{justifyContent:"flex-end",paddingTop:20}}><label style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}}><input type="checkbox" checked={!!form.isVip} onChange={e=>F("isVip",e.target.checked)} style={{width:16,height:16}}/><span style={{fontFamily:"var(--font-b)",textTransform:"none",letterSpacing:0,fontSize:13,color:"var(--sky)"}}>VIP Müşteri</span></label></div>
+        <div className="field span2"><label>Not</label><textarea value={form.note} onChange={e=>F("note",e.target.value)}/></div>
+      </div>
+    </Modal>}
+    {delId&&<Confirm msg="Bu müşteriyi silmek istediğinize emin misiniz?" onYes={handleDel} onNo={()=>setDelId(null)}/>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   PRODUCTS PAGE
+   ═══════════════════════════════════════ */
+const EMPTY_PROD={name:"",cat:"",unit:"Rulo",price:"",stock:"",code:"",desc:""};
+const CATS=["HDPE Membran","Su Tutucu Bant","Jeotekstil","Geonet","Drene","PVC Membran","Diğer"];
+const UNITS=["Rulo","m²","Adet","KG","Metre"];
+function ProductsPage(){
+  const {items,loading,save,remove}=useCol("products");
+  const toast=useToast();
+  const [q,setQ]=useState("");
+  const [catFilter,setCatFilter]=useState("Tümü");
+  const [modal,setModal]=useState(false);
+  const [form,setForm]=useState(EMPTY_PROD);
+  const [editId,setEditId]=useState(null);
+  const [delId,setDelId]=useState(null);
+  const F=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const cats=["Tümü",...new Set(items.map(p=>p.cat).filter(Boolean))];
+  const filtered=items.filter(p=>(catFilter==="Tümü"||p.cat===catFilter)&&[p.name,p.cat,p.code].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
+  const openAdd=()=>{setForm(EMPTY_PROD);setEditId(null);setModal(true)};
+  const openEdit=p=>{setForm({...p,price:p.price||"",stock:p.stock||""});setEditId(p.id);setModal(true)};
+  const handleSave=async()=>{
+    if(!form.name){toast("Ürün adı gerekli.","err");return}
+    await save({...form,price:Number(form.price)||0,stock:Number(form.stock)||0,id:editId||uid()});
+    toast(editId?"Ürün güncellendi.":"Ürün eklendi.");
+    setModal(false);
+  };
+  if(loading)return <Spinner/>;
+  return <div>
+    <div className="page-head">
+      <div><div className="page-title">📦 Ürün Listesi</div><div className="page-sub">{items.length} ürün — HDPE, PVC, Jeotekstil</div></div>
+      <button className="btn btn-amber" onClick={openAdd}>＋ Yeni Ürün</button>
+    </div>
+    <div className="toolbar">
+      <Search value={q} onChange={setQ} placeholder="Ürün ara…"/>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {cats.map(c=><button key={c} className={`btn btn-xs ${catFilter===c?"btn-amber":"btn-ghost"}`} onClick={()=>setCatFilter(c)}>{c}</button>)}
+      </div>
+    </div>
+    {filtered.length===0?<Empty icon="📦" text="Ürün bulunamadı."/>:
+    <div className="tbl-wrap"><table>
+      <thead><tr><th>Kod</th><th>Ürün Adı</th><th>Kategori</th><th>Birim</th><th>Liste Fiyatı</th><th>Stok</th><th>Durum</th><th></th></tr></thead>
+      <tbody>{filtered.map(p=><tr key={p.id}>
+        <td><span className="mono" style={{fontSize:10,color:"var(--mist)"}}>{p.code||"-"}</span></td>
+        <td><div style={{fontWeight:600,fontSize:13}}>{p.name}</div><div style={{fontSize:10,color:"var(--mist)",marginTop:1}}>{p.desc?.slice(0,40)}</div></td>
+        <td><span className="badge b-azure">{p.cat}</span></td>
+        <td style={{fontSize:12}}>{p.unit}</td>
+        <td><span className="mono" style={{color:"var(--amber)"}}>₺{Number(p.price).toLocaleString("tr-TR")}</span></td>
+        <td><span className="mono" style={{fontWeight:700,color:p.stock<20?"var(--rose)":p.stock<50?"var(--amber)":"var(--jade)"}}>{p.stock}</span></td>
+        <td><span className={`badge ${p.stock===0?"b-rose":p.stock<20?"b-amber":"b-jade"}`}>{p.stock===0?"Tükendi":p.stock<20?"Az":"Yeterli"}</span></td>
+        <td><div style={{display:"flex",gap:4}}>
+          <button className="btn btn-ghost btn-xs" onClick={()=>openEdit(p)}>✏</button>
+          <button className="btn btn-danger btn-xs" onClick={()=>setDelId(p.id)}>🗑</button>
+        </div></td>
+      </tr>)}</tbody>
+    </table></div>}
+    {modal&&<Modal title={editId?"Ürün Düzenle":"Yeni Ürün"} onClose={()=>setModal(false)} onSave={handleSave} wide>
+      <div className="form-grid">
+        <div className="field span2"><label>Ürün Adı *</label><input value={form.name} onChange={e=>F("name",e.target.value)} placeholder="HDPE Membran 1mm Eco"/></div>
+        <div className="field"><label>Ürün Kodu</label><input value={form.code} onChange={e=>F("code",e.target.value)} placeholder="GS-HD-1E"/></div>
+        <div className="field"><label>Kategori</label><select value={form.cat} onChange={e=>F("cat",e.target.value)}><option value="">Seçin</option>{CATS.map(c=><option key={c}>{c}</option>)}</select></div>
+        <div className="field"><label>Birim</label><select value={form.unit} onChange={e=>F("unit",e.target.value)}>{UNITS.map(u=><option key={u}>{u}</option>)}</select></div>
+        <div className="field"><label>Liste Fiyatı (₺)</label><input type="number" value={form.price} onChange={e=>F("price",e.target.value)}/></div>
+        <div className="field"><label>Stok Miktarı</label><input type="number" value={form.stock} onChange={e=>F("stock",e.target.value)}/></div>
+        <div className="field span2"><label>Açıklama</label><textarea value={form.desc} onChange={e=>F("desc",e.target.value)}/></div>
+      </div>
+    </Modal>}
+    {delId&&<Confirm msg="Bu ürünü silmek istediğinize emin misiniz?" onYes={async()=>{await remove(delId);toast("Silindi.");setDelId(null)}} onNo={()=>setDelId(null)}/>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   ORDERS PAGE
+   ═══════════════════════════════════════ */
+const ORDER_STATUSES=["Bekliyor","Üretimde","Hazır","Sevk Edildi","Tamamlandı","İptal"];
+function OrdersPage(){
+  const {items,loading,save,remove}=useCol("orders");
+  const {items:customers}=useCol("customers");
+  const {items:products}=useCol("products");
+  const toast=useToast();
+  const [q,setQ]=useState("");
+  const [statusF,setStatusF]=useState("Tümü");
+  const [cur,setCur]=useState("TRY");
+  const [modal,setModal]=useState(false);
+  const [detailModal,setDetailModal]=useState(null);
+  const [form,setForm]=useState({orderNo:"",customerId:"",customerName:"",items:[],status:"Bekliyor",orderDate:today(),deliveryDate:"",currency:"TRY",note:""});
+  const [editId,setEditId]=useState(null);
+  const [delId,setDelId]=useState(null);
+  const F=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{
+    setForm({orderNo:"GYI-"+uid(),customerId:"",customerName:"",items:[{productId:"",productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Bekliyor",orderDate:today(),deliveryDate:"",currency:"TRY",note:""});
+    setEditId(null);setModal(true);
+  };
+  const openEdit=o=>{setForm({...o,items:o.items?[...o.items]:[]});setEditId(o.id);setModal(true)};
+  const addItem=()=>setForm(f=>({...f,items:[...f.items,{productId:"",productName:"",qty:1,unit:"Rulo",unitPrice:0}]}));
+  const updateItem=(i,k,v)=>setForm(f=>{const its=[...f.items];its[i]={...its[i],[k]:v};return{...f,items:its}});
+  const removeItem=i=>setForm(f=>({...f,items:f.items.filter((_,idx)=>idx!==i)}));
+  const handleCustomer=(cid)=>{
+    const c=customers.find(x=>x.id===cid);
+    setForm(f=>({...f,customerId:cid,customerName:c?.name||""}));
+  };
+  const handleProduct=(i,pid)=>{
+    const p=products.find(x=>x.id===pid);
+    updateItem(i,"productId",pid);
+    if(p){updateItem(i,"productName",p.name);updateItem(i,"unit",p.unit);updateItem(i,"unitPrice",p.price)}
+  };
+  const handleSave=async()=>{
+    if(!form.customerId&&!form.customerName){toast("Müşteri gerekli.","err");return}
+    await save({...form,id:editId||uid()});
+    toast(editId?"Sipariş güncellendi.":"Sipariş eklendi.");
+    setModal(false);
+  };
+  const getTotal=o=>(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+  const filtered=items.filter(o=>(statusF==="Tümü"||o.status===statusF)&&[o.orderNo,o.customerName].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
+  const totalRev=filtered.reduce((a,o)=>a+getTotal(o),0);
+  if(loading)return <Spinner/>;
+  return <div>
+    <div className="page-head">
+      <div><div className="page-title">📋 Sipariş Yönetimi</div><div className="page-sub">{items.length} sipariş — Toplam {convertCurrency(items.reduce((a,o)=>a+getTotal(o),0),cur)}</div></div>
+      <div style={{display:"flex",gap:8,alignItems:"center"}}><CurrencyTabs cur={cur} onChange={setCur}/><button className="btn btn-amber" onClick={openAdd}>＋ Yeni Sipariş</button></div>
+    </div>
+    <div className="toolbar">
+      <Search value={q} onChange={setQ} placeholder="Sipariş ara…"/>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {["Tümü",...ORDER_STATUSES].map(s=><button key={s} className={`btn btn-xs ${statusF===s?"btn-amber":"btn-ghost"}`} onClick={()=>setStatusF(s)}>{s}</button>)}
+      </div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:14}}>
+      {[["Toplam",filtered.length,"var(--amber)"],["Bekliyor",filtered.filter(o=>o.status==="Bekliyor").length,"var(--amber)"],["Tamamlanan",filtered.filter(o=>o.status==="Tamamlandı").length,"var(--jade)"],["Gecikmiş",filtered.filter(o=>o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status)).length,"var(--rose)"]].map(([l,v,c])=>(
+        <div key={l} className="card" style={{borderTop:`2px solid ${c}`,padding:"10px 14px"}}>
+          <div className="kpi-label">{l}</div>
+          <div style={{fontFamily:"var(--font-h)",fontWeight:800,fontSize:24,color:c}}>{v}</div>
+        </div>
+      ))}
+    </div>
+    {filtered.length===0?<Empty icon="📋" text="Sipariş bulunamadı."/>:
+    <div className="tbl-wrap"><table>
+      <thead><tr><th>Sipariş No</th><th>Müşteri</th><th>Kalemler</th><th>Toplam</th><th>Sipariş T.</th><th>Teslim T.</th><th>Para</th><th>Durum</th><th></th></tr></thead>
+      <tbody>{filtered.map(o=>{
+        const total=getTotal(o);
+        const overdue=o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status);
+        return <tr key={o.id} style={overdue?{background:"rgba(244,63,94,.03)"}:{}}>
+          <td><span className="mono" style={{color:"var(--amber)",fontWeight:700}}>{o.orderNo}</span></td>
+          <td style={{fontWeight:600,fontSize:12}}>{o.customerName}</td>
+          <td style={{fontSize:11,color:"var(--mist)"}}>{(o.items||[]).map(i=>`${i.qty} ${i.unit} ${i.productName||""}`).join(", ").slice(0,40)}</td>
+          <td><span className="mono" style={{color:"var(--jade)",fontWeight:700}}>{convertCurrency(total,cur)}</span></td>
+          <td><span className="mono" style={{fontSize:11,color:"var(--mist)"}}>{o.orderDate}</span></td>
+          <td><span className={`mono`} style={{fontSize:11,color:overdue?"var(--rose)":"var(--mist)",fontWeight:overdue?700:400}}>{o.deliveryDate||"-"}{overdue?" ⚠":""}</span></td>
+          <td><span className="badge b-mist">{o.currency}</span></td>
+          <td><StatusBadge status={o.status}/></td>
+          <td><div style={{display:"flex",gap:4}}>
+            <button className="btn btn-ghost btn-xs" onClick={()=>setDetailModal(o)}>👁</button>
+            <button className="btn btn-ghost btn-xs" onClick={()=>openEdit(o)}>✏</button>
+            <button className="btn btn-danger btn-xs" onClick={()=>setDelId(o.id)}>🗑</button>
+          </div></td>
+        </tr>
+      })}</tbody>
+    </table></div>}
+    {modal&&<Modal title={editId?"Sipariş Düzenle":"Yeni Sipariş"} onClose={()=>setModal(false)} onSave={handleSave} wide>
+      <div className="form-grid">
+        <div className="field"><label>Sipariş No</label><input value={form.orderNo} onChange={e=>F("orderNo",e.target.value)}/></div>
+        <div className="field"><label>Durum</label><select value={form.status} onChange={e=>F("status",e.target.value)}>{ORDER_STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+        <div className="field span2"><label>Müşteri *</label>
+          <select value={form.customerId} onChange={e=>handleCustomer(e.target.value)}>
+            <option value="">Müşteri Seçin</option>
+            {customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+        <div className="field"><label>Sipariş Tarihi</label><input type="date" value={form.orderDate} onChange={e=>F("orderDate",e.target.value)}/></div>
+        <div className="field"><label>Teslim Tarihi</label><input type="date" value={form.deliveryDate} onChange={e=>F("deliveryDate",e.target.value)}/></div>
+        <div className="field"><label>Para Birimi</label><select value={form.currency} onChange={e=>F("currency",e.target.value)}><option>TRY</option><option>USD</option><option>EUR</option></select></div>
+        <div className="field span2">
+          <label>Sipariş Kalemleri</label>
+          {(form.items||[]).map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr auto",gap:6,marginBottom:6}}>
+            <select value={item.productId} onChange={e=>handleProduct(i,e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}>
+              <option value="">Ürün Seç</option>
+              {products.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+            <input type="number" value={item.qty} onChange={e=>updateItem(i,"qty",e.target.value)} placeholder="Adet" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input value={item.unit} onChange={e=>updateItem(i,"unit",e.target.value)} placeholder="Birim" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input type="number" value={item.unitPrice} onChange={e=>updateItem(i,"unitPrice",e.target.value)} placeholder="Fiyat" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <button className="btn btn-danger btn-xs" onClick={()=>removeItem(i)}>✕</button>
+          </div>)}
+          <button className="btn btn-ghost btn-sm" onClick={addItem}>＋ Kalem Ekle</button>
+        </div>
+        <div className="field span2"><label>Not</label><textarea value={form.note} onChange={e=>F("note",e.target.value)}/></div>
+      </div>
+    </Modal>}
+    {detailModal&&<Modal title={`Sipariş Detayı — ${detailModal.orderNo}`} onClose={()=>setDetailModal(null)}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
+        {[["Müşteri",detailModal.customerName],["Durum",""],["Sipariş",detailModal.orderDate],["Teslim",detailModal.deliveryDate||"-"],["Para Birimi",detailModal.currency]].map(([l,v],i)=><div key={i} style={{padding:"10px 12px",background:"var(--ink3)",borderRadius:8}}><div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{l}</div>{l==="Durum"?<StatusBadge status={detailModal.status}/>:<div style={{fontWeight:600,fontSize:13}}>{v}</div>}</div>)}
+      </div>
+      <div><div style={{fontSize:11,color:"var(--mist)",marginBottom:6,fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Sipariş Kalemleri</div>
+      <div className="tbl-wrap"><table>
+        <thead><tr><th>Ürün</th><th>Adet</th><th>Birim Fiyat</th><th>Toplam</th></tr></thead>
+        <tbody>{(detailModal.items||[]).map((item,i)=><tr key={i}>
+          <td style={{fontSize:12}}>{item.productName}</td>
+          <td className="mono">{item.qty} {item.unit}</td>
+          <td className="mono" style={{color:"var(--amber)"}}>₺{Number(item.unitPrice).toLocaleString("tr-TR")}</td>
+          <td className="mono" style={{color:"var(--jade)",fontWeight:700}}>₺{(Number(item.qty)*Number(item.unitPrice)).toLocaleString("tr-TR")}</td>
+        </tr>)}
+        <tr><td colSpan={3} style={{fontWeight:700,textAlign:"right"}}>Toplam:</td><td className="mono" style={{color:"var(--jade)",fontWeight:800,fontSize:14}}>₺{getTotal(detailModal).toLocaleString("tr-TR")}</td></tr>
+        </tbody>
+      </table></div></div>
+      {detailModal.note&&<div style={{marginTop:10,padding:"10px 12px",background:"var(--ink3)",borderRadius:8,fontSize:12,color:"var(--mist)"}}><strong style={{color:"var(--sky)"}}>Not:</strong> {detailModal.note}</div>}
+    </Modal>}
+    {delId&&<Confirm msg="Bu siparişi silmek istediğinize emin misiniz?" onYes={async()=>{await remove(delId);toast("Silindi.");setDelId(null)}} onNo={()=>setDelId(null)}/>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   QUOTES PAGE
+   ═══════════════════════════════════════ */
+const QUOTE_STATUSES=["Hazırlanıyor","Gönderildi","Onaylandı","Reddedildi","İptal"];
+function QuotesPage(){
+  const {items,loading,save,remove}=useCol("quotes");
+  const {items:customers}=useCol("customers");
+  const {items:products}=useCol("products");
+  const toast=useToast();
+  const [modal,setModal]=useState(false);
+  const [editId,setEditId]=useState(null);
+  const [delId,setDelId]=useState(null);
+  const [cur,setCur]=useState("TRY");
+  const [form,setForm]=useState({quoteNo:"",customerId:"",customerName:"",items:[],status:"Hazırlanıyor",validUntil:"",currency:"TRY",discount:0,note:""});
+  const F=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const getTotal=(q)=>{
+    const sub=(q.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+    return sub*(1-Number(q.discount||0)/100);
+  };
+  const addItem=()=>setForm(f=>({...f,items:[...f.items,{productName:"",qty:1,unit:"Rulo",unitPrice:0}]}));
+  const updateItem=(i,k,v)=>setForm(f=>{const its=[...f.items];its[i]={...its[i],[k]:v};return{...f,items:its}});
+  const removeItem=i=>setForm(f=>({...f,items:f.items.filter((_,idx)=>idx!==i)}));
+  const openAdd=()=>{
+    setForm({quoteNo:"TKL-"+new Date().getFullYear()+"-"+uid(),customerId:"",customerName:"",items:[{productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Hazırlanıyor",validUntil:"",currency:"TRY",discount:0,note:""});
+    setEditId(null);setModal(true);
+  };
+  const openEdit=q=>{setForm({...q,items:q.items?[...q.items]:[]});setEditId(q.id);setModal(true)};
+  const handleSave=async()=>{
+    if(!form.customerName&&!form.customerId){toast("Müşteri gerekli.","err");return}
+    const c=customers.find(x=>x.id===form.customerId);
+    await save({...form,customerName:form.customerName||c?.name||"",id:editId||uid()});
+    toast("Teklif kaydedildi.");setModal(false);
+  };
+  if(loading)return <Spinner/>;
+  return <div>
+    <div className="page-head">
+      <div><div className="page-title">📄 Teklif Yönetimi</div><div className="page-sub">{items.length} teklif — Çok para birimli</div></div>
+      <div style={{display:"flex",gap:8}}><CurrencyTabs cur={cur} onChange={setCur}/><button className="btn btn-amber" onClick={openAdd}>＋ Yeni Teklif</button></div>
+    </div>
+    {items.length===0?<Empty icon="📄" text="Henüz teklif yok."/>:
+    <div className="tbl-wrap"><table>
+      <thead><tr><th>Teklif No</th><th>Müşteri</th><th>Kalemler</th><th>Toplam</th><th>İndirim</th><th>Geçerlilik</th><th>Para</th><th>Durum</th><th></th></tr></thead>
+      <tbody>{items.map(q=><tr key={q.id}>
+        <td><span className="mono" style={{color:"var(--violet)",fontWeight:700}}>{q.quoteNo}</span></td>
+        <td style={{fontWeight:600,fontSize:12}}>{q.customerName}</td>
+        <td style={{fontSize:11,color:"var(--mist)"}}>{(q.items||[]).length} kalem</td>
+        <td><span className="mono" style={{color:"var(--amber)",fontWeight:700}}>{convertCurrency(getTotal(q),cur)}</span></td>
+        <td><span className="badge b-rose">{q.discount||0}%</span></td>
+        <td><span className="mono" style={{fontSize:11,color:"var(--mist)"}}>{q.validUntil||"-"}</span></td>
+        <td><span className="badge b-mist">{q.currency}</span></td>
+        <td><StatusBadge status={q.status}/></td>
+        <td><div style={{display:"flex",gap:4}}>
+          <button className="btn btn-ghost btn-xs" onClick={()=>openEdit(q)}>✏</button>
+          <button className="btn btn-danger btn-xs" onClick={()=>setDelId(q.id)}>🗑</button>
+        </div></td>
+      </tr>)}</tbody>
+    </table></div>}
+    {modal&&<Modal title={editId?"Teklif Düzenle":"Yeni Teklif"} onClose={()=>setModal(false)} onSave={handleSave} wide>
+      <div className="form-grid">
+        <div className="field"><label>Teklif No</label><input value={form.quoteNo} onChange={e=>F("quoteNo",e.target.value)}/></div>
+        <div className="field"><label>Durum</label><select value={form.status} onChange={e=>F("status",e.target.value)}>{QUOTE_STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+        <div className="field span2"><label>Müşteri *</label>
+          <select value={form.customerId} onChange={e=>{const c=customers.find(x=>x.id===e.target.value);setForm(f=>({...f,customerId:e.target.value,customerName:c?.name||""}))}}>
+            <option value="">Müşteri Seçin</option>
+            {customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+        <div className="field"><label>Geçerlilik Tarihi</label><input type="date" value={form.validUntil} onChange={e=>F("validUntil",e.target.value)}/></div>
+        <div className="field"><label>Para Birimi</label><select value={form.currency} onChange={e=>F("currency",e.target.value)}><option>TRY</option><option>USD</option><option>EUR</option></select></div>
+        <div className="field"><label>İndirim (%)</label><input type="number" min="0" max="100" value={form.discount} onChange={e=>F("discount",e.target.value)}/></div>
+        <div className="field span2">
+          <label>Teklif Kalemleri</label>
+          {(form.items||[]).map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"3fr 1fr 1fr 1fr auto",gap:6,marginBottom:6}}>
+            <input value={item.productName} onChange={e=>updateItem(i,"productName",e.target.value)} placeholder="Ürün adı" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input type="number" value={item.qty} onChange={e=>updateItem(i,"qty",e.target.value)} placeholder="Miktar" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input value={item.unit} onChange={e=>updateItem(i,"unit",e.target.value)} placeholder="Birim" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input type="number" value={item.unitPrice} onChange={e=>updateItem(i,"unitPrice",e.target.value)} placeholder="Birim Fiyat" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <button className="btn btn-danger btn-xs" onClick={()=>removeItem(i)}>✕</button>
+          </div>)}
+          <button className="btn btn-ghost btn-sm" onClick={addItem}>＋ Kalem Ekle</button>
+        </div>
+        <div className="field span2"><label>Not</label><textarea value={form.note} onChange={e=>F("note",e.target.value)}/></div>
+      </div>
+    </Modal>}
+    {delId&&<Confirm msg="Bu teklifi silmek istediğinize emin misiniz?" onYes={async()=>{await remove(delId);toast("Silindi.");setDelId(null)}} onNo={()=>setDelId(null)}/>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   REPORTS PAGE
+   ═══════════════════════════════════════ */
+function ReportsPage(){
+  const {items:orders}=useCol("orders");
+  const {items:customers}=useCol("customers");
+  const {items:products}=useCol("products");
+  const [cur,setCur]=useState("TRY");
+  const [from,setFrom]=useState("");
+  const [to,setTo]=useState("");
+  const filtered=orders.filter(o=>{
+    if(from&&o.orderDate<from)return false;
+    if(to&&o.orderDate>to)return false;
+    return true;
+  });
+  const getTotal=o=>(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+  const totalRev=filtered.reduce((a,o)=>a+getTotal(o),0);
+  const completedRev=filtered.filter(o=>o.status==="Tamamlandı").reduce((a,o)=>a+getTotal(o),0);
+  const byCustomer=Object.values(filtered.reduce((a,o)=>{if(!a[o.customerName])a[o.customerName]={name:o.customerName,orders:0,total:0};a[o.customerName].orders++;a[o.customerName].total+=getTotal(o);return a},{})).sort((a,b)=>b.total-a.total);
+  const byProduct=Object.values(filtered.reduce((a,o)=>{(o.items||[]).forEach(i=>{if(!a[i.productName])a[i.productName]={name:i.productName,qty:0,total:0};a[i.productName].qty+=Number(i.qty||0);a[i.productName].total+=Number(i.qty||0)*Number(i.unitPrice||0)});return a},{})).sort((a,b)=>b.total-a.total);
+  const downloadCSV=()=>{
+    const rows=[["Sipariş No","Müşteri","Toplam","Durum","Tarih"],...filtered.map(o=>[o.orderNo,o.customerName,getTotal(o),o.status,o.orderDate])];
+    const csv=rows.map(r=>r.join(",")).join("\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv"}));a.download="geoser-rapor.csv";a.click();
+  };
+  return <div>
+    <div className="page-head">
+      <div><div className="page-title">📊 Raporlar & Analizler</div></div>
+      <div style={{display:"flex",gap:8}}><CurrencyTabs cur={cur} onChange={setCur}/><button className="btn btn-ghost btn-sm" onClick={downloadCSV}>⬇ CSV İndir</button></div>
+    </div>
+    <div className="card" style={{marginBottom:14}}>
+      <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+        <span style={{fontSize:12,color:"var(--mist)"}}>Tarih Aralığı:</span>
+        <input type="date" value={from} onChange={e=>setFrom(e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 10px",fontSize:12}}/>
+        <span style={{color:"var(--mist)"}}>—</span>
+        <input type="date" value={to} onChange={e=>setTo(e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 10px",fontSize:12}}/>
+        {(from||to)&&<button className="btn btn-ghost btn-xs" onClick={()=>{setFrom("");setTo("")}}>✕ Temizle</button>}
+        <span style={{fontSize:11,color:"var(--mist)"}}>{filtered.length} sipariş gösteriliyor</span>
+      </div>
+    </div>
+    <div className="kpi-grid" style={{marginBottom:14}}>
+      <div className="kpi kpi-jade"><div className="kpi-label">Toplam Ciro</div><div className="kpi-val">{convertCurrency(totalRev,cur)}</div></div>
+      <div className="kpi kpi-amber"><div className="kpi-label">Tamamlanan</div><div className="kpi-val">{convertCurrency(completedRev,cur)}</div></div>
+      <div className="kpi kpi-azure"><div className="kpi-label">Sipariş Sayısı</div><div className="kpi-val">{filtered.length}</div></div>
+      <div className="kpi kpi-violet"><div className="kpi-label">Müşteri</div><div className="kpi-val">{customers.length}</div></div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+      <div className="card">
+        <div className="card-head"><div className="card-title">🏆 Müşteri Bazlı Satış</div></div>
+        {byCustomer.length===0?<Empty icon="📊" text="Veri yok"/>:<div className="chart-bar">
+          {byCustomer.slice(0,6).map((c,i)=><div key={c.name} className="chart-bar-row">
+            <div className="chart-bar-label">{(c.name||"").slice(0,12)}</div>
+            <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${byCustomer[0]?(c.total/byCustomer[0].total)*100:0}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)","var(--mist)"][i]}}/></div>
+            <div className="chart-bar-val">{convertCurrency(c.total,cur)}</div>
+          </div>)}
+        </div>}
+      </div>
+      <div className="card">
+        <div className="card-head"><div className="card-title">📦 Ürün Bazlı Satış</div></div>
+        {byProduct.length===0?<Empty icon="📦" text="Veri yok"/>:<div className="tbl-wrap"><table>
+          <thead><tr><th>Ürün</th><th>Adet</th><th>Toplam</th></tr></thead>
+          <tbody>{byProduct.slice(0,6).map(p=><tr key={p.name}>
+            <td style={{fontSize:11}}>{(p.name||"—").slice(0,22)}</td>
+            <td className="mono" style={{fontSize:11}}>{p.qty}</td>
+            <td className="mono" style={{color:"var(--jade)",fontWeight:700,fontSize:11}}>{convertCurrency(p.total,cur)}</td>
+          </tr>)}</tbody>
+        </table></div>}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   SETTINGS PAGE
+   ═══════════════════════════════════════ */
+function SettingsPage(){
+  const {user}=useAuth();
+  return <div>
+    <div className="page-head"><div className="page-title">⚙️ Ayarlar & Profil</div></div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+      <div className="card">
+        <div className="card-head"><div className="card-title">👤 Kullanıcı Bilgileri</div></div>
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          {[["E-posta",user?.email||"-"],["Rol",ROLES[user?.role]?.label||user?.role||"-"],["Ad",user?.displayName||user?.name||"-"],["Firebase UID",user?.uid?.slice(0,16)+"…"||"-"]].map(([l,v])=>(
+            <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 12px",background:"var(--ink3)",borderRadius:8}}>
+              <span style={{fontSize:11,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1}}>{l}</span>
+              <span style={{fontFamily:"var(--font-m)",fontSize:11,color:"var(--sky)"}}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-head"><div className="card-title">🔥 Firebase Bilgileri</div></div>
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {[["Project ID","geoser-erp"],["Auth Domain","geoser-erp.firebaseapp.com"],["Bölge","europe-west3"],["Durum","Aktif"]].map(([l,v])=>(
+            <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 12px",background:"var(--ink3)",borderRadius:8}}>
+              <span style={{fontSize:11,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1}}>{l}</span>
+              <span style={{fontFamily:"var(--font-m)",fontSize:11,color:"var(--jade)"}}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card" style={{gridColumn:"1/-1"}}>
+        <div className="card-head"><div className="card-title">🏭 Şirket Bilgileri</div></div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
+          {[["Unvan","GEOSER Geosentetik İmalat A.Ş."],["Sektör","Geosentetik Üretim"],["Kuruluş","2010"],["Ürün Gamı","HDPE, PVC, Jeotekstil, Geonet"],["Pazarlar","Türkiye + 40+ Ülke İhracat"],["Kalite","ISO 9001:2015"]].map(([l,v])=>(
+            <div key={l} style={{padding:"10px 12px",background:"var(--ink3)",borderRadius:8}}>
+              <div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{l}</div>
+              <div style={{fontWeight:600,fontSize:12}}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION CONFIG
+   ═══════════════════════════════════════ */
+const NAV=[
+  {section:"ANA"},
+  {id:"dashboard",icon:"🏠",label:"Genel Bakış"},
+  {section:"SATIŞ"},
+  {id:"customers",icon:"👥",label:"Müşteriler"},
+  {id:"orders",icon:"📋",label:"Siparişler"},
+  {id:"quotes",icon:"📄",label:"Teklifler"},
+  {section:"STOK"},
+  {id:"products",icon:"📦",label:"Ürün Listesi"},
+  {section:"ANALİZ"},
+  {id:"reports",icon:"📊",label:"Raporlar"},
+  {section:"SİSTEM"},
+  {id:"settings",icon:"⚙️",label:"Ayarlar"},
+];
+
+const PAGE_TITLES={dashboard:"Genel Bakış",customers:"Müşteriler",orders:"Siparişler",quotes:"Teklifler",products:"Ürünler",reports:"Raporlar",settings:"Ayarlar"};
+const PAGES={dashboard:Dashboard,customers:CustomersPage,products:ProductsPage,orders:OrdersPage,quotes:QuotesPage,reports:ReportsPage,settings:SettingsPage};
+
+/* ═══════════════════════════════════════
+   APP SHELL
+   ═══════════════════════════════════════ */
+function AppShell(){
+  const {user,logout,hasPage}=useAuth();
+  const toast=useToast();
+  const [page,setPage]=useState("dashboard");
+  const [collapsed,setCollapsed]=useState(false);
+  const [mobileOpen,setMobileOpen]=useState(false);
+  const PageComp=PAGES[page]||Dashboard;
+  const role=user?.role||"admin";
+  const roleInfo=ROLES[role]||ROLES.admin;
+  const visibleNav=NAV.filter(n=>!n.id||hasPage(n.id));
+  const handleLogout=async()=>{try{await logout();toast("Çıkış yapıldı.")}catch(e){toast(e.message,"err")}};
+  const navTo=(id)=>{setPage(id);setMobileOpen(false)};
+  return <div className="shell">
+    {mobileOpen&&<div className="mobile-overlay" onClick={()=>setMobileOpen(false)}/>}
+    <nav className={`nav${collapsed?" collapsed":""}${mobileOpen?" mobile-open":""}`}>
+      <div className="nav-logo">
+        <div className="nav-logo-mark">G</div>
+        {!collapsed&&<div className="nav-logo-text"><div className="nav-logo-title">GEOSER ERP</div><div className="nav-logo-sub">v4.0</div></div>}
+      </div>
+      <div className="nav-body">
+        {visibleNav.map((n,i)=>n.section
+          ?(!collapsed?<div key={i} className="nav-section">{n.section}</div>:null)
+          :<div key={n.id} className={`nav-item${page===n.id?" active":""}`} onClick={()=>navTo(n.id)}>
+            <span className="nav-icon">{n.icon}</span>
+            {!collapsed&&<span>{n.label}</span>}
+          </div>
+        )}
+      </div>
+      <div className="nav-foot">
+        <div className="user-row" onClick={()=>navTo("settings")}>
+          <div className="user-av">{(user?.displayName||user?.email||"U")[0].toUpperCase()}</div>
+          {!collapsed&&<div className="user-info"><div className="user-name">{user?.displayName||user?.email}</div><div className="user-role">{roleInfo.icon} {roleInfo.label}</div></div>}
+          {!collapsed&&<button className="logout-btn" onClick={e=>{e.stopPropagation();handleLogout()}} title="Çıkış">⏻</button>}
+        </div>
+      </div>
+    </nav>
+    <div className="main">
+      <div className="topbar">
+        <div className="topbar-left">
+          <button className="hamburger" onClick={()=>{if(window.innerWidth<768)setMobileOpen(v=>!v);else setCollapsed(v=>!v)}}>☰</button>
+          <span className="breadcrumb">{PAGE_TITLES[page]||"Dashboard"}</span>
+        </div>
+        <div className="topbar-right">
+          <div className="topbar-chip" style={{color:roleInfo.color}}>{roleInfo.icon} {roleInfo.label}</div>
+          <div className="topbar-chip"><span className="sync-dot sync-ok"/>Bağlı</div>
+          <div className="topbar-chip" style={{fontFamily:"var(--font-m)",fontSize:10}}>{new Date().toLocaleDateString("tr-TR")}</div>
+        </div>
+      </div>
+      <div className="content"><PageComp/></div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   ROOT
+   ═══════════════════════════════════════ */
+function Root(){
+  const {user}=useAuth();
+  if(user===undefined)return <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--ink)"}}>
+    <div style={{textAlign:"center"}}><div className="spin" style={{margin:"0 auto 12px"}}/><div style={{fontSize:12,color:"var(--mist)",fontFamily:"var(--font-m)"}}>Bağlanıyor…</div></div>
+  </div>;
+  if(!user)return <LoginPage/>;
+  return <AppShell/>;
+}
+function App(){
+  return <AuthProvider><ToastProvider><Root/></ToastProvider></AuthProvider>;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+<style>@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}</style>
+</body>
 </html>
