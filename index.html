@@ -1,26 +1,16 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-<meta charset="UTF-8">
-<title>GEOSER ERP - Firebase Kurulum Gerekli</title>
-<style>
-body{font-family:sans-serif;background:#09111f;color:#eef3ff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
-.box{background:#0f1d2f;border:1px solid #1a2d44;border-radius:12px;padding:40px;max-width:500px;text-align:center;}
-h1{color:#f97316;font-size:32px;margin-bottom:8px;}
-p{color:#7c9ab8;line-height:1.6;}
-.step{background:#172339;border-radius:8px;padding:12px;margin:10px 0;text-align:left;font-size:13px;}
-a{color:#f97316;}
-</style>
-</head>
-<body>
-<div class="box">
-  <h1>GEOSER ERP</h1>
-  <p>Firebase yapılandırması gerekiyor.</p>
-  <div class="step">1. <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → Proje oluştur</div>
-  <div class="step">2. Authentication → E-posta/Şifre etkinleştir</div>
-  <div class="step">3. Firestore Database → Test modunda oluştur</div>
-  <div class="step">4. Proje Ayarları → Web uygulaması → Config al</div>
-  <div class="step">5. Config'i Claude'a yapıştır → Güncellenmiş dosyayı al</div>
-</div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GEOSER ERP / CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
