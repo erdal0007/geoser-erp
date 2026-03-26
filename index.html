@@ -30,6 +30,8 @@ body{font-family:var(--font-b);font-size:13px;color:var(--sky);-webkit-font-smoo
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:2px}
 #root{height:100%}
+
+/* ── LAYOUT ── */
 .shell{display:flex;height:100vh;overflow:hidden}
 .nav{width:220px;background:var(--ink2);border-right:1px solid var(--rim);display:flex;flex-direction:column;flex-shrink:0;transition:width .2s}
 .nav.collapsed{width:56px}
@@ -53,6 +55,7 @@ body{font-family:var(--font-b);font-size:13px;color:var(--sky);-webkit-font-smoo
 .user-role{font-size:9px;color:var(--mist);text-transform:uppercase;letter-spacing:.8px}
 .logout-btn{background:none;border:none;cursor:pointer;color:var(--mist);font-size:13px;padding:2px;flex-shrink:0}
 .logout-btn:hover{color:var(--rose)}
+
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{padding:10px 20px;background:var(--ink2);border-bottom:1px solid var(--rim);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px}
 .topbar-left{display:flex;align-items:center;gap:10px}
@@ -62,6 +65,8 @@ body{font-family:var(--font-b);font-size:13px;color:var(--sky);-webkit-font-smoo
 .topbar-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;background:var(--ink3);border:1px solid var(--rim2);font-size:11px;color:var(--mist);cursor:pointer;transition:all .12s}
 .topbar-chip:hover{color:var(--sky)}
 .content{flex:1;overflow-y:auto;padding:20px}
+
+/* ── AUTH ── */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px;position:relative;overflow:hidden}
 .auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 20%,rgba(245,166,35,.06),transparent),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(96,165,250,.05),transparent)}
 .auth-card{background:var(--ink2);border:1px solid var(--rim);border-radius:16px;padding:36px 32px;width:100%;max-width:400px;position:relative;z-index:1}
@@ -96,6 +101,8 @@ textarea{resize:vertical;min-height:72px}
 .btn-xs{padding:3px 8px;font-size:10px}
 .err-box{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);color:var(--rose);padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:12px}
 .ok-box{background:rgba(34,211,160,.06);border:1px solid rgba(34,211,160,.2);color:var(--jade);padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:12px}
+
+/* ── CARDS ── */
 .card{background:var(--ink2);border:1px solid var(--rim);border-radius:12px;padding:16px}
 .card-title{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--sky)}
 .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -110,6 +117,8 @@ textarea{resize:vertical;min-height:72px}
 .kpi-azure{border-top-color:var(--azure)}.kpi-azure .kpi-val{color:var(--azure)}.kpi-azure::before{background:var(--azure)}
 .kpi-violet{border-top-color:var(--violet)}.kpi-violet .kpi-val{color:var(--violet)}.kpi-violet::before{background:var(--violet)}
 .kpi-rose{border-top-color:var(--rose)}.kpi-rose .kpi-val{color:var(--rose)}.kpi-rose::before{background:var(--rose)}
+
+/* ── TABLE ── */
 .tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--rim)}
 table{width:100%;border-collapse:collapse}
 th{background:var(--ink3);color:var(--mist);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid var(--rim);white-space:nowrap}
@@ -124,6 +133,8 @@ tr:hover td{background:rgba(255,255,255,.01)}
 .b-azure{background:rgba(96,165,250,.1);color:var(--azure)}
 .b-violet{background:rgba(167,139,250,.1);color:var(--violet)}
 .b-mist{background:rgba(107,132,168,.12);color:var(--mist)}
+
+/* ── MODAL ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
 .modal{background:var(--ink2);border:1px solid var(--rim);border-radius:14px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
 .modal.wide{max-width:780px}
@@ -134,6 +145,8 @@ tr:hover td{background:rgba(255,255,255,.01)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-grid.g3{grid-template-columns:1fr 1fr 1fr}
 .span2{grid-column:1/-1}
+
+/* ── MISC ── */
 .page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
 .page-title{font-family:var(--font-h);font-size:16px;font-weight:700;color:var(--sky)}
 .page-sub{font-size:11px;color:var(--mist);margin-top:2px}
@@ -160,12 +173,16 @@ tr:hover td{background:rgba(255,255,255,.01)}
 .sync-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
 .sync-ok{background:var(--jade)}.sync-busy{background:var(--amber);animation:pulse 1s infinite}.sync-err{background:var(--rose)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── DASHBOARD CHARTS ── */
 .chart-bar{display:flex;flex-direction:column;gap:8px}
 .chart-bar-row{display:flex;align-items:center;gap:8px}
 .chart-bar-label{width:90px;font-size:11px;color:var(--mist);text-align:right;flex-shrink:0}
 .chart-bar-track{flex:1;height:14px;background:var(--ink3);border-radius:4px;overflow:hidden}
 .chart-bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 .chart-bar-val{width:60px;font-family:var(--font-m);font-size:11px;color:var(--sky);text-align:right;flex-shrink:0}
+
+/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .nav{position:fixed;top:0;left:0;height:100vh;z-index:200;transform:translateX(-100%);width:220px!important}
   .nav.mobile-open{transform:translateX(0)}
@@ -181,6 +198,9 @@ tr:hover td{background:rgba(255,255,255,.01)}
 <script type="text/babel">
 const {useState,useEffect,useRef,useMemo,useCallback,createContext,useContext}=React;
 
+/* ═══════════════════════════════════════
+   FIREBASE CONFIG — geoser-erp project
+   ═══════════════════════════════════════ */
 const FB_CONFIG={
   apiKey:"AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI",
   authDomain:"geoser-erp.firebaseapp.com",
@@ -197,8 +217,13 @@ try{
   auth=firebase.auth();
 }catch(e){console.error("Firebase init:",e)}
 
+/* ═══════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════ */
 const FX={USD:32.8,EUR:35.6,TRY:1};
 const fmtMoney=(n,cur="TRY")=>{
+  const v=Number(n||0)/FX[cur]*FX.TRY;
+  const rates={TRY:32.8,USD:1,EUR:0.92};
   const display=Number(n||0);
   const syms={TRY:"₺",USD:"$",EUR:"€"};
   return syms[cur]+display.toLocaleString("tr-TR",{minimumFractionDigits:0,maximumFractionDigits:0});
@@ -212,6 +237,9 @@ const fmtDate=d=>{if(!d)return"-";const dt=d?.toDate?d.toDate():new Date(d);retu
 const today=()=>new Date().toISOString().split("T")[0];
 const uid=()=>Math.random().toString(36).slice(2,9).toUpperCase();
 
+/* ═══════════════════════════════════════
+   MOCK/SEED DATA
+   ═══════════════════════════════════════ */
 const SEED={
   products:[
     {id:"P1",name:"HDPE Membran 1mm Eco",cat:"HDPE Membran",unit:"Rulo",price:8500,stock:45,code:"GS-HD-1E",desc:"1mm kalınlık, 200cm en, 20m/rulo"},
@@ -244,6 +272,9 @@ const SEED={
   ],
 };
 
+/* ═══════════════════════════════════════
+   DATA HOOK
+   ═══════════════════════════════════════ */
 function useCol(col){
   const [items,setItems]=useState([]);
   const [loading,setLoading]=useState(true);
@@ -255,6 +286,7 @@ function useCol(col){
     const q=firebase.firestore().collection(col).orderBy("_ts","desc");
     const unsub=q.onSnapshot(snap=>{
       if(snap.empty&&SEED[col]){
+        // seed
         const batch=db.batch();
         (SEED[col]||[]).forEach(d=>{const r=db.collection(col).doc(d.id);batch.set(r,{...d,_ts:firebase.firestore.FieldValue.serverTimestamp()})});
         batch.commit().catch(()=>{});
@@ -295,6 +327,9 @@ function useCol(col){
   return{items,loading,save,remove};
 }
 
+/* ═══════════════════════════════════════
+   AUTH CONTEXT
+   ═══════════════════════════════════════ */
 const AuthCtx=createContext(null);
 const ROLES={
   admin:{label:"Yönetici",icon:"👑",desc:"Tüm yetkiler",color:"var(--amber)",pages:["dashboard","customers","products","orders","quotes","reports","settings"]},
@@ -314,7 +349,10 @@ function AuthProvider({children}){
       }else setUser(null);
     });
   },[]);
-  const login=async(email,pw)=>{const cred=await auth.signInWithEmailAndPassword(email,pw);return cred.user};
+  const login=async(email,pw)=>{
+    const cred=await auth.signInWithEmailAndPassword(email,pw);
+    return cred.user;
+  };
   const register=async(email,pw,name,role)=>{
     const cred=await auth.createUserWithEmailAndPassword(email,pw);
     await cred.user.updateProfile({displayName:name});
@@ -322,11 +360,17 @@ function AuthProvider({children}){
     return cred.user;
   };
   const logout=()=>auth.signOut();
-  const hasPage=(page)=>{if(!user)return false;return ROLES[user.role]?.pages.includes(page)||user.role==="admin"};
+  const hasPage=(page)=>{
+    if(!user)return false;
+    return ROLES[user.role]?.pages.includes(page)||user.role==="admin";
+  };
   return <AuthCtx.Provider value={{user,login,register,logout,hasPage}}>{children}</AuthCtx.Provider>;
 }
 const useAuth=()=>useContext(AuthCtx);
 
+/* ═══════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════ */
 const ToastCtx=createContext(null);
 function ToastProvider({children}){
   const [toasts,setToasts]=useState([]);
@@ -339,7 +383,7 @@ function ToastProvider({children}){
     {children}
     <div style={{position:"fixed",bottom:20,right:20,zIndex:9999,display:"flex",flexDirection:"column",gap:8}}>
       {toasts.map(t=>(
-        <div key={t.id} style={{padding:"10px 16px",borderRadius:8,fontSize:12,fontWeight:600,background:t.type==="ok"?"rgba(34,211,160,.9)":t.type==="err"?"rgba(244,63,94,.9)":"rgba(245,166,35,.9)",color:"#fff",boxShadow:"0 4px 20px rgba(0,0,0,.4)"}}>
+        <div key={t.id} style={{padding:"10px 16px",borderRadius:8,fontSize:12,fontWeight:600,background:t.type==="ok"?"rgba(34,211,160,.9)":t.type==="err"?"rgba(244,63,94,.9)":"rgba(245,166,35,.9)",color:"#fff",boxShadow:"0 4px 20px rgba(0,0,0,.4)",animation:"slideIn .2s ease"}}>
           {t.type==="ok"?"✓ ":t.type==="err"?"✗ ":"⚠ "}{t.msg}
         </div>
       ))}
@@ -348,35 +392,59 @@ function ToastProvider({children}){
 }
 const useToast=()=>useContext(ToastCtx);
 
+/* ═══════════════════════════════════════
+   UI COMPONENTS
+   ═══════════════════════════════════════ */
 function Modal({title,onClose,onSave,saveLabel="Kaydet",wide,children}){
   return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
     <div className={`modal${wide?" wide":""}`}>
-      <div className="modal-head"><span className="modal-title">{title}</span><button className="btn btn-ghost btn-xs" onClick={onClose}>✕</button></div>
+      <div className="modal-head">
+        <span className="modal-title">{title}</span>
+        <button className="btn btn-ghost btn-xs" onClick={onClose}>✕</button>
+      </div>
       <div className="modal-body">{children}</div>
-      {onSave&&<div className="modal-foot"><button className="btn btn-ghost btn-sm" onClick={onClose}>İptal</button><button className="btn btn-amber btn-sm" onClick={onSave}>💾 {saveLabel}</button></div>}
+      {onSave&&<div className="modal-foot">
+        <button className="btn btn-ghost btn-sm" onClick={onClose}>İptal</button>
+        <button className="btn btn-amber btn-sm" onClick={onSave}>💾 {saveLabel}</button>
+      </div>}
     </div>
   </div>;
 }
 function Confirm({msg,onYes,onNo}){
-  return <div className="overlay"><div className="modal" style={{maxWidth:380}}>
-    <div className="modal-head"><span className="modal-title">Onay</span></div>
-    <div className="modal-body"><p style={{fontSize:13,color:"var(--sky2)"}}>{msg}</p></div>
-    <div className="modal-foot"><button className="btn btn-ghost btn-sm" onClick={onNo}>Hayır</button><button className="btn btn-danger btn-sm" onClick={onYes}>Evet, Sil</button></div>
-  </div></div>;
+  return <div className="overlay">
+    <div className="modal" style={{maxWidth:380}}>
+      <div className="modal-head"><span className="modal-title">Onay</span></div>
+      <div className="modal-body"><p style={{fontSize:13,color:"var(--sky2)"}}>{msg}</p></div>
+      <div className="modal-foot">
+        <button className="btn btn-ghost btn-sm" onClick={onNo}>Hayır</button>
+        <button className="btn btn-danger btn-sm" onClick={onYes}>Evet, Sil</button>
+      </div>
+    </div>
+  </div>;
 }
 function Search({value,onChange,placeholder="Ara…"}){
-  return <div className="search-box"><span className="search-icon">🔍</span><input className="field" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{width:"100%"}}/></div>;
+  return <div className="search-box">
+    <span className="search-icon">🔍</span>
+    <input className="field" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{width:"100%"}}/>
+  </div>;
 }
-function Empty({icon="📭",text="Kayıt bulunamadı."}){return <div className="empty"><div className="empty-icon">{icon}</div><div className="empty-text">{text}</div></div>}
+function Empty({icon="📭",text="Kayıt bulunamadı."}){
+  return <div className="empty"><div className="empty-icon">{icon}</div><div className="empty-text">{text}</div></div>;
+}
 function Spinner(){return <div className="loading"><div className="spin"/></div>}
 function StatusBadge({status}){
   const map={"Tamamlandı":"b-jade","Üretimde":"b-azure","Bekliyor":"b-amber","Hazır":"b-violet","Sevk Edildi":"b-amber","İptal":"b-rose","Gönderildi":"b-jade","Hazırlanıyor":"b-amber"};
   return <span className={`badge ${map[status]||"b-mist"}`}>{status}</span>;
 }
 function CurrencyTabs({cur,onChange}){
-  return <div className="currency-tabs">{["TRY","USD","EUR"].map(c=><button key={c} className={`currency-tab${cur===c?" on":""}`} onClick={()=>onChange(c)}>{c}</button>)}</div>;
+  return <div className="currency-tabs">
+    {["TRY","USD","EUR"].map(c=><button key={c} className={`currency-tab${cur===c?" on":""}`} onClick={()=>onChange(c)}>{c}</button>)}
+  </div>;
 }
 
+/* ═══════════════════════════════════════
+   LOGIN PAGE
+   ═══════════════════════════════════════ */
 function LoginPage(){
   const {login,register}=useAuth();
   const toast=useToast();
@@ -426,24 +494,34 @@ function LoginPage(){
       </>}
       <div className="field"><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ornek@geoser.com"/></div>
       <div className="field"><label>Şifre</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
-      <button className="btn btn-amber btn-full" onClick={handle} disabled={loading}>{loading?"Bekleniyor…":tab==="login"?"Giriş Yap →":"Hesap Oluştur →"}</button>
+      <button className="btn btn-amber btn-full" onClick={handle} disabled={loading}>
+        {loading?"Bekleniyor…":tab==="login"?"Giriş Yap →":"Hesap Oluştur →"}
+      </button>
     </div>
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   DASHBOARD
+   ═══════════════════════════════════════ */
 function Dashboard(){
   const {items:products}=useCol("products");
   const {items:customers}=useCol("customers");
   const {items:orders}=useCol("orders");
   const {items:quotes}=useCol("quotes");
   const [cur,setCur]=useState("TRY");
-  const totalRev=orders.filter(o=>o.status==="Tamamlandı").reduce((a,o)=>{return a+(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0)},0);
+  const totalRev=orders.filter(o=>o.status==="Tamamlandı").reduce((a,o)=>{
+    const total=(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+    return a+total;
+  },0);
   const pending=orders.filter(o=>o.status==="Bekliyor"||o.status==="Üretimde");
   const overdue=orders.filter(o=>o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status));
   const statusCounts=orders.reduce((a,o)=>{a[o.status]=(a[o.status]||0)+1;return a},{});
+  const recentOrders=[...orders].slice(0,5);
   const topCustomers=[...customers].sort((a,b)=>(b.totalOrders||0)-(a.totalOrders||0)).slice(0,5);
+  const productsByRevenue=products.slice(0,6);
   return <div>
-    {overdue.length>0&&<div className="alert alert-err">⚠️ <strong>{overdue.length} sipariş</strong> teslim tarihini geçti.</div>}
+    {overdue.length>0&&<div className="alert alert-err">⚠️ <strong>{overdue.length} sipariş</strong> teslim tarihini geçti: {overdue.map(o=>o.orderNo).join(", ")}</div>}
     <div className="page-head">
       <div><div className="page-title">Genel Bakış</div><div className="page-sub">GEOSER ERP Yönetim Paneli</div></div>
       <CurrencyTabs cur={cur} onChange={setCur}/>
@@ -461,24 +539,28 @@ function Dashboard(){
         <div className="card-head"><div className="card-title">📋 Son Siparişler</div><span className="badge b-amber">{orders.length}</span></div>
         <div className="tbl-wrap"><table>
           <thead><tr><th>No</th><th>Müşteri</th><th>Tutar</th><th>Durum</th></tr></thead>
-          <tbody>{orders.slice(0,5).map(o=>{
-            const total=(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
-            return <tr key={o.id}>
-              <td><span className="mono" style={{color:"var(--amber)"}}>{o.orderNo}</span></td>
-              <td style={{fontSize:12}}>{o.customerName}</td>
-              <td><span className="mono" style={{color:"var(--jade)"}}>{convertCurrency(total,cur)}</span></td>
-              <td><StatusBadge status={o.status}/></td>
-            </tr>
-          })}</tbody>
+          <tbody>
+            {recentOrders.map(o=>{
+              const total=(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+              return <tr key={o.id}>
+                <td><span className="mono" style={{color:"var(--amber)"}}>{o.orderNo}</span></td>
+                <td style={{fontSize:12}}>{o.customerName}</td>
+                <td><span className="mono" style={{color:"var(--jade)"}}>{convertCurrency(total,cur)}</span></td>
+                <td><StatusBadge status={o.status}/></td>
+              </tr>
+            })}
+          </tbody>
         </table></div>
       </div>
       <div className="card">
         <div className="card-head"><div className="card-title">🏆 En İyi Müşteriler</div></div>
-        <div className="chart-bar">{topCustomers.map((c,i)=><div key={c.id} className="chart-bar-row">
-          <div className="chart-bar-label" style={{textAlign:"left"}}>{c.name.slice(0,14)}</div>
-          <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${(c.totalOrders||1)*10}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)"][i]}}/></div>
-          <div className="chart-bar-val">{c.totalOrders} sipariş</div>
-        </div>)}</div>
+        <div className="chart-bar">
+          {topCustomers.map((c,i)=><div key={c.id} className="chart-bar-row">
+            <div className="chart-bar-label" style={{textAlign:"left"}}>{c.name.slice(0,14)}</div>
+            <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${(c.totalOrders||1)*10}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)"][i]}}/></div>
+            <div className="chart-bar-val">{c.totalOrders} sipariş</div>
+          </div>)}
+        </div>
       </div>
     </div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
@@ -491,7 +573,7 @@ function Dashboard(){
       </div>
       <div className="card">
         <div className="card-head"><div className="card-title">📦 Ürün Stok Özeti</div></div>
-        {products.slice(0,6).map(p=>{
+        {productsByRevenue.map(p=>{
           const pct=Math.min(100,Math.round(p.stock/300*100));
           const color=pct<20?"var(--rose)":pct<50?"var(--amber)":"var(--jade)";
           return <div key={p.id} style={{marginBottom:8}}>
@@ -504,6 +586,9 @@ function Dashboard(){
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   CUSTOMERS PAGE
+   ═══════════════════════════════════════ */
 const EMPTY_CUST={name:"",contact:"",country:"Türkiye",phone:"",email:"",type:"Yurtiçi",isVip:false,note:""};
 const CUST_TYPES=["Yurtiçi","İhracat","Bayi","Proje"];
 function CustomersPage(){
@@ -518,7 +603,13 @@ function CustomersPage(){
   const filtered=items.filter(c=>[c.name,c.contact,c.country,c.email].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
   const openAdd=()=>{setForm(EMPTY_CUST);setEditId(null);setModal(true)};
   const openEdit=c=>{setForm({...c});setEditId(c.id);setModal(true)};
-  const handleSave=async()=>{if(!form.name){toast("Firma adı gerekli.","err");return}await save({...form,id:editId||uid()});toast(editId?"Müşteri güncellendi.":"Müşteri eklendi.");setModal(false)};
+  const handleSave=async()=>{
+    if(!form.name){toast("Firma adı gerekli.","err");return}
+    await save({...form,id:editId||uid()});
+    toast(editId?"Müşteri güncellendi.":"Müşteri eklendi.");
+    setModal(false);
+  };
+  const handleDel=async()=>{await remove(delId);toast("Silindi.");setDelId(null)};
   if(loading)return <Spinner/>;
   return <div>
     <div className="page-head">
@@ -555,10 +646,13 @@ function CustomersPage(){
         <div className="field span2"><label>Not</label><textarea value={form.note} onChange={e=>F("note",e.target.value)}/></div>
       </div>
     </Modal>}
-    {delId&&<Confirm msg="Bu müşteriyi silmek istediğinize emin misiniz?" onYes={async()=>{await remove(delId);toast("Silindi.");setDelId(null)}} onNo={()=>setDelId(null)}/>}
+    {delId&&<Confirm msg="Bu müşteriyi silmek istediğinize emin misiniz?" onYes={handleDel} onNo={()=>setDelId(null)}/>}
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   PRODUCTS PAGE
+   ═══════════════════════════════════════ */
 const EMPTY_PROD={name:"",cat:"",unit:"Rulo",price:"",stock:"",code:"",desc:""};
 const CATS=["HDPE Membran","Su Tutucu Bant","Jeotekstil","Geonet","Drene","PVC Membran","Diğer"];
 const UNITS=["Rulo","m²","Adet","KG","Metre"];
@@ -576,20 +670,27 @@ function ProductsPage(){
   const filtered=items.filter(p=>(catFilter==="Tümü"||p.cat===catFilter)&&[p.name,p.cat,p.code].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
   const openAdd=()=>{setForm(EMPTY_PROD);setEditId(null);setModal(true)};
   const openEdit=p=>{setForm({...p,price:p.price||"",stock:p.stock||""});setEditId(p.id);setModal(true)};
-  const handleSave=async()=>{if(!form.name){toast("Ürün adı gerekli.","err");return}await save({...form,price:Number(form.price)||0,stock:Number(form.stock)||0,id:editId||uid()});toast(editId?"Ürün güncellendi.":"Ürün eklendi.");setModal(false)};
+  const handleSave=async()=>{
+    if(!form.name){toast("Ürün adı gerekli.","err");return}
+    await save({...form,price:Number(form.price)||0,stock:Number(form.stock)||0,id:editId||uid()});
+    toast(editId?"Ürün güncellendi.":"Ürün eklendi.");
+    setModal(false);
+  };
   if(loading)return <Spinner/>;
   return <div>
     <div className="page-head">
-      <div><div className="page-title">📦 Ürün Listesi</div><div className="page-sub">{items.length} ürün</div></div>
+      <div><div className="page-title">📦 Ürün Listesi</div><div className="page-sub">{items.length} ürün — HDPE, PVC, Jeotekstil</div></div>
       <button className="btn btn-amber" onClick={openAdd}>＋ Yeni Ürün</button>
     </div>
     <div className="toolbar">
       <Search value={q} onChange={setQ} placeholder="Ürün ara…"/>
-      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{cats.map(c=><button key={c} className={`btn btn-xs ${catFilter===c?"btn-amber":"btn-ghost"}`} onClick={()=>setCatFilter(c)}>{c}</button>)}</div>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {cats.map(c=><button key={c} className={`btn btn-xs ${catFilter===c?"btn-amber":"btn-ghost"}`} onClick={()=>setCatFilter(c)}>{c}</button>)}
+      </div>
     </div>
     {filtered.length===0?<Empty icon="📦" text="Ürün bulunamadı."/>:
     <div className="tbl-wrap"><table>
-      <thead><tr><th>Kod</th><th>Ürün Adı</th><th>Kategori</th><th>Birim</th><th>Fiyat</th><th>Stok</th><th>Durum</th><th></th></tr></thead>
+      <thead><tr><th>Kod</th><th>Ürün Adı</th><th>Kategori</th><th>Birim</th><th>Liste Fiyatı</th><th>Stok</th><th>Durum</th><th></th></tr></thead>
       <tbody>{filtered.map(p=><tr key={p.id}>
         <td><span className="mono" style={{fontSize:10,color:"var(--mist)"}}>{p.code||"-"}</span></td>
         <td><div style={{fontWeight:600,fontSize:13}}>{p.name}</div><div style={{fontSize:10,color:"var(--mist)",marginTop:1}}>{p.desc?.slice(0,40)}</div></td>
@@ -606,8 +707,8 @@ function ProductsPage(){
     </table></div>}
     {modal&&<Modal title={editId?"Ürün Düzenle":"Yeni Ürün"} onClose={()=>setModal(false)} onSave={handleSave} wide>
       <div className="form-grid">
-        <div className="field span2"><label>Ürün Adı *</label><input value={form.name} onChange={e=>F("name",e.target.value)}/></div>
-        <div className="field"><label>Ürün Kodu</label><input value={form.code} onChange={e=>F("code",e.target.value)}/></div>
+        <div className="field span2"><label>Ürün Adı *</label><input value={form.name} onChange={e=>F("name",e.target.value)} placeholder="HDPE Membran 1mm Eco"/></div>
+        <div className="field"><label>Ürün Kodu</label><input value={form.code} onChange={e=>F("code",e.target.value)} placeholder="GS-HD-1E"/></div>
         <div className="field"><label>Kategori</label><select value={form.cat} onChange={e=>F("cat",e.target.value)}><option value="">Seçin</option>{CATS.map(c=><option key={c}>{c}</option>)}</select></div>
         <div className="field"><label>Birim</label><select value={form.unit} onChange={e=>F("unit",e.target.value)}>{UNITS.map(u=><option key={u}>{u}</option>)}</select></div>
         <div className="field"><label>Liste Fiyatı (₺)</label><input type="number" value={form.price} onChange={e=>F("price",e.target.value)}/></div>
@@ -619,6 +720,9 @@ function ProductsPage(){
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   ORDERS PAGE
+   ═══════════════════════════════════════ */
 const ORDER_STATUSES=["Bekliyor","Üretimde","Hazır","Sevk Edildi","Tamamlandı","İptal"];
 function OrdersPage(){
   const {items,loading,save,remove}=useCol("orders");
@@ -634,38 +738,66 @@ function OrdersPage(){
   const [editId,setEditId]=useState(null);
   const [delId,setDelId]=useState(null);
   const F=(k,v)=>setForm(f=>({...f,[k]:v}));
-  const getTotal=o=>(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
-  const filtered=items.filter(o=>(statusF==="Tümü"||o.status===statusF)&&[o.orderNo,o.customerName].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
-  const openAdd=()=>{setForm({orderNo:"GYI-"+uid(),customerId:"",customerName:"",items:[{productId:"",productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Bekliyor",orderDate:today(),deliveryDate:"",currency:"TRY",note:""});setEditId(null);setModal(true)};
+  const openAdd=()=>{
+    setForm({orderNo:"GYI-"+uid(),customerId:"",customerName:"",items:[{productId:"",productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Bekliyor",orderDate:today(),deliveryDate:"",currency:"TRY",note:""});
+    setEditId(null);setModal(true);
+  };
   const openEdit=o=>{setForm({...o,items:o.items?[...o.items]:[]});setEditId(o.id);setModal(true)};
   const addItem=()=>setForm(f=>({...f,items:[...f.items,{productId:"",productName:"",qty:1,unit:"Rulo",unitPrice:0}]}));
   const updateItem=(i,k,v)=>setForm(f=>{const its=[...f.items];its[i]={...its[i],[k]:v};return{...f,items:its}});
   const removeItem=i=>setForm(f=>({...f,items:f.items.filter((_,idx)=>idx!==i)}));
-  const handleCustomer=(cid)=>{const c=customers.find(x=>x.id===cid);setForm(f=>({...f,customerId:cid,customerName:c?.name||""}))};
-  const handleProduct=(i,pid)=>{const p=products.find(x=>x.id===pid);updateItem(i,"productId",pid);if(p){updateItem(i,"productName",p.name);updateItem(i,"unit",p.unit);updateItem(i,"unitPrice",p.price)}};
-  const handleSave=async()=>{if(!form.customerId&&!form.customerName){toast("Müşteri gerekli.","err");return}await save({...form,id:editId||uid()});toast(editId?"Sipariş güncellendi.":"Sipariş eklendi.");setModal(false)};
+  const handleCustomer=(cid)=>{
+    const c=customers.find(x=>x.id===cid);
+    setForm(f=>({...f,customerId:cid,customerName:c?.name||""}));
+  };
+  const handleProduct=(i,pid)=>{
+    const p=products.find(x=>x.id===pid);
+    updateItem(i,"productId",pid);
+    if(p){updateItem(i,"productName",p.name);updateItem(i,"unit",p.unit);updateItem(i,"unitPrice",p.price)}
+  };
+  const handleSave=async()=>{
+    if(!form.customerId&&!form.customerName){toast("Müşteri gerekli.","err");return}
+    await save({...form,id:editId||uid()});
+    toast(editId?"Sipariş güncellendi.":"Sipariş eklendi.");
+    setModal(false);
+  };
+  const getTotal=o=>(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+  const filtered=items.filter(o=>(statusF==="Tümü"||o.status===statusF)&&[o.orderNo,o.customerName].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
+  const totalRev=filtered.reduce((a,o)=>a+getTotal(o),0);
   if(loading)return <Spinner/>;
   return <div>
     <div className="page-head">
-      <div><div className="page-title">📋 Sipariş Yönetimi</div><div className="page-sub">{items.length} sipariş</div></div>
+      <div><div className="page-title">📋 Sipariş Yönetimi</div><div className="page-sub">{items.length} sipariş — Toplam {convertCurrency(items.reduce((a,o)=>a+getTotal(o),0),cur)}</div></div>
       <div style={{display:"flex",gap:8,alignItems:"center"}}><CurrencyTabs cur={cur} onChange={setCur}/><button className="btn btn-amber" onClick={openAdd}>＋ Yeni Sipariş</button></div>
     </div>
     <div className="toolbar">
       <Search value={q} onChange={setQ} placeholder="Sipariş ara…"/>
-      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{["Tümü",...ORDER_STATUSES].map(s=><button key={s} className={`btn btn-xs ${statusF===s?"btn-amber":"btn-ghost"}`} onClick={()=>setStatusF(s)}>{s}</button>)}</div>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {["Tümü",...ORDER_STATUSES].map(s=><button key={s} className={`btn btn-xs ${statusF===s?"btn-amber":"btn-ghost"}`} onClick={()=>setStatusF(s)}>{s}</button>)}
+      </div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:14}}>
+      {[["Toplam",filtered.length,"var(--amber)"],["Bekliyor",filtered.filter(o=>o.status==="Bekliyor").length,"var(--amber)"],["Tamamlanan",filtered.filter(o=>o.status==="Tamamlandı").length,"var(--jade)"],["Gecikmiş",filtered.filter(o=>o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status)).length,"var(--rose)"]].map(([l,v,c])=>(
+        <div key={l} className="card" style={{borderTop:`2px solid ${c}`,padding:"10px 14px"}}>
+          <div className="kpi-label">{l}</div>
+          <div style={{fontFamily:"var(--font-h)",fontWeight:800,fontSize:24,color:c}}>{v}</div>
+        </div>
+      ))}
     </div>
     {filtered.length===0?<Empty icon="📋" text="Sipariş bulunamadı."/>:
     <div className="tbl-wrap"><table>
-      <thead><tr><th>Sipariş No</th><th>Müşteri</th><th>Toplam</th><th>Sipariş T.</th><th>Teslim T.</th><th>Durum</th><th></th></tr></thead>
+      <thead><tr><th>Sipariş No</th><th>Müşteri</th><th>Kalemler</th><th>Toplam</th><th>Sipariş T.</th><th>Teslim T.</th><th>Para</th><th>Durum</th><th></th></tr></thead>
       <tbody>{filtered.map(o=>{
         const total=getTotal(o);
         const overdue=o.deliveryDate&&new Date(o.deliveryDate)<new Date()&&!["Tamamlandı","Sevk Edildi","İptal"].includes(o.status);
         return <tr key={o.id} style={overdue?{background:"rgba(244,63,94,.03)"}:{}}>
           <td><span className="mono" style={{color:"var(--amber)",fontWeight:700}}>{o.orderNo}</span></td>
           <td style={{fontWeight:600,fontSize:12}}>{o.customerName}</td>
+          <td style={{fontSize:11,color:"var(--mist)"}}>{(o.items||[]).map(i=>`${i.qty} ${i.unit} ${i.productName||""}`).join(", ").slice(0,40)}</td>
           <td><span className="mono" style={{color:"var(--jade)",fontWeight:700}}>{convertCurrency(total,cur)}</span></td>
           <td><span className="mono" style={{fontSize:11,color:"var(--mist)"}}>{o.orderDate}</span></td>
-          <td><span className="mono" style={{fontSize:11,color:overdue?"var(--rose)":"var(--mist)",fontWeight:overdue?700:400}}>{o.deliveryDate||"-"}{overdue?" ⚠":""}</span></td>
+          <td><span className={`mono`} style={{fontSize:11,color:overdue?"var(--rose)":"var(--mist)",fontWeight:overdue?700:400}}>{o.deliveryDate||"-"}{overdue?" ⚠":""}</span></td>
+          <td><span className="badge b-mist">{o.currency}</span></td>
           <td><StatusBadge status={o.status}/></td>
           <td><div style={{display:"flex",gap:4}}>
             <button className="btn btn-ghost btn-xs" onClick={()=>setDetailModal(o)}>👁</button>
@@ -679,14 +811,22 @@ function OrdersPage(){
       <div className="form-grid">
         <div className="field"><label>Sipariş No</label><input value={form.orderNo} onChange={e=>F("orderNo",e.target.value)}/></div>
         <div className="field"><label>Durum</label><select value={form.status} onChange={e=>F("status",e.target.value)}>{ORDER_STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
-        <div className="field span2"><label>Müşteri *</label><select value={form.customerId} onChange={e=>handleCustomer(e.target.value)}><option value="">Müşteri Seçin</option>{customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+        <div className="field span2"><label>Müşteri *</label>
+          <select value={form.customerId} onChange={e=>handleCustomer(e.target.value)}>
+            <option value="">Müşteri Seçin</option>
+            {customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
         <div className="field"><label>Sipariş Tarihi</label><input type="date" value={form.orderDate} onChange={e=>F("orderDate",e.target.value)}/></div>
         <div className="field"><label>Teslim Tarihi</label><input type="date" value={form.deliveryDate} onChange={e=>F("deliveryDate",e.target.value)}/></div>
         <div className="field"><label>Para Birimi</label><select value={form.currency} onChange={e=>F("currency",e.target.value)}><option>TRY</option><option>USD</option><option>EUR</option></select></div>
         <div className="field span2">
           <label>Sipariş Kalemleri</label>
           {(form.items||[]).map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr auto",gap:6,marginBottom:6}}>
-            <select value={item.productId} onChange={e=>handleProduct(i,e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}><option value="">Ürün Seç</option>{products.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>
+            <select value={item.productId} onChange={e=>handleProduct(i,e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}>
+              <option value="">Ürün Seç</option>
+              {products.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
             <input type="number" value={item.qty} onChange={e=>updateItem(i,"qty",e.target.value)} placeholder="Adet" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
             <input value={item.unit} onChange={e=>updateItem(i,"unit",e.target.value)} placeholder="Birim" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
             <input type="number" value={item.unitPrice} onChange={e=>updateItem(i,"unitPrice",e.target.value)} placeholder="Fiyat" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
@@ -697,26 +837,36 @@ function OrdersPage(){
         <div className="field span2"><label>Not</label><textarea value={form.note} onChange={e=>F("note",e.target.value)}/></div>
       </div>
     </Modal>}
-    {detailModal&&<Modal title={`Sipariş — ${detailModal.orderNo}`} onClose={()=>setDetailModal(null)}>
+    {detailModal&&<Modal title={`Sipariş Detayı — ${detailModal.orderNo}`} onClose={()=>setDetailModal(null)}>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-        {[["Müşteri",detailModal.customerName],["Durum",""],["Sipariş T.",detailModal.orderDate],["Teslim T.",detailModal.deliveryDate||"-"],["Para",detailModal.currency]].map(([l,v],i)=><div key={i} style={{padding:"10px 12px",background:"var(--ink3)",borderRadius:8}}><div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{l}</div>{l==="Durum"?<StatusBadge status={detailModal.status}/>:<div style={{fontWeight:600,fontSize:13}}>{v}</div>}</div>)}
+        {[["Müşteri",detailModal.customerName],["Durum",""],["Sipariş",detailModal.orderDate],["Teslim",detailModal.deliveryDate||"-"],["Para Birimi",detailModal.currency]].map(([l,v],i)=><div key={i} style={{padding:"10px 12px",background:"var(--ink3)",borderRadius:8}}><div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{l}</div>{l==="Durum"?<StatusBadge status={detailModal.status}/>:<div style={{fontWeight:600,fontSize:13}}>{v}</div>}</div>)}
       </div>
+      <div><div style={{fontSize:11,color:"var(--mist)",marginBottom:6,fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Sipariş Kalemleri</div>
       <div className="tbl-wrap"><table>
         <thead><tr><th>Ürün</th><th>Adet</th><th>Birim Fiyat</th><th>Toplam</th></tr></thead>
-        <tbody>
-          {(detailModal.items||[]).map((item,i)=><tr key={i}><td style={{fontSize:12}}>{item.productName}</td><td className="mono">{item.qty} {item.unit}</td><td className="mono" style={{color:"var(--amber)"}}>₺{Number(item.unitPrice).toLocaleString("tr-TR")}</td><td className="mono" style={{color:"var(--jade)",fontWeight:700}}>₺{(Number(item.qty)*Number(item.unitPrice)).toLocaleString("tr-TR")}</td></tr>)}
-          <tr><td colSpan={3} style={{fontWeight:700,textAlign:"right"}}>Toplam:</td><td className="mono" style={{color:"var(--jade)",fontWeight:800,fontSize:14}}>₺{getTotal(detailModal).toLocaleString("tr-TR")}</td></tr>
+        <tbody>{(detailModal.items||[]).map((item,i)=><tr key={i}>
+          <td style={{fontSize:12}}>{item.productName}</td>
+          <td className="mono">{item.qty} {item.unit}</td>
+          <td className="mono" style={{color:"var(--amber)"}}>₺{Number(item.unitPrice).toLocaleString("tr-TR")}</td>
+          <td className="mono" style={{color:"var(--jade)",fontWeight:700}}>₺{(Number(item.qty)*Number(item.unitPrice)).toLocaleString("tr-TR")}</td>
+        </tr>)}
+        <tr><td colSpan={3} style={{fontWeight:700,textAlign:"right"}}>Toplam:</td><td className="mono" style={{color:"var(--jade)",fontWeight:800,fontSize:14}}>₺{getTotal(detailModal).toLocaleString("tr-TR")}</td></tr>
         </tbody>
-      </table></div>
+      </table></div></div>
+      {detailModal.note&&<div style={{marginTop:10,padding:"10px 12px",background:"var(--ink3)",borderRadius:8,fontSize:12,color:"var(--mist)"}}><strong style={{color:"var(--sky)"}}>Not:</strong> {detailModal.note}</div>}
     </Modal>}
     {delId&&<Confirm msg="Bu siparişi silmek istediğinize emin misiniz?" onYes={async()=>{await remove(delId);toast("Silindi.");setDelId(null)}} onNo={()=>setDelId(null)}/>}
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   QUOTES PAGE
+   ═══════════════════════════════════════ */
 const QUOTE_STATUSES=["Hazırlanıyor","Gönderildi","Onaylandı","Reddedildi","İptal"];
 function QuotesPage(){
   const {items,loading,save,remove}=useCol("quotes");
   const {items:customers}=useCol("customers");
+  const {items:products}=useCol("products");
   const toast=useToast();
   const [modal,setModal]=useState(false);
   const [editId,setEditId]=useState(null);
@@ -724,28 +874,41 @@ function QuotesPage(){
   const [cur,setCur]=useState("TRY");
   const [form,setForm]=useState({quoteNo:"",customerId:"",customerName:"",items:[],status:"Hazırlanıyor",validUntil:"",currency:"TRY",discount:0,note:""});
   const F=(k,v)=>setForm(f=>({...f,[k]:v}));
-  const getTotal=q=>{const sub=(q.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);return sub*(1-Number(q.discount||0)/100)};
+  const getTotal=(q)=>{
+    const sub=(q.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
+    return sub*(1-Number(q.discount||0)/100);
+  };
   const addItem=()=>setForm(f=>({...f,items:[...f.items,{productName:"",qty:1,unit:"Rulo",unitPrice:0}]}));
   const updateItem=(i,k,v)=>setForm(f=>{const its=[...f.items];its[i]={...its[i],[k]:v};return{...f,items:its}});
   const removeItem=i=>setForm(f=>({...f,items:f.items.filter((_,idx)=>idx!==i)}));
-  const openAdd=()=>{setForm({quoteNo:"TKL-"+new Date().getFullYear()+"-"+uid(),customerId:"",customerName:"",items:[{productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Hazırlanıyor",validUntil:"",currency:"TRY",discount:0,note:""});setEditId(null);setModal(true)};
+  const openAdd=()=>{
+    setForm({quoteNo:"TKL-"+new Date().getFullYear()+"-"+uid(),customerId:"",customerName:"",items:[{productName:"",qty:1,unit:"Rulo",unitPrice:0}],status:"Hazırlanıyor",validUntil:"",currency:"TRY",discount:0,note:""});
+    setEditId(null);setModal(true);
+  };
   const openEdit=q=>{setForm({...q,items:q.items?[...q.items]:[]});setEditId(q.id);setModal(true)};
-  const handleSave=async()=>{if(!form.customerName&&!form.customerId){toast("Müşteri gerekli.","err");return}await save({...form,id:editId||uid()});toast("Teklif kaydedildi.");setModal(false)};
+  const handleSave=async()=>{
+    if(!form.customerName&&!form.customerId){toast("Müşteri gerekli.","err");return}
+    const c=customers.find(x=>x.id===form.customerId);
+    await save({...form,customerName:form.customerName||c?.name||"",id:editId||uid()});
+    toast("Teklif kaydedildi.");setModal(false);
+  };
   if(loading)return <Spinner/>;
   return <div>
     <div className="page-head">
-      <div><div className="page-title">📄 Teklif Yönetimi</div><div className="page-sub">{items.length} teklif</div></div>
+      <div><div className="page-title">📄 Teklif Yönetimi</div><div className="page-sub">{items.length} teklif — Çok para birimli</div></div>
       <div style={{display:"flex",gap:8}}><CurrencyTabs cur={cur} onChange={setCur}/><button className="btn btn-amber" onClick={openAdd}>＋ Yeni Teklif</button></div>
     </div>
     {items.length===0?<Empty icon="📄" text="Henüz teklif yok."/>:
     <div className="tbl-wrap"><table>
-      <thead><tr><th>Teklif No</th><th>Müşteri</th><th>Toplam</th><th>İndirim</th><th>Geçerlilik</th><th>Durum</th><th></th></tr></thead>
+      <thead><tr><th>Teklif No</th><th>Müşteri</th><th>Kalemler</th><th>Toplam</th><th>İndirim</th><th>Geçerlilik</th><th>Para</th><th>Durum</th><th></th></tr></thead>
       <tbody>{items.map(q=><tr key={q.id}>
         <td><span className="mono" style={{color:"var(--violet)",fontWeight:700}}>{q.quoteNo}</span></td>
         <td style={{fontWeight:600,fontSize:12}}>{q.customerName}</td>
+        <td style={{fontSize:11,color:"var(--mist)"}}>{(q.items||[]).length} kalem</td>
         <td><span className="mono" style={{color:"var(--amber)",fontWeight:700}}>{convertCurrency(getTotal(q),cur)}</span></td>
         <td><span className="badge b-rose">{q.discount||0}%</span></td>
         <td><span className="mono" style={{fontSize:11,color:"var(--mist)"}}>{q.validUntil||"-"}</span></td>
+        <td><span className="badge b-mist">{q.currency}</span></td>
         <td><StatusBadge status={q.status}/></td>
         <td><div style={{display:"flex",gap:4}}>
           <button className="btn btn-ghost btn-xs" onClick={()=>openEdit(q)}>✏</button>
@@ -757,8 +920,12 @@ function QuotesPage(){
       <div className="form-grid">
         <div className="field"><label>Teklif No</label><input value={form.quoteNo} onChange={e=>F("quoteNo",e.target.value)}/></div>
         <div className="field"><label>Durum</label><select value={form.status} onChange={e=>F("status",e.target.value)}>{QUOTE_STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
-        <div className="field span2"><label>Müşteri *</label><select value={form.customerId} onChange={e=>{const c=customers.find(x=>x.id===e.target.value);setForm(f=>({...f,customerId:e.target.value,customerName:c?.name||""}))}}>
-          <option value="">Müşteri Seçin</option>{customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+        <div className="field span2"><label>Müşteri *</label>
+          <select value={form.customerId} onChange={e=>{const c=customers.find(x=>x.id===e.target.value);setForm(f=>({...f,customerId:e.target.value,customerName:c?.name||""}))}}>
+            <option value="">Müşteri Seçin</option>
+            {customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
         <div className="field"><label>Geçerlilik Tarihi</label><input type="date" value={form.validUntil} onChange={e=>F("validUntil",e.target.value)}/></div>
         <div className="field"><label>Para Birimi</label><select value={form.currency} onChange={e=>F("currency",e.target.value)}><option>TRY</option><option>USD</option><option>EUR</option></select></div>
         <div className="field"><label>İndirim (%)</label><input type="number" min="0" max="100" value={form.discount} onChange={e=>F("discount",e.target.value)}/></div>
@@ -768,7 +935,7 @@ function QuotesPage(){
             <input value={item.productName} onChange={e=>updateItem(i,"productName",e.target.value)} placeholder="Ürün adı" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
             <input type="number" value={item.qty} onChange={e=>updateItem(i,"qty",e.target.value)} placeholder="Miktar" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
             <input value={item.unit} onChange={e=>updateItem(i,"unit",e.target.value)} placeholder="Birim" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
-            <input type="number" value={item.unitPrice} onChange={e=>updateItem(i,"unitPrice",e.target.value)} placeholder="Fiyat" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
+            <input type="number" value={item.unitPrice} onChange={e=>updateItem(i,"unitPrice",e.target.value)} placeholder="Birim Fiyat" style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 8px",fontSize:12}}/>
             <button className="btn btn-danger btn-xs" onClick={()=>removeItem(i)}>✕</button>
           </div>)}
           <button className="btn btn-ghost btn-sm" onClick={addItem}>＋ Kalem Ekle</button>
@@ -780,17 +947,26 @@ function QuotesPage(){
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   REPORTS PAGE
+   ═══════════════════════════════════════ */
 function ReportsPage(){
   const {items:orders}=useCol("orders");
   const {items:customers}=useCol("customers");
+  const {items:products}=useCol("products");
   const [cur,setCur]=useState("TRY");
   const [from,setFrom]=useState("");
   const [to,setTo]=useState("");
-  const filtered=orders.filter(o=>{if(from&&o.orderDate<from)return false;if(to&&o.orderDate>to)return false;return true});
+  const filtered=orders.filter(o=>{
+    if(from&&o.orderDate<from)return false;
+    if(to&&o.orderDate>to)return false;
+    return true;
+  });
   const getTotal=o=>(o.items||[]).reduce((s,i)=>s+Number(i.qty||0)*Number(i.unitPrice||0),0);
   const totalRev=filtered.reduce((a,o)=>a+getTotal(o),0);
   const completedRev=filtered.filter(o=>o.status==="Tamamlandı").reduce((a,o)=>a+getTotal(o),0);
   const byCustomer=Object.values(filtered.reduce((a,o)=>{if(!a[o.customerName])a[o.customerName]={name:o.customerName,orders:0,total:0};a[o.customerName].orders++;a[o.customerName].total+=getTotal(o);return a},{})).sort((a,b)=>b.total-a.total);
+  const byProduct=Object.values(filtered.reduce((a,o)=>{(o.items||[]).forEach(i=>{if(!a[i.productName])a[i.productName]={name:i.productName,qty:0,total:0};a[i.productName].qty+=Number(i.qty||0);a[i.productName].total+=Number(i.qty||0)*Number(i.unitPrice||0)});return a},{})).sort((a,b)=>b.total-a.total);
   const downloadCSV=()=>{
     const rows=[["Sipariş No","Müşteri","Toplam","Durum","Tarih"],...filtered.map(o=>[o.orderNo,o.customerName,getTotal(o),o.status,o.orderDate])];
     const csv=rows.map(r=>r.join(",")).join("\n");
@@ -808,7 +984,7 @@ function ReportsPage(){
         <span style={{color:"var(--mist)"}}>—</span>
         <input type="date" value={to} onChange={e=>setTo(e.target.value)} style={{background:"var(--ink3)",border:"1px solid var(--rim2)",borderRadius:6,color:"var(--sky)",padding:"6px 10px",fontSize:12}}/>
         {(from||to)&&<button className="btn btn-ghost btn-xs" onClick={()=>{setFrom("");setTo("")}}>✕ Temizle</button>}
-        <span style={{fontSize:11,color:"var(--mist)"}}>{filtered.length} sipariş</span>
+        <span style={{fontSize:11,color:"var(--mist)"}}>{filtered.length} sipariş gösteriliyor</span>
       </div>
     </div>
     <div className="kpi-grid" style={{marginBottom:14}}>
@@ -817,70 +993,173 @@ function ReportsPage(){
       <div className="kpi kpi-azure"><div className="kpi-label">Sipariş Sayısı</div><div className="kpi-val">{filtered.length}</div></div>
       <div className="kpi kpi-violet"><div className="kpi-label">Müşteri</div><div className="kpi-val">{customers.length}</div></div>
     </div>
-    <div className="card">
-      <div className="card-head"><div className="card-title">🏆 Müşteri Bazlı Satış</div></div>
-      {byCustomer.length===0?<Empty icon="📊" text="Veri yok"/>:<div className="chart-bar">
-        {byCustomer.slice(0,6).map((c,i)=><div key={c.name} className="chart-bar-row">
-          <div className="chart-bar-label">{(c.name||"").slice(0,12)}</div>
-          <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${byCustomer[0]?(c.total/byCustomer[0].total)*100:0}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)","var(--mist)"][i]}}/></div>
-          <div className="chart-bar-val">{convertCurrency(c.total,cur)}</div>
-        </div>)}
-      </div>}
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+      <div className="card">
+        <div className="card-head"><div className="card-title">🏆 Müşteri Bazlı Satış</div></div>
+        {byCustomer.length===0?<Empty icon="📊" text="Veri yok"/>:<div className="chart-bar">
+          {byCustomer.slice(0,6).map((c,i)=><div key={c.name} className="chart-bar-row">
+            <div className="chart-bar-label">{(c.name||"").slice(0,12)}</div>
+            <div className="chart-bar-track"><div className="chart-bar-fill" style={{width:`${byCustomer[0]?(c.total/byCustomer[0].total)*100:0}%`,background:["var(--amber)","var(--jade)","var(--azure)","var(--violet)","var(--rose)","var(--mist)"][i]}}/></div>
+            <div className="chart-bar-val">{convertCurrency(c.total,cur)}</div>
+          </div>)}
+        </div>}
+      </div>
+      <div className="card">
+        <div className="card-head"><div className="card-title">📦 Ürün Bazlı Satış</div></div>
+        {byProduct.length===0?<Empty icon="📦" text="Veri yok"/>:<div className="tbl-wrap"><table>
+          <thead><tr><th>Ürün</th><th>Adet</th><th>Toplam</th></tr></thead>
+          <tbody>{byProduct.slice(0,6).map(p=><tr key={p.name}>
+            <td style={{fontSize:11}}>{(p.name||"—").slice(0,22)}</td>
+            <td className="mono" style={{fontSize:11}}>{p.qty}</td>
+            <td className="mono" style={{color:"var(--jade)",fontWeight:700,fontSize:11}}>{convertCurrency(p.total,cur)}</td>
+          </tr>)}</tbody>
+        </table></div>}
+      </div>
     </div>
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   SETTINGS PAGE
+   ═══════════════════════════════════════ */
+function PinManager(){
+  const toast=useToast();
+  const [pin1,setPin1]=useState("");
+  const [pin2,setPin2]=useState("");
+  const [mode,setMode]=useState("view"); // view | set | remove
+  const current=localStorage.getItem("geoser_pin")||"";
+  const savePin=()=>{
+    if(!pin1||pin1.length<4){toast("PIN en az 4 rakam olmalı.","err");return;}
+    if(pin1!==pin2){toast("PIN'ler eşleşmiyor.","err");return;}
+    if(!/^\d+$/.test(pin1)){toast("Sadece rakam girin.","err");return;}
+    localStorage.setItem("geoser_pin",pin1);
+    toast("PIN kaydedildi! Sayfa yenilenince aktif olur.");
+    setPin1("");setPin2("");setMode("view");
+  };
+  const removePin=()=>{
+    localStorage.removeItem("geoser_pin");
+    toast("PIN kaldırıldı.");
+    setMode("view");
+  };
+  if(mode==="set")return <div>
+    <div style={{fontSize:12,color:"var(--mist)",marginBottom:12}}>{current?"Yeni PIN belirleyin:":"PIN kilidi oluşturun (4-6 rakam):"}</div>
+    <div className="form-grid">
+      <div className="field"><label>PIN *</label><input type="password" maxLength={6} value={pin1} onChange={e=>setPin1(e.target.value.replace(/\D/g,""))} placeholder="1234"/></div>
+      <div className="field"><label>PIN Tekrar *</label><input type="password" maxLength={6} value={pin2} onChange={e=>setPin2(e.target.value.replace(/\D/g,""))} placeholder="1234"/></div>
+    </div>
+    <div style={{display:"flex",gap:8,marginTop:8}}>
+      <button className="btn btn-amber btn-sm" onClick={savePin}>💾 PIN Kaydet</button>
+      <button className="btn btn-ghost btn-sm" onClick={()=>setMode("view")}>İptal</button>
+    </div>
+  </div>;
+  return <div>
+    <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+      <div style={{flex:1,padding:"10px 14px",background:"var(--ink3)",borderRadius:8,fontSize:12}}>
+        {current?<span style={{color:"var(--jade)"}}>✅ PIN kilidi aktif — {current.length} haneli</span>:<span style={{color:"var(--mist)"}}>⚠️ PIN kilidi kapalı</span>}
+      </div>
+      <button className="btn btn-amber btn-sm" onClick={()=>setMode("set")}>{current?"🔑 PIN Değiştir":"＋ PIN Ekle"}</button>
+      {current&&<button className="btn btn-danger btn-sm" onClick={removePin}>🗑 Kaldır</button>}
+    </div>
+    <div style={{fontSize:11,color:"var(--mist)"}}>PIN aktifken site açıldığında önce PIN ekranı gelir. Sadece bu tarayıcıda çalışır.</div>
+  </div>;
+}
+
 function SettingsPage(){
-  const {user}=useAuth();
+  const {user,hasPage}=useAuth();
   const toast=useToast();
   const isAdmin=user?.role==="admin";
   const [activeTab,setActiveTab]=useState("profile");
+  // Kullanıcı yönetimi state
   const [users,setUsers]=useState([]);
   const [loadingUsers,setLoadingUsers]=useState(false);
   const [addUserModal,setAddUserModal]=useState(false);
   const [newUser,setNewUser]=useState({email:"",password:"",name:"",role:"sales"});
   const [editRoleModal,setEditRoleModal]=useState(null);
+  // Menü yönetimi state
   const [menuConfig,setMenuConfig]=useState(()=>{
-    try{return JSON.parse(localStorage.getItem("geoser_menu_config")||"null")||{dashboard:true,customers:true,orders:true,quotes:true,products:true,reports:true,settings:true};}
+    try{return JSON.parse(localStorage.getItem("geoser_menu_config")||"null")||
+    {dashboard:true,customers:true,orders:true,quotes:true,products:true,reports:true,settings:true};}
     catch{return{dashboard:true,customers:true,orders:true,quotes:true,products:true,reports:true,settings:true};}
   });
   const MENU_LABELS={dashboard:"🏠 Genel Bakış",customers:"👥 Müşteriler",orders:"📋 Siparişler",quotes:"📄 Teklifler",products:"📦 Ürün Listesi",reports:"📊 Raporlar",settings:"⚙️ Ayarlar"};
+
   const loadUsers=async()=>{
-    if(!db)return;setLoadingUsers(true);
-    try{const snap=await db.collection("users").get();setUsers(snap.docs.map(d=>({id:d.id,...d.data()})));}
-    catch(e){toast("Kullanıcılar yüklenemedi: "+e.message,"err");}
+    if(!db)return;
+    setLoadingUsers(true);
+    try{
+      const snap=await db.collection("users").get();
+      setUsers(snap.docs.map(d=>({id:d.id,...d.data()})));
+    }catch(e){toast("Kullanıcılar yüklenemedi: "+e.message,"err");}
     setLoadingUsers(false);
   };
+
   useEffect(()=>{if(activeTab==="users"&&isAdmin)loadUsers();},[activeTab]);
+
   const handleAddUser=async()=>{
     if(!newUser.email||!newUser.password){toast("E-posta ve şifre gerekli.","err");return;}
     if(newUser.password.length<6){toast("Şifre en az 6 karakter olmalı.","err");return;}
     try{
-      const res=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:newUser.email,password:newUser.password,returnSecureToken:true})});
+      // Firebase Auth REST API ile kullanıcı oluştur
+      const res=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI`,{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({email:newUser.email,password:newUser.password,returnSecureToken:true})
+      });
       const data=await res.json();
       if(data.error)throw new Error(data.error.message);
-      await db.collection("users").doc(data.localId).set({name:newUser.name||newUser.email,email:newUser.email,role:newUser.role,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      // Firestore'a profil kaydet
+      await db.collection("users").doc(data.localId).set({
+        name:newUser.name||newUser.email,email:newUser.email,role:newUser.role,
+        createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
       toast("Kullanıcı oluşturuldu: "+newUser.email);
-      setAddUserModal(false);setNewUser({email:"",password:"",name:"",role:"sales"});loadUsers();
-    }catch(e){toast(e.message,"err");}
+      setAddUserModal(false);
+      setNewUser({email:"",password:"",name:"",role:"sales"});
+      loadUsers();
+    }catch(e){
+      const ERR={"EMAIL_EXISTS":"Bu e-posta zaten kayıtlı.","WEAK_PASSWORD : Password should be at least 6 characters":"Şifre en az 6 karakter olmalı."};
+      toast(ERR[e.message]||e.message,"err");
+    }
   };
+
   const handleChangeRole=async(userId,newRole)=>{
-    try{await db.collection("users").doc(userId).update({role:newRole});toast("Rol güncellendi.");setEditRoleModal(null);loadUsers();}
-    catch(e){toast("Hata: "+e.message,"err");}
+    try{
+      await db.collection("users").doc(userId).update({role:newRole});
+      toast("Rol güncellendi.");
+      setEditRoleModal(null);
+      loadUsers();
+    }catch(e){toast("Hata: "+e.message,"err");}
   };
+
   const handleDeleteUser=async(userId,email)=>{
     if(!confirm(email+" kullanıcısını silmek istediğinize emin misiniz?"))return;
-    try{await db.collection("users").doc(userId).delete();toast("Kullanıcı silindi.");loadUsers();}
-    catch(e){toast("Hata: "+e.message,"err");}
+    try{
+      await db.collection("users").doc(userId).delete();
+      toast("Kullanıcı profili silindi. Firebase Auth'dan da silinmesi için Console'u kullanın.");
+      loadUsers();
+    }catch(e){toast("Hata: "+e.message,"err");}
   };
-  const saveMenuConfig=(cfg)=>{setMenuConfig(cfg);localStorage.setItem("geoser_menu_config",JSON.stringify(cfg));toast("Menü kaydedildi. Sayfayı yenileyin.")};
+
+  const saveMenuConfig=(cfg)=>{
+    setMenuConfig(cfg);
+    localStorage.setItem("geoser_menu_config",JSON.stringify(cfg));
+    toast("Menü kaydedildi. Sayfayı yenileyin.");
+  };
+
   const ROLE_OPTS=[{v:"admin",l:"👑 Yönetici"},{v:"sales",l:"💼 Satış"},{v:"production",l:"⚙️ Üretim"},{v:"accounting",l:"📊 Muhasebe"}];
-  const tabs=[{id:"profile",label:"👤 Profil"},...(isAdmin?[{id:"users",label:"👥 Kullanıcılar"},{id:"menu",label:"🗂️ Menü Yönetimi"},{id:"system",label:"🔥 Sistem"}]:[])];
+
+  const tabs=[
+    {id:"profile",label:"👤 Profil"},
+    ...(isAdmin?[{id:"users",label:"👥 Kullanıcılar"},{id:"menu",label:"🗂️ Menü Yönetimi"},{id:"system",label:"🔥 Sistem"}]:[])
+  ];
+
   return <div>
     <div className="page-head"><div className="page-title">⚙️ Ayarlar</div></div>
+    {/* Tab bar */}
     <div style={{display:"flex",gap:4,marginBottom:16,borderBottom:"1px solid var(--rim)",paddingBottom:8,flexWrap:"wrap"}}>
       {tabs.map(t=><button key={t.id} className={`btn btn-sm ${activeTab===t.id?"btn-amber":"btn-ghost"}`} onClick={()=>setActiveTab(t.id)}>{t.label}</button>)}
     </div>
+
+    {/* PROFIL */}
     {activeTab==="profile"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
       <div className="card">
         <div className="card-head"><div className="card-title">👤 Hesap Bilgilerim</div></div>
@@ -892,7 +1171,7 @@ function SettingsPage(){
             </div>
           ))}
           <div style={{padding:"9px 12px",background:"var(--amber3)",border:"1px solid rgba(245,166,35,.2)",borderRadius:8,fontSize:11,color:"var(--amber)"}}>
-            🔐 Şifrenizi değiştirmek için çıkış yapıp "Şifremi unuttum" seçeneğini kullanın.
+            🔐 Şifrenizi değiştirmek için: Çıkış yapın → "Şifremi unuttum" seçeneğini kullanın.
           </div>
         </div>
       </div>
@@ -908,6 +1187,8 @@ function SettingsPage(){
         </div>
       </div>
     </div>}
+
+    {/* KULLANICI YÖNETİMİ */}
     {activeTab==="users"&&isAdmin&&<div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
         <div style={{fontSize:13,color:"var(--mist)"}}>Sisteme erişimi olan kullanıcılar</div>
@@ -919,27 +1200,36 @@ function SettingsPage(){
         <tbody>{users.map(u=><tr key={u.id}>
           <td style={{fontWeight:600}}>{u.name||"-"}</td>
           <td style={{fontFamily:"var(--font-m)",fontSize:12,color:"var(--mist)"}}>{u.email}</td>
-          <td><span className={`badge ${u.role==="admin"?"b-amber":u.role==="sales"?"b-azure":u.role==="production"?"b-jade":"b-violet"}`}>{ROLES[u.role]?.icon} {ROLES[u.role]?.label||u.role}</span></td>
+          <td>
+            <span className={`badge ${u.role==="admin"?"b-amber":u.role==="sales"?"b-azure":u.role==="production"?"b-jade":"b-violet"}`}>
+              {ROLES[u.role]?.icon} {ROLES[u.role]?.label||u.role}
+            </span>
+          </td>
           <td><div style={{display:"flex",gap:4}}>
             <button className="btn btn-ghost btn-xs" onClick={()=>setEditRoleModal(u)}>👑 Rol Değiştir</button>
             {u.id!==user?.uid&&<button className="btn btn-danger btn-xs" onClick={()=>handleDeleteUser(u.id,u.email)}>🗑</button>}
           </div></td>
         </tr>)}</tbody>
       </table></div>}
-      {users.length===0&&!loadingUsers&&<Empty icon="👥" text="Kullanıcı bulunamadı."/>}
+      {users.length===0&&!loadingUsers&&<div className="empty"><div className="empty-icon">👥</div><div className="empty-text">Kullanıcı bulunamadı. Firestore users koleksiyonunu kontrol edin.</div></div>}
     </div>}
+
+    {/* MENÜ YÖNETİMİ */}
     {activeTab==="menu"&&isAdmin&&<div>
-      <div style={{fontSize:13,color:"var(--mist)",marginBottom:12}}>Hangi sekmelerin görüneceğini ayarlayın.</div>
+      <div style={{fontSize:13,color:"var(--mist)",marginBottom:12}}>Hangi sekmelerin görüneceğini ayarlayın. Kaydettikten sonra sayfayı yenileyin.</div>
       <div className="card">
         <div className="card-head"><div className="card-title">🗂️ Menü Sekmeleri</div></div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           {Object.entries(MENU_LABELS).map(([key,label])=>(
             <div key={key} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",background:"var(--ink3)",borderRadius:8}}>
               <span style={{fontSize:13,fontWeight:500}}>{label}</span>
-              <div style={{width:36,height:20,borderRadius:10,background:menuConfig[key]?"var(--amber)":"var(--rim2)",position:"relative",cursor:key==="settings"?"not-allowed":"pointer",transition:"background .2s"}}
-                onClick={()=>{if(key!=="settings")setMenuConfig(p=>({...p,[key]:!p[key]}))}}>
-                <div style={{width:16,height:16,borderRadius:"50%",background:"white",position:"absolute",top:2,left:menuConfig[key]?18:2,transition:"left .2s"}}/>
-              </div>
+              <label style={{display:"flex",alignItems:"center",gap:8,cursor:key==="settings"?"not-allowed":"pointer"}}>
+                {key==="settings"&&<span style={{fontSize:10,color:"var(--mist)"}}>Her zaman aktif</span>}
+                <div style={{width:36,height:20,borderRadius:10,background:menuConfig[key]?"var(--amber)":"var(--rim2)",position:"relative",cursor:key==="settings"?"not-allowed":"pointer",transition:"background .2s"}}
+                  onClick={()=>{if(key!=="settings")setMenuConfig(p=>({...p,[key]:!p[key]}))}}>
+                  <div style={{width:16,height:16,borderRadius:"50%",background:"white",position:"absolute",top:2,left:menuConfig[key]?18:2,transition:"left .2s"}}/>
+                </div>
+              </label>
             </div>
           ))}
         </div>
@@ -949,7 +1239,15 @@ function SettingsPage(){
         </div>
       </div>
     </div>}
-    {activeTab==="system"&&isAdmin&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+
+    {/* SİSTEM BİLGİLERİ */}
+    {activeTab==="system"&&isAdmin&&<div>
+      {/* PIN YÖNETİMİ */}
+      <div className="card" style={{marginBottom:14}}>
+        <div className="card-head"><div className="card-title">🔐 PIN Kilidi</div></div>
+        <PinManager/>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
       <div className="card">
         <div className="card-head"><div className="card-title">🔥 Firebase</div></div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
@@ -962,9 +1260,9 @@ function SettingsPage(){
         </div>
       </div>
       <div className="card">
-        <div className="card-head"><div className="card-title">🌐 Site</div></div>
+        <div className="card-head"><div className="card-title">🌐 Site Bilgileri</div></div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {[["URL","erdal0007.github.io/geoser-erp"],["Hosting","GitHub Pages"],["Versiyon","v4.0"]].map(([l,v])=>(
+          {[["URL","erdal0007.github.io/geoser-erp"],["Hosting","GitHub Pages"],["Versiyon","v4.0"],["Güncelleme","Mart 2026"]].map(([l,v])=>(
             <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"9px 12px",background:"var(--ink3)",borderRadius:8}}>
               <span style={{fontSize:11,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1}}>{l}</span>
               <span style={{fontFamily:"var(--font-m)",fontSize:11,color:"var(--sky)"}}>{v}</span>
@@ -972,21 +1270,32 @@ function SettingsPage(){
           ))}
         </div>
         <div style={{marginTop:10}}>
-          <a href="https://console.firebase.google.com/project/geoser-erp/authentication/users" target="_blank" className="btn btn-ghost btn-sm" style={{width:"100%",justifyContent:"center"}}>🔥 Firebase Console'u Aç</a>
+          <a href="https://console.firebase.google.com/project/geoser-erp/authentication/users" target="_blank" className="btn btn-ghost btn-sm" style={{width:"100%",justifyContent:"center"}}>
+            🔥 Firebase Console'u Aç
+          </a>
         </div>
       </div>
+      </div>
     </div>}
+
+    {/* Kullanıcı Ekle Modal */}
     {addUserModal&&<div className="overlay" onClick={e=>e.target===e.currentTarget&&setAddUserModal(false)}>
       <div className="modal">
         <div className="modal-head"><span className="modal-title">👤 Yeni Kullanıcı Ekle</span><button className="btn btn-ghost btn-xs" onClick={()=>setAddUserModal(false)}>✕</button></div>
         <div className="modal-body">
+          <div className="alert" style={{background:"rgba(96,165,250,.06)",border:"1px solid rgba(96,165,250,.2)",color:"var(--azure)",marginBottom:14}}>
+            ℹ️ Kullanıcı oluşturulacak ve sisteme erişim hakkı verilecek.
+          </div>
           <div className="field"><label>Ad Soyad</label><input value={newUser.name} onChange={e=>setNewUser(p=>({...p,name:e.target.value}))} placeholder="Ali Kaya"/></div>
           <div className="field"><label>E-posta *</label><input type="email" value={newUser.email} onChange={e=>setNewUser(p=>({...p,email:e.target.value}))} placeholder="ali@geoser.com"/></div>
           <div className="field"><label>Şifre * (min 6 karakter)</label><input type="password" value={newUser.password} onChange={e=>setNewUser(p=>({...p,password:e.target.value}))} placeholder="••••••••"/></div>
           <div className="field"><label>Rol</label>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginTop:4}}>
               {ROLE_OPTS.map(r=><div key={r.v} onClick={()=>setNewUser(p=>({...p,role:r.v}))}
-                style={{padding:"8px 10px",borderRadius:8,border:`1px solid ${newUser.role===r.v?"var(--amber)":"var(--rim)"}`,background:newUser.role===r.v?"var(--amber3)":"transparent",cursor:"pointer",fontSize:12,fontWeight:500}}>{r.l}</div>)}
+                style={{padding:"8px 10px",borderRadius:8,border:`1px solid ${newUser.role===r.v?"var(--amber)":"var(--rim)"}`,
+                background:newUser.role===r.v?"var(--amber3)":"transparent",cursor:"pointer",fontSize:12,fontWeight:500}}>
+                {r.l}
+              </div>)}
             </div>
           </div>
         </div>
@@ -996,14 +1305,18 @@ function SettingsPage(){
         </div>
       </div>
     </div>}
+
+    {/* Rol Değiştir Modal */}
     {editRoleModal&&<div className="overlay" onClick={e=>e.target===e.currentTarget&&setEditRoleModal(null)}>
       <div className="modal" style={{maxWidth:380}}>
         <div className="modal-head"><span className="modal-title">👑 Rol Değiştir</span><button className="btn btn-ghost btn-xs" onClick={()=>setEditRoleModal(null)}>✕</button></div>
         <div className="modal-body">
-          <div style={{fontSize:12,color:"var(--mist)",marginBottom:12}}>{editRoleModal.email} — yeni rol seçin:</div>
+          <div style={{fontSize:12,color:"var(--mist)",marginBottom:12}}>{editRoleModal.email} kullanıcısının rolünü değiştirin:</div>
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {ROLE_OPTS.map(r=><div key={r.v} onClick={()=>handleChangeRole(editRoleModal.id,r.v)}
-              style={{padding:"10px 14px",borderRadius:8,border:`1px solid ${editRoleModal.role===r.v?"var(--amber)":"var(--rim)"}`,background:editRoleModal.role===r.v?"var(--amber3)":"var(--ink3)",cursor:"pointer",fontSize:13,fontWeight:500,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              style={{padding:"10px 14px",borderRadius:8,border:`1px solid ${editRoleModal.role===r.v?"var(--amber)":"var(--rim)"}`,
+              background:editRoleModal.role===r.v?"var(--amber3)":"var(--ink3)",cursor:"pointer",fontSize:13,fontWeight:500,
+              display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <span>{r.l}</span>
               {editRoleModal.role===r.v&&<span style={{fontSize:10,color:"var(--amber)"}}>✓ Mevcut</span>}
             </div>)}
@@ -1014,6 +1327,9 @@ function SettingsPage(){
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   NAVIGATION CONFIG
+   ═══════════════════════════════════════ */
 const NAV=[
   {section:"ANA"},
   {id:"dashboard",icon:"🏠",label:"Genel Bakış"},
@@ -1028,9 +1344,13 @@ const NAV=[
   {section:"SİSTEM"},
   {id:"settings",icon:"⚙️",label:"Ayarlar"},
 ];
+
 const PAGE_TITLES={dashboard:"Genel Bakış",customers:"Müşteriler",orders:"Siparişler",quotes:"Teklifler",products:"Ürünler",reports:"Raporlar",settings:"Ayarlar"};
 const PAGES={dashboard:Dashboard,customers:CustomersPage,products:ProductsPage,orders:OrdersPage,quotes:QuotesPage,reports:ReportsPage,settings:SettingsPage};
 
+/* ═══════════════════════════════════════
+   APP SHELL
+   ═══════════════════════════════════════ */
 function AppShell(){
   const {user,logout,hasPage}=useAuth();
   const toast=useToast();
@@ -1084,15 +1404,79 @@ function AppShell(){
   </div>;
 }
 
+/* ═══════════════════════════════════════
+   ROOT
+   ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   PIN LOCK SCREEN
+   ═══════════════════════════════════════ */
+function PinScreen({onUnlock}){
+  const [input,setInput]=useState("");
+  const [err,setErr]=useState(false);
+  const [shake,setShake]=useState(false);
+  const stored=localStorage.getItem("geoser_pin")||"";
+  const press=(v)=>{
+    if(input.length>=6)return;
+    const next=input+v;
+    setInput(next);
+    setErr(false);
+    if(next.length===stored.length){
+      if(next===stored){
+        onUnlock();
+      }else{
+        setShake(true);
+        setTimeout(()=>{setInput("");setErr(true);setShake(false)},600);
+      }
+    }
+  };
+  const del=()=>setInput(p=>p.slice(0,-1));
+  const dots=stored.length||4;
+  return <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--ink)",flexDirection:"column",gap:28}}>
+    <div style={{textAlign:"center"}}>
+      <div style={{width:52,height:52,borderRadius:14,background:"var(--amber)",margin:"0 auto 12px",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--font-h)",fontWeight:800,fontSize:20,color:"var(--ink)"}}>G</div>
+      <div style={{fontFamily:"var(--font-h)",fontWeight:700,fontSize:18,color:"var(--sky)"}}>GEOSER ERP</div>
+      <div style={{fontSize:11,color:"var(--mist)",marginTop:4}}>PIN kodunu girin</div>
+    </div>
+    <div style={{display:"flex",gap:12,animation:shake?"shake .4s ease":"none"}}>
+      {Array.from({length:dots}).map((_,i)=>(
+        <div key={i} style={{width:14,height:14,borderRadius:"50%",background:input.length>i?"var(--amber)":"var(--rim2)",transition:"background .15s",border:"2px solid "+(input.length>i?"var(--amber)":"var(--rim)")}}/>
+      ))}
+    </div>
+    {err&&<div style={{fontSize:12,color:"var(--rose)",marginTop:-12}}>Hatalı PIN, tekrar deneyin.</div>}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(3,72px)",gap:10}}>
+      {[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k,i)=>(
+        <button key={i} onClick={()=>k==="⌫"?del():k!==""&&press(String(k))}
+          style={{width:72,height:72,borderRadius:12,background:k===""?"transparent":"var(--ink2)",border:k===""?"none":"1px solid var(--rim)",color:"var(--sky)",fontSize:k==="⌫"?20:22,fontWeight:600,cursor:k===""?"default":"pointer",fontFamily:"var(--font-h)",transition:"all .1s"}}
+          onMouseEnter={e=>{if(k!=="")e.target.style.background="var(--ink3)"}}
+          onMouseLeave={e=>{if(k!=="")e.target.style.background="var(--ink2)"}}>
+          {k}
+        </button>
+      ))}
+    </div>
+    <style>{`@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}`}</style>
+  </div>;
+}
+
 function Root(){
   const {user}=useAuth();
+  const [pinOk,setPinOk]=useState(()=>{
+    const pin=localStorage.getItem("geoser_pin");
+    return !pin; // PIN yoksa direkt geç
+  });
+  useEffect(()=>{
+    const pin=localStorage.getItem("geoser_pin");
+    if(!pin)setPinOk(true);
+  },[]);
+  if(!pinOk)return <PinScreen onUnlock={()=>setPinOk(true)}/>;
   if(user===undefined)return <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--ink)"}}>
     <div style={{textAlign:"center"}}><div className="spin" style={{margin:"0 auto 12px"}}/><div style={{fontSize:12,color:"var(--mist)",fontFamily:"var(--font-m)"}}>Bağlanıyor…</div></div>
   </div>;
   if(!user)return <LoginPage/>;
   return <AppShell/>;
 }
-function App(){return <AuthProvider><ToastProvider><Root/></ToastProvider></AuthProvider>}
+function App(){
+  return <AuthProvider><ToastProvider><Root/></ToastProvider></AuthProvider>;
+}
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 <style>@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}</style>
