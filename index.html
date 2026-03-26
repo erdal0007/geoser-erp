@@ -1022,6 +1022,199 @@ function ReportsPage(){
 /* ═══════════════════════════════════════
    SETTINGS PAGE
    ═══════════════════════════════════════ */
+
+/* ═══════════════════════════════════════
+   OTOMATİK YEDEKLEME SİSTEMİ
+   ═══════════════════════════════════════ */
+function useBackup(){
+  const doBackup=async(auto=false)=>{
+    try{
+      // Tüm koleksiyonları topla
+      const collections=["products","customers","orders","quotes"];
+      const data={};
+      const now=new Date();
+      for(const col of collections){
+        try{
+          if(db){
+            const snap=await db.collection(col).get();
+            data[col]=snap.docs.map(d=>({...d.data(),id:d.id}));
+          }else{
+            data[col]=JSON.parse(localStorage.getItem("geoser_"+col)||"[]");
+          }
+        }catch{
+          data[col]=JSON.parse(localStorage.getItem("geoser_"+col)||"[]");
+        }
+      }
+      const backup={
+        meta:{
+          version:"v4.0",
+          createdAt:now.toISOString(),
+          date:now.toLocaleDateString("tr-TR"),
+          time:now.toLocaleTimeString("tr-TR"),
+          auto,
+          counts:Object.fromEntries(Object.entries(data).map(([k,v])=>[k,v.length]))
+        },
+        data
+      };
+      const json=JSON.stringify(backup,null,2);
+      const blob=new Blob([json],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a");
+      const dateStr=now.toISOString().slice(0,10);
+      const timeStr=now.toTimeString().slice(0,5).replace(":","");
+      a.href=url;
+      a.download=`GEOSER_ERP_Yedek_${dateStr}_${timeStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      // Son yedek tarihini kaydet
+      localStorage.setItem("geoser_last_backup",now.toISOString());
+      return{ok:true, filename:a.download, counts:backup.meta.counts};
+    }catch(e){
+      console.error("Yedek hatası:",e);
+      return{ok:false, error:e.message};
+    }
+  };
+
+  const shouldAutoBackup=()=>{
+    const last=localStorage.getItem("geoser_last_backup");
+    if(!last)return true;
+    const lastDate=new Date(last).toDateString();
+    const today=new Date().toDateString();
+    return lastDate!==today;
+  };
+
+  return{doBackup,shouldAutoBackup};
+}
+
+function BackupWidget(){
+  const {doBackup,shouldAutoBackup}=useBackup();
+  const toast=useToast();
+  const [loading,setLoading]=useState(false);
+  const [lastBackup,setLastBackup]=useState(()=>localStorage.getItem("geoser_last_backup"));
+  const [autoRan,setAutoRan]=useState(false);
+
+  // Sayfa açılırken otomatik yedek al (günde 1 kez)
+  useEffect(()=>{
+    if(autoRan)return;
+    setAutoRan(true);
+    const autoBackupEnabled=localStorage.getItem("geoser_auto_backup")!=="off";
+    if(autoBackupEnabled&&shouldAutoBackup()){
+      setTimeout(async()=>{
+        const result=await doBackup(true);
+        if(result.ok){
+          setLastBackup(new Date().toISOString());
+          toast("✅ Günlük yedek alındı: "+result.filename.slice(0,30)+"…");
+        }
+      },3000); // Sayfa yüklendikten 3sn sonra
+    }
+  },[]);
+
+  const handleManual=async()=>{
+    setLoading(true);
+    const result=await doBackup(false);
+    if(result.ok){
+      setLastBackup(new Date().toISOString());
+      const cnt=result.counts;
+      toast(`✅ Yedek indirildi! ${cnt.customers||0} müşteri, ${cnt.orders||0} sipariş, ${cnt.products||0} ürün`);
+    }else{
+      toast("❌ Yedek alınamadı: "+result.error,"err");
+    }
+    setLoading(false);
+  };
+
+  const fmt=(iso)=>{
+    if(!iso)return"Hiç yedek alınmadı";
+    const d=new Date(iso);
+    return d.toLocaleDateString("tr-TR")+", "+d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
+  };
+
+  const autoOn=localStorage.getItem("geoser_auto_backup")!=="off";
+  const toggleAuto=()=>{
+    if(autoOn){localStorage.setItem("geoser_auto_backup","off");toast("Otomatik yedek kapatıldı.","warn");}
+    else{localStorage.removeItem("geoser_auto_backup");toast("Otomatik yedek açıldı.");}
+    window.location.reload();
+  };
+
+  return <div style={{display:"flex",alignItems:"center",gap:6}}>
+    <div className="topbar-chip" title={"Son yedek: "+fmt(lastBackup)} style={{gap:5,cursor:"pointer"}} onClick={handleManual}>
+      {loading?<span className="sync-dot sync-busy"/>:<span>💾</span>}
+      <span style={{fontSize:10}}>{loading?"Yedekleniyor…":"Yedek Al"}</span>
+    </div>
+  </div>;
+}
+
+function BackupSettings(){
+  const {doBackup,shouldAutoBackup}=useBackup();
+  const toast=useToast();
+  const [loading,setLoading]=useState(false);
+  const [lastBackup,setLastBackup]=useState(()=>localStorage.getItem("geoser_last_backup"));
+  const autoOn=localStorage.getItem("geoser_auto_backup")!=="off";
+
+  const handleManual=async()=>{
+    setLoading(true);
+    const result=await doBackup(false);
+    if(result.ok){setLastBackup(new Date().toISOString());toast("✅ Yedek alındı: "+result.filename);}
+    else toast("❌ Hata: "+result.error,"err");
+    setLoading(false);
+  };
+  const toggleAuto=()=>{
+    if(autoOn){localStorage.setItem("geoser_auto_backup","off");}
+    else{localStorage.removeItem("geoser_auto_backup");}
+    toast(autoOn?"Otomatik yedek kapatıldı.":"Otomatik yedek açıldı.");
+    setTimeout(()=>window.location.reload(),1000);
+  };
+  const restoreBackup=async(e)=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    try{
+      const text=await file.text();
+      const backup=JSON.parse(text);
+      if(!backup.data)throw new Error("Geçersiz yedek dosyası.");
+      if(!confirm("Bu yedek dosyasını geri yüklemek istediğinize emin misiniz? Mevcut veriler üzerine yazılır."))return;
+      Object.entries(backup.data).forEach(([col,items])=>{
+        localStorage.setItem("geoser_"+col,JSON.stringify(items));
+        if(db){items.forEach(item=>{db.collection(col).doc(item.id).set(item).catch(()=>{});})}
+      });
+      toast("✅ Yedek geri yüklendi! Sayfa yenileniyor…");
+      setTimeout(()=>window.location.reload(),1500);
+    }catch(e){toast("❌ Geri yükleme hatası: "+e.message,"err");}
+  };
+  const fmt=(iso)=>{if(!iso)return"Henüz yedek alınmadı";const d=new Date(iso);return d.toLocaleDateString("tr-TR")+", "+d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})};
+
+  return <div style={{display:"flex",flexDirection:"column",gap:10}}>
+    {/* Durum */}
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+      <div style={{padding:"10px 14px",background:"var(--ink3)",borderRadius:8}}>
+        <div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>Son Yedek</div>
+        <div style={{fontSize:12,color:"var(--jade)",fontWeight:600}}>{fmt(lastBackup)}</div>
+      </div>
+      <div style={{padding:"10px 14px",background:"var(--ink3)",borderRadius:8}}>
+        <div style={{fontSize:10,color:"var(--mist)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>Otomatik Yedek</div>
+        <div style={{fontSize:12,color:autoOn?"var(--jade)":"var(--rose)",fontWeight:600}}>{autoOn?"✅ Açık — Her gün siteye girince":"❌ Kapalı"}</div>
+      </div>
+    </div>
+    {/* Açıklama */}
+    <div style={{padding:"10px 14px",background:"rgba(96,165,250,.06)",border:"1px solid rgba(96,165,250,.15)",borderRadius:8,fontSize:11,color:"var(--azure)"}}>
+      ℹ️ Yedekler <strong>JSON formatında</strong> bilgisayarınıza indirilir. "Otomatik" modda her gün siteyi ilk açtığınızda otomatik yedek alınır.
+    </div>
+    {/* Butonlar */}
+    <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+      <button className="btn btn-amber btn-sm" onClick={handleManual} disabled={loading}>
+        {loading?"⏳ Yedekleniyor…":"⬇ Şimdi Yedek Al"}
+      </button>
+      <button className={`btn btn-sm ${autoOn?"btn-ghost":"btn-amber"}`} onClick={toggleAuto}>
+        {autoOn?"⏸ Otomatik Yedek Kapat":"▶ Otomatik Yedek Aç"}
+      </button>
+      <label className="btn btn-ghost btn-sm" style={{cursor:"pointer"}}>
+        🔄 Yedek Geri Yükle
+        <input type="file" accept=".json" onChange={restoreBackup} style={{display:"none"}}/>
+      </label>
+    </div>
+  </div>;
+}
+
 function PinManager(){
   const toast=useToast();
   const [pin1,setPin1]=useState("");
@@ -1242,6 +1435,11 @@ function SettingsPage(){
 
     {/* SİSTEM BİLGİLERİ */}
     {activeTab==="system"&&isAdmin&&<div>
+      {/* YEDEKLEME */}
+      <div className="card" style={{marginBottom:14}}>
+        <div className="card-head"><div className="card-title">💾 Veri Yedekleme</div></div>
+        <BackupSettings/>
+      </div>
       {/* PIN YÖNETİMİ */}
       <div className="card" style={{marginBottom:14}}>
         <div className="card-head"><div className="card-title">🔐 PIN Kilidi</div></div>
@@ -1396,6 +1594,7 @@ function AppShell(){
         <div className="topbar-right">
           <div className="topbar-chip" style={{color:roleInfo.color}}>{roleInfo.icon} {roleInfo.label}</div>
           <div className="topbar-chip"><span className="sync-dot sync-ok"/>Bağlı</div>
+          <BackupWidget/>
           <div className="topbar-chip" style={{fontFamily:"var(--font-m)",fontSize:10}}>{new Date().toLocaleDateString("tr-TR")}</div>
         </div>
       </div>
