@@ -446,22 +446,18 @@ function CurrencyTabs({cur,onChange}){
    LOGIN PAGE
    ═══════════════════════════════════════ */
 function LoginPage(){
-  const {login,register}=useAuth();
+  const {login}=useAuth();
   const toast=useToast();
-  const [tab,setTab]=useState("login");
   const [email,setEmail]=useState("");
   const [pass,setPass]=useState("");
-  const [name,setName]=useState("");
-  const [role,setRole]=useState("admin");
   const [loading,setLoading]=useState(false);
   const [err,setErr]=useState("");
-  const ERR={"auth/user-not-found":"E-posta kayıtlı değil.","auth/wrong-password":"Şifre hatalı.","auth/invalid-credential":"E-posta veya şifre hatalı.","auth/email-already-in-use":"Bu e-posta zaten kayıtlı.","auth/weak-password":"Şifre en az 6 karakter olmalı."};
+  const ERR={"auth/user-not-found":"E-posta kayıtlı değil.","auth/wrong-password":"Şifre hatalı.","auth/invalid-credential":"E-posta veya şifre hatalı."};
   const handle=async()=>{
     if(!email||!pass){setErr("E-posta ve şifre gerekli.");return}
     setLoading(true);setErr("");
     try{
-      if(tab==="login")await login(email,pass);
-      else{if(!name){setErr("Ad gerekli.");setLoading(false);return}await register(email,pass,name,role);}
+      await login(email,pass);
       toast("Giriş yapıldı. Hoş geldiniz!");
     }catch(e){setErr(ERR[e.code]||e.message);}
     setLoading(false);
@@ -474,36 +470,18 @@ function LoginPage(){
         <div className="auth-title">GEOSER ERP / CRM</div>
         <div className="auth-sub" style={{fontFamily:"var(--font-m)",fontSize:10}}>GEOSENTETİK İMALAT A.Ş.</div>
       </div>
-      <div className="auth-tabs">
-        <div className={`auth-tab${tab==="login"?" on":""}`} onClick={()=>{setTab("login");setErr("")}}>Giriş Yap</div>
-        <div className={`auth-tab${tab==="register"?" on":""}`} onClick={()=>{setTab("register");setErr("")}}>Kayıt Ol</div>
-      </div>
       {err&&<div className="err-box">{err}</div>}
-      {tab==="register"&&<>
-        <div className="field"><label>Ad Soyad</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Geoser Yöneticisi"/></div>
-        <div style={{marginBottom:12}}>
-          <div className="field" style={{marginBottom:6}}><label>Kullanıcı Rolü</label></div>
-          <div className="role-select">
-            {Object.entries(ROLES).map(([k,v])=><div key={k} className={`role-opt${role===k?" on":""}`} onClick={()=>setRole(k)}>
-              <div className="role-opt-icon">{v.icon}</div>
-              <div className="role-opt-name">{v.label}</div>
-              <div className="role-opt-desc">{v.desc}</div>
-            </div>)}
-          </div>
-        </div>
-      </>}
-      <div className="field"><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ornek@geoser.com"/></div>
+      <div className="field"><label>E-posta</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ornek@geoser.com" autoFocus/></div>
       <div className="field"><label>Şifre</label><input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
-      <button className="btn btn-amber btn-full" onClick={handle} disabled={loading}>
-        {loading?"Bekleniyor…":tab==="login"?"Giriş Yap →":"Hesap Oluştur →"}
-      </button>
+      <button className="btn btn-amber btn-full" onClick={handle} disabled={loading}>{loading?"Bekleniyor…":"Giriş Yap →"}</button>
+      <div style={{marginTop:14,padding:"10px 12px",background:"var(--ink3)",borderRadius:8,fontSize:11,color:"var(--mist)",textAlign:"center"}}>
+        🔒 Yeni hesap için yöneticinize başvurun.
+      </div>
     </div>
   </div>;
 }
 
-/* ═══════════════════════════════════════
-   DASHBOARD
-   ═══════════════════════════════════════ */
+
 function Dashboard(){
   const {items:products}=useCol("products");
   const {items:customers}=useCol("customers");
