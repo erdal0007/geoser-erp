@@ -6,6 +6,16 @@
 <title>GEOSER ERP Pro</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI",
+  authDomain:"geoser-erp.firebaseapp.com",
+  projectId:"geoser-erp"
+});
+const db = firebase.firestore();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
@@ -61,41 +71,41 @@
 <div id="loginPage" class="login-bg">
   <div class="login-card">
     <div style="text-align:center;margin-bottom:32px">
-      <div style="width:64px;height:64px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">ð­</div>
+      <div style="width:64px;height:64px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">Ã°ÂÂÂ­</div>
       <h1 style="font-size:24px;font-weight:800;color:#f1f5f9;margin:0">GEOSER ERP Pro</h1>
       <p style="color:#64748b;font-size:13px;margin:6px 0 0">Kurumsal Kaynak Planlama Sistemi</p>
     </div>
     <div id="loginAlert"></div>
     <div class="form-group"><label class="label">E-posta</label><input type="email" id="loginEmail" placeholder="ornek@geoser.net" value="erdal@geoser.net"></div>
-    <div class="form-group"><label class="label">Åifre</label><input type="password" id="loginPass" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" value="Geoser2026!"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="doLogin()">ð GiriÅ Yap</button>
-    <p style="text-align:center;color:#475569;font-size:12px;margin-top:20px">Â© 2026 GEOSER A.Å. â TÃ¼m haklarÄ± saklÄ±dÄ±r.</p>
+    <div class="form-group"><label class="label">ÃÂifre</label><input type="password" id="loginPass" placeholder="Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢" value="Geoser2026!"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="doLogin()">Ã°ÂÂÂ GiriÃÂ Yap</button>
+    <p style="text-align:center;color:#475569;font-size:12px;margin-top:20px">ÃÂ© 2026 GEOSER A.ÃÂ. Ã¢ÂÂ TÃÂ¼m haklarÃÂ± saklÃÂ±dÃÂ±r.</p>
   </div>
 </div>
 <div id="app" style="display:none">
   <div class="sidebar" id="sidebar">
     <div style="padding:20px 16px;border-bottom:1px solid #334155">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">ð­</div>
+        <div style="width:40px;height:40px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">Ã°ÂÂÂ­</div>
         <div><div style="font-weight:700;font-size:15px;color:#f1f5f9">GEOSER ERP</div><div style="font-size:11px;color:#64748b">v2.0 Pro</div></div>
       </div>
     </div>
     <div style="padding:16px 0">
-      <div style="padding:0 16px 8px;font-size:10px;color:#475569;font-weight:600;letter-spacing:1px">ANA MENÃ</div>
-      <div class="nav-item active" onclick="showSection('dashboard',this)">ð Dashboard</div>
-      <div class="nav-item" onclick="showSection('products',this)">ð¦ ÃrÃ¼n StoklarÄ±</div>
-      <div class="nav-item" onclick="showSection('rawmaterials',this)">ð§ª Hammadde StoklarÄ±</div>
-      <div class="nav-item" onclick="showSection('recipes',this)">ð ReÃ§eteler / BOM</div>
-      <div class="nav-item" onclick="showSection('orders',this)">ð SipariÅler</div>
-      <div class="nav-item" onclick="showSection('production',this)">âï¸ Ãretim Emirleri</div>
-      <div class="nav-item" onclick="showSection('quality',this)">â Kalite Kontrol</div>
-      <div class="nav-item" onclick="showSection('shipment',this)">ð Sevkiyat</div>
-      <div class="nav-item" onclick="showSection('reports',this)">ð Raporlar</div>
+      <div style="padding:0 16px 8px;font-size:10px;color:#475569;font-weight:600;letter-spacing:1px">ANA MENÃÂ</div>
+      <div class="nav-item active" onclick="showSection('dashboard',this)">Ã°ÂÂÂ Dashboard</div>
+      <div class="nav-item" onclick="showSection('products',this)">Ã°ÂÂÂ¦ ÃÂrÃÂ¼n StoklarÃÂ±</div>
+      <div class="nav-item" onclick="showSection('rawmaterials',this)">Ã°ÂÂ§Âª Hammadde StoklarÃÂ±</div>
+      <div class="nav-item" onclick="showSection('recipes',this)">Ã°ÂÂÂ ReÃÂ§eteler / BOM</div>
+      <div class="nav-item" onclick="showSection('orders',this)">Ã°ÂÂÂ SipariÃÂler</div>
+      <div class="nav-item" onclick="showSection('production',this)">Ã¢ÂÂÃ¯Â¸Â ÃÂretim Emirleri</div>
+      <div class="nav-item" onclick="showSection('quality',this)">Ã¢ÂÂ Kalite Kontrol</div>
+      <div class="nav-item" onclick="showSection('shipment',this)">Ã°ÂÂÂ Sevkiyat</div>
+      <div class="nav-item" onclick="showSection('reports',this)">Ã°ÂÂÂ Raporlar</div>
       <div id="adminNav" style="display:none">
-        <div style="padding:16px 16px 8px;font-size:10px;color:#475569;font-weight:600;letter-spacing:1px;margin-top:8px">YÃNETÄ°M</div>
-        <div class="nav-item" onclick="showSection('users',this)">ð¥ KullanÄ±cÄ±lar</div>
-        <div class="nav-item" onclick="showSection('settings',this)">âï¸ Ayarlar</div>
-        <div class="nav-item" onclick="showSection('logs',this)">ð Sistem LoglarÄ±</div>
+        <div style="padding:16px 16px 8px;font-size:10px;color:#475569;font-weight:600;letter-spacing:1px;margin-top:8px">YÃÂNETÃÂ°M</div>
+        <div class="nav-item" onclick="showSection('users',this)">Ã°ÂÂÂ¥ KullanÃÂ±cÃÂ±lar</div>
+        <div class="nav-item" onclick="showSection('settings',this)">Ã¢ÂÂÃ¯Â¸Â Ayarlar</div>
+        <div class="nav-item" onclick="showSection('logs',this)">Ã°ÂÂÂ Sistem LoglarÃÂ±</div>
       </div>
     </div>
     <div style="padding:16px;border-top:1px solid #334155;margin-top:auto">
@@ -103,7 +113,7 @@
         <div id="sidebarAvatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff"></div>
         <div><div id="sidebarName" style="font-size:13px;font-weight:600;color:#f1f5f9"></div><div id="sidebarRole" style="font-size:11px;color:#64748b"></div></div>
       </div>
-      <button class="btn btn-secondary" style="width:100%;justify-content:center" onclick="doLogout()">ðª ÃÄ±kÄ±Å</button>
+      <button class="btn btn-secondary" style="width:100%;justify-content:center" onclick="doLogout()">Ã°ÂÂÂª ÃÂÃÂ±kÃÂ±ÃÂ</button>
     </div>
   </div>
   <div class="main">
@@ -120,227 +130,227 @@
     <div class="section active" id="sec-dashboard">
       <div class="stat-row" id="kpiRow"></div>
       <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:24px">
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð AylÄ±k Ãretim &amp; SatÄ±Å</div><canvas id="mainChart" height="180"></canvas></div>
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð¥§ SipariÅ Durumu</div><canvas id="pieChart" height="180"></canvas></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ AylÃÂ±k ÃÂretim &amp; SatÃÂ±ÃÂ</div><canvas id="mainChart" height="180"></canvas></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂ¥Â§ SipariÃÂ Durumu</div><canvas id="pieChart" height="180"></canvas></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð Son SipariÅler</div><div id="recentOrders"></div></div>
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">â ï¸ Kritik Stok UyarÄ±larÄ±</div><div id="stockAlerts"></div></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ Son SipariÃÂler</div><div id="recentOrders"></div></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã¢ÂÂ Ã¯Â¸Â Kritik Stok UyarÃÂ±larÃÂ±</div><div id="stockAlerts"></div></div>
       </div>
     </div>
     <div class="section" id="sec-products">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <div style="display:flex;gap:10px">
-          <input type="text" id="prodSearch" placeholder="ð ÃrÃ¼n ara..." style="width:280px" oninput="filterProducts()">
-          <select id="prodCatFilter" onchange="filterProducts()" style="width:160px"><option value="">TÃ¼m Kategoriler</option></select>
+          <input type="text" id="prodSearch" placeholder="Ã°ÂÂÂ ÃÂrÃÂ¼n ara..." style="width:280px" oninput="filterProducts()">
+          <select id="prodCatFilter" onchange="filterProducts()" style="width:160px"><option value="">TÃÂ¼m Kategoriler</option></select>
         </div>
-        <button class="btn btn-primary" onclick="openModal('productModal')">+ Yeni ÃrÃ¼n</button>
+        <button class="btn btn-primary" onclick="openModal('productModal')">+ Yeni ÃÂrÃÂ¼n</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>Kod</th><th>ÃrÃ¼n AdÄ±</th><th>Kategori</th><th>Stok</th><th>Min</th><th>Birim</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="productsTbl"></tbody></table>
+        <table><thead><tr><th>Kod</th><th>ÃÂrÃÂ¼n AdÃÂ±</th><th>Kategori</th><th>Stok</th><th>Min</th><th>Birim</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="productsTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-rawmaterials">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <input type="text" id="rawSearch" placeholder="ð Hammadde ara..." style="width:280px" oninput="filterRaw()">
+        <input type="text" id="rawSearch" placeholder="Ã°ÂÂÂ Hammadde ara..." style="width:280px" oninput="filterRaw()">
         <button class="btn btn-primary" onclick="openModal('rawModal')">+ Yeni Hammadde</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>Kod</th><th>Ad</th><th>TedarikÃ§i</th><th>Stok</th><th>Min</th><th>Birim</th><th>Maliyet</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="rawTbl"></tbody></table>
+        <table><thead><tr><th>Kod</th><th>Ad</th><th>TedarikÃÂ§i</th><th>Stok</th><th>Min</th><th>Birim</th><th>Maliyet</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="rawTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-recipes">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <input type="text" id="recSearch" placeholder="ð ReÃ§ete ara..." style="width:280px" oninput="filterRecipes()">
-        <button class="btn btn-primary" onclick="openModal('recipeModal')">+ Yeni ReÃ§ete</button>
+        <input type="text" id="recSearch" placeholder="Ã°ÂÂÂ ReÃÂ§ete ara..." style="width:280px" oninput="filterRecipes()">
+        <button class="btn btn-primary" onclick="openModal('recipeModal')">+ Yeni ReÃÂ§ete</button>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div class="card" style="padding:0;overflow:hidden">
-          <table><thead><tr><th>ÃrÃ¼n</th><th>Versiyon</th><th>Malzeme</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="recipesTbl"></tbody></table>
+          <table><thead><tr><th>ÃÂrÃÂ¼n</th><th>Versiyon</th><th>Malzeme</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="recipesTbl"></tbody></table>
         </div>
-        <div class="card" id="recipeDetail"><div style="color:#64748b;text-align:center;padding:40px">Soldan bir reÃ§ete seÃ§in</div></div>
+        <div class="card" id="recipeDetail"><div style="color:#64748b;text-align:center;padding:40px">Soldan bir reÃÂ§ete seÃÂ§in</div></div>
       </div>
     </div>
     <div class="section" id="sec-orders">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <div style="display:flex;gap:10px">
-          <input type="text" id="ordSearch" placeholder="ð SipariÅ ara..." style="width:260px" oninput="filterOrders()">
-          <select id="ordStatusFilter" onchange="filterOrders()" style="width:160px"><option value="">TÃ¼m Durumlar</option><option>Bekliyor</option><option>OnaylandÄ±</option><option>Ãretimde</option><option>HazÄ±r</option><option>Sevk Edildi</option><option>Ä°ptal</option></select>
+          <input type="text" id="ordSearch" placeholder="Ã°ÂÂÂ SipariÃÂ ara..." style="width:260px" oninput="filterOrders()">
+          <select id="ordStatusFilter" onchange="filterOrders()" style="width:160px"><option value="">TÃÂ¼m Durumlar</option><option>Bekliyor</option><option>OnaylandÃÂ±</option><option>ÃÂretimde</option><option>HazÃÂ±r</option><option>Sevk Edildi</option><option>ÃÂ°ptal</option></select>
         </div>
-        <button class="btn btn-primary" onclick="openModal('orderModal')">+ Yeni SipariÅ</button>
+        <button class="btn btn-primary" onclick="openModal('orderModal')">+ Yeni SipariÃÂ</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>No</th><th>MÃ¼Återi</th><th>ÃrÃ¼n</th><th>Miktar</th><th>Tarih</th><th>Teslim</th><th>Durum</th><th>Ãncelik</th><th>Ä°Ålem</th></tr></thead><tbody id="ordersTbl"></tbody></table>
+        <table><thead><tr><th>No</th><th>MÃÂ¼ÃÂteri</th><th>ÃÂrÃÂ¼n</th><th>Miktar</th><th>Tarih</th><th>Teslim</th><th>Durum</th><th>ÃÂncelik</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="ordersTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-production">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <select id="prodStatusFilter" onchange="filterProduction()" style="width:200px"><option value="">TÃ¼m Emirler</option><option>PlanlandÄ±</option><option>BaÅladÄ±</option><option>TamamlandÄ±</option><option>Ä°ptal</option></select>
-        <button class="btn btn-primary" onclick="openModal('productionModal')">+ Yeni Ãretim Emri</button>
+        <select id="prodStatusFilter" onchange="filterProduction()" style="width:200px"><option value="">TÃÂ¼m Emirler</option><option>PlanlandÃÂ±</option><option>BaÃÂladÃÂ±</option><option>TamamlandÃÂ±</option><option>ÃÂ°ptal</option></select>
+        <button class="btn btn-primary" onclick="openModal('productionModal')">+ Yeni ÃÂretim Emri</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>Emir</th><th>ÃrÃ¼n</th><th>SipariÅ</th><th>Planlanan</th><th>GerÃ§ekleÅen</th><th>Ä°lerleme</th><th>BaÅlangÄ±Ã§</th><th>BitiÅ</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="productionTbl"></tbody></table>
+        <table><thead><tr><th>Emir</th><th>ÃÂrÃÂ¼n</th><th>SipariÃÂ</th><th>Planlanan</th><th>GerÃÂ§ekleÃÂen</th><th>ÃÂ°lerleme</th><th>BaÃÂlangÃÂ±ÃÂ§</th><th>BitiÃÂ</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="productionTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-quality">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <select id="qualStatusFilter" onchange="filterQuality()" style="width:200px"><option value="">TÃ¼m Kontroller</option><option>Bekliyor</option><option>GeÃ§ti</option><option>BaÅarÄ±sÄ±z</option><option>KoÅullu</option></select>
-        <button class="btn btn-primary" onclick="openModal('qualityModal')">+ Yeni KK KaydÄ±</button>
+        <select id="qualStatusFilter" onchange="filterQuality()" style="width:200px"><option value="">TÃÂ¼m Kontroller</option><option>Bekliyor</option><option>GeÃÂ§ti</option><option>BaÃÂarÃÂ±sÃÂ±z</option><option>KoÃÂullu</option></select>
+        <button class="btn btn-primary" onclick="openModal('qualityModal')">+ Yeni KK KaydÃÂ±</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>KK No</th><th>ÃrÃ¼n</th><th>Ãretim</th><th>Tip</th><th>Kontrol Eden</th><th>Tarih</th><th>SonuÃ§</th><th>Notlar</th></tr></thead><tbody id="qualityTbl"></tbody></table>
+        <table><thead><tr><th>KK No</th><th>ÃÂrÃÂ¼n</th><th>ÃÂretim</th><th>Tip</th><th>Kontrol Eden</th><th>Tarih</th><th>SonuÃÂ§</th><th>Notlar</th></tr></thead><tbody id="qualityTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-shipment">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <select id="shipStatusFilter" onchange="filterShipment()" style="width:200px"><option value="">TÃ¼m Sevkiyatlar</option><option>HazÄ±rlanÄ±yor</option><option>YÃ¼klendi</option><option>Yolda</option><option>Teslim Edildi</option></select>
+        <select id="shipStatusFilter" onchange="filterShipment()" style="width:200px"><option value="">TÃÂ¼m Sevkiyatlar</option><option>HazÃÂ±rlanÃÂ±yor</option><option>YÃÂ¼klendi</option><option>Yolda</option><option>Teslim Edildi</option></select>
         <button class="btn btn-primary" onclick="openModal('shipModal')">+ Yeni Sevkiyat</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>No</th><th>MÃ¼Återi</th><th>SipariÅ</th><th>ÃrÃ¼n</th><th>Miktar</th><th>TaÅÄ±yÄ±cÄ±</th><th>Plaka</th><th>Tarih</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="shipTbl"></tbody></table>
+        <table><thead><tr><th>No</th><th>MÃÂ¼ÃÂteri</th><th>SipariÃÂ</th><th>ÃÂrÃÂ¼n</th><th>Miktar</th><th>TaÃÂÃÂ±yÃÂ±cÃÂ±</th><th>Plaka</th><th>Tarih</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="shipTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-reports">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" id="reportCards"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð Ãretim PerformansÄ±</div><canvas id="reportChart1" height="200"></canvas></div>
-        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð¦ Stok Seviyeleri</div><canvas id="reportChart2" height="200"></canvas></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ ÃÂretim PerformansÃÂ±</div><canvas id="reportChart1" height="200"></canvas></div>
+        <div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ¦ Stok Seviyeleri</div><canvas id="reportChart2" height="200"></canvas></div>
       </div>
     </div>
     <div class="section" id="sec-users">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <h3 style="color:#f1f5f9;margin:0">Sistem KullanÄ±cÄ±larÄ±</h3>
-        <button class="btn btn-primary" onclick="openModal('userModal')">+ Yeni KullanÄ±cÄ±</button>
+        <h3 style="color:#f1f5f9;margin:0">Sistem KullanÃÂ±cÃÂ±larÃÂ±</h3>
+        <button class="btn btn-primary" onclick="openModal('userModal')">+ Yeni KullanÃÂ±cÃÂ±</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>Ad Soyad</th><th>E-posta</th><th>Rol</th><th>Son GiriÅ</th><th>Durum</th><th>Ä°Ålem</th></tr></thead><tbody id="usersTbl"></tbody></table>
+        <table><thead><tr><th>Ad Soyad</th><th>E-posta</th><th>Rol</th><th>Son GiriÃÂ</th><th>Durum</th><th>ÃÂ°ÃÂlem</th></tr></thead><tbody id="usersTbl"></tbody></table>
       </div>
     </div>
     <div class="section" id="sec-settings"><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" id="settingsContent"></div></div>
     <div class="section" id="sec-logs">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <input type="text" id="logSearch" placeholder="ð Log ara..." style="width:300px" oninput="filterLogs()">
-        <button class="btn btn-danger" onclick="if(confirm('LoglarÄ± temizle?')){APP.logs=[];saveLogs();renderLogs();}">ðï¸ Temizle</button>
+        <input type="text" id="logSearch" placeholder="Ã°ÂÂÂ Log ara..." style="width:300px" oninput="filterLogs()">
+        <button class="btn btn-danger" onclick="if(confirm('LoglarÃÂ± temizle?')){APP.logs=[];saveLogs();renderLogs();}">Ã°ÂÂÂÃ¯Â¸Â Temizle</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
-        <table><thead><tr><th>Zaman</th><th>KullanÄ±cÄ±</th><th>ModÃ¼l</th><th>Ä°Ålem</th><th>Detay</th></tr></thead><tbody id="logsTbl"></tbody></table>
+        <table><thead><tr><th>Zaman</th><th>KullanÃÂ±cÃÂ±</th><th>ModÃÂ¼l</th><th>ÃÂ°ÃÂlem</th><th>Detay</th></tr></thead><tbody id="logsTbl"></tbody></table>
       </div>
     </div>
   </div>
 </div>
 <div class="modal" id="productModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="productModalTitle">Yeni ÃrÃ¼n</h3><button onclick="closeModal('productModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="productModalTitle">Yeni ÃÂrÃÂ¼n</h3><button onclick="closeModal('productModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="productId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div class="form-group"><label class="label">ÃrÃ¼n Kodu *</label><input id="pCode" placeholder="PRD-001"></div>
-    <div class="form-group"><label class="label">ÃrÃ¼n AdÄ± *</label><input id="pName" placeholder="ÃrÃ¼n adÄ±"></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n Kodu *</label><input id="pCode" placeholder="PRD-001"></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n AdÃÂ± *</label><input id="pName" placeholder="ÃÂrÃÂ¼n adÃÂ±"></div>
     <div class="form-group"><label class="label">Kategori</label><input id="pCat" placeholder="Kategori"></div>
     <div class="form-group"><label class="label">Birim</label><select id="pUnit"><option>Adet</option><option>Kg</option><option>Lt</option><option>Mt</option><option>Paket</option></select></div>
     <div class="form-group"><label class="label">Mevcut Stok</label><input type="number" id="pStock" value="0"></div>
     <div class="form-group"><label class="label">Min Stok</label><input type="number" id="pMinStock" value="10"></div>
-    <div class="form-group"><label class="label">Birim Fiyat (âº)</label><input type="number" id="pPrice" value="0"></div>
+    <div class="form-group"><label class="label">Birim Fiyat (Ã¢ÂÂº)</label><input type="number" id="pPrice" value="0"></div>
     <div class="form-group"><label class="label">Durum</label><select id="pStatus"><option>Aktif</option><option>Pasif</option></select></div>
   </div>
-  <div class="form-group"><label class="label">AÃ§Ä±klama</label><textarea id="pDesc" rows="2"></textarea></div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('productModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveProduct()">ð¾ Kaydet</button></div>
+  <div class="form-group"><label class="label">AÃÂ§ÃÂ±klama</label><textarea id="pDesc" rows="2"></textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('productModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveProduct()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="rawModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="rawModalTitle">Yeni Hammadde</h3><button onclick="closeModal('rawModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="rawModalTitle">Yeni Hammadde</h3><button onclick="closeModal('rawModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="rawId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div class="form-group"><label class="label">Kod *</label><input id="rCode" placeholder="HM-001"></div>
-    <div class="form-group"><label class="label">Ad *</label><input id="rName" placeholder="Hammadde adÄ±"></div>
-    <div class="form-group"><label class="label">TedarikÃ§i</label><input id="rSupplier" placeholder="TedarikÃ§i firma"></div>
+    <div class="form-group"><label class="label">Ad *</label><input id="rName" placeholder="Hammadde adÃÂ±"></div>
+    <div class="form-group"><label class="label">TedarikÃÂ§i</label><input id="rSupplier" placeholder="TedarikÃÂ§i firma"></div>
     <div class="form-group"><label class="label">Birim</label><select id="rUnit"><option>Kg</option><option>Lt</option><option>Adet</option><option>Mt</option><option>Ton</option></select></div>
     <div class="form-group"><label class="label">Mevcut Stok</label><input type="number" id="rStock" value="0"></div>
     <div class="form-group"><label class="label">Min Stok</label><input type="number" id="rMinStock" value="0"></div>
-    <div class="form-group"><label class="label">Maliyet/Birim (âº)</label><input type="number" id="rCost" value="0"></div>
+    <div class="form-group"><label class="label">Maliyet/Birim (Ã¢ÂÂº)</label><input type="number" id="rCost" value="0"></div>
     <div class="form-group"><label class="label">Durum</label><select id="rStatus"><option>Aktif</option><option>Pasif</option></select></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('rawModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveRaw()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('rawModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveRaw()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="recipeModal"><div class="modal-box" style="min-width:600px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">ReÃ§ete</h3><button onclick="closeModal('recipeModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">ReÃÂ§ete</h3><button onclick="closeModal('recipeModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="recipeId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-    <div class="form-group"><label class="label">ÃrÃ¼n *</label><select id="recProduct"></select></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n *</label><select id="recProduct"></select></div>
     <div class="form-group"><label class="label">Versiyon</label><input id="recVersion" value="v1.0"></div>
   </div>
   <div style="margin-bottom:12px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><label class="label" style="margin:0">Malzemeler</label><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="addRecipeRow()">+ SatÄ±r Ekle</button></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><label class="label" style="margin:0">Malzemeler</label><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="addRecipeRow()">+ SatÃÂ±r Ekle</button></div>
     <div id="recipeRows"></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-secondary" onclick="closeModal('recipeModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveRecipe()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-secondary" onclick="closeModal('recipeModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveRecipe()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="orderModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="orderModalTitle">Yeni SipariÅ</h3><button onclick="closeModal('orderModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="orderModalTitle">Yeni SipariÃÂ</h3><button onclick="closeModal('orderModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="orderId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div class="form-group"><label class="label">MÃ¼Återi *</label><input id="oCustomer" placeholder="MÃ¼Återi adÄ±"></div>
-    <div class="form-group"><label class="label">ÃrÃ¼n *</label><select id="oProduct"></select></div>
+    <div class="form-group"><label class="label">MÃÂ¼ÃÂteri *</label><input id="oCustomer" placeholder="MÃÂ¼ÃÂteri adÃÂ±"></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n *</label><select id="oProduct"></select></div>
     <div class="form-group"><label class="label">Miktar *</label><input type="number" id="oQty" value="1"></div>
     <div class="form-group"><label class="label">Teslim Tarihi</label><input type="date" id="oDelivery"></div>
-    <div class="form-group"><label class="label">Ãncelik</label><select id="oPriority"><option>Normal</option><option>YÃ¼ksek</option><option>Acil</option></select></div>
-    <div class="form-group"><label class="label">Durum</label><select id="oStatus"><option>Bekliyor</option><option>OnaylandÄ±</option><option>Ãretimde</option><option>HazÄ±r</option><option>Sevk Edildi</option><option>Ä°ptal</option></select></div>
+    <div class="form-group"><label class="label">ÃÂncelik</label><select id="oPriority"><option>Normal</option><option>YÃÂ¼ksek</option><option>Acil</option></select></div>
+    <div class="form-group"><label class="label">Durum</label><select id="oStatus"><option>Bekliyor</option><option>OnaylandÃÂ±</option><option>ÃÂretimde</option><option>HazÃÂ±r</option><option>Sevk Edildi</option><option>ÃÂ°ptal</option></select></div>
   </div>
   <div class="form-group"><label class="label">Notlar</label><textarea id="oNotes" rows="2"></textarea></div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('orderModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveOrder()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('orderModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveOrder()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="productionModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="prodModalTitle">Yeni Ãretim Emri</h3><button onclick="closeModal('productionModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="prodModalTitle">Yeni ÃÂretim Emri</h3><button onclick="closeModal('productionModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="productionId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div class="form-group"><label class="label">ÃrÃ¼n *</label><select id="woProduct"></select></div>
-    <div class="form-group"><label class="label">Ä°liÅkili SipariÅ</label><select id="woOrder"><option value="">-- SeÃ§iniz --</option></select></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n *</label><select id="woProduct"></select></div>
+    <div class="form-group"><label class="label">ÃÂ°liÃÂkili SipariÃÂ</label><select id="woOrder"><option value="">-- SeÃÂ§iniz --</option></select></div>
     <div class="form-group"><label class="label">Planlanan Miktar</label><input type="number" id="woPlanned" value="1"></div>
-    <div class="form-group"><label class="label">GerÃ§ekleÅen</label><input type="number" id="woActual" value="0"></div>
-    <div class="form-group"><label class="label">BaÅlangÄ±Ã§</label><input type="date" id="woStart"></div>
-    <div class="form-group"><label class="label">BitiÅ</label><input type="date" id="woEnd"></div>
-    <div class="form-group"><label class="label">Durum</label><select id="woStatus"><option>PlanlandÄ±</option><option>BaÅladÄ±</option><option>TamamlandÄ±</option><option>Ä°ptal</option></select></div>
-    <div class="form-group"><label class="label">Ä°lerleme (%)</label><input type="number" id="woProgress" value="0" min="0" max="100"></div>
+    <div class="form-group"><label class="label">GerÃÂ§ekleÃÂen</label><input type="number" id="woActual" value="0"></div>
+    <div class="form-group"><label class="label">BaÃÂlangÃÂ±ÃÂ§</label><input type="date" id="woStart"></div>
+    <div class="form-group"><label class="label">BitiÃÂ</label><input type="date" id="woEnd"></div>
+    <div class="form-group"><label class="label">Durum</label><select id="woStatus"><option>PlanlandÃÂ±</option><option>BaÃÂladÃÂ±</option><option>TamamlandÃÂ±</option><option>ÃÂ°ptal</option></select></div>
+    <div class="form-group"><label class="label">ÃÂ°lerleme (%)</label><input type="number" id="woProgress" value="0" min="0" max="100"></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('productionModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveProduction()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('productionModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveProduction()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="qualityModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">Yeni KK KaydÄ±</h3><button onclick="closeModal('qualityModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">Yeni KK KaydÃÂ±</h3><button onclick="closeModal('qualityModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div class="form-group"><label class="label">ÃrÃ¼n *</label><select id="qqProduct"></select></div>
-    <div class="form-group"><label class="label">Ãretim Emri</label><select id="qqProd"><option value="">-- SeÃ§iniz --</option></select></div>
-    <div class="form-group"><label class="label">Kontrol Tipi</label><select id="qqType"><option>GiriÅ KontrolÃ¼</option><option>SÃ¼reÃ§ KontrolÃ¼</option><option>Final Kontrol</option><option>Sevkiyat Ãncesi</option></select></div>
-    <div class="form-group"><label class="label">SonuÃ§</label><select id="qqResult"><option>Bekliyor</option><option>GeÃ§ti</option><option>BaÅarÄ±sÄ±z</option><option>KoÅullu</option></select></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n *</label><select id="qqProduct"></select></div>
+    <div class="form-group"><label class="label">ÃÂretim Emri</label><select id="qqProd"><option value="">-- SeÃÂ§iniz --</option></select></div>
+    <div class="form-group"><label class="label">Kontrol Tipi</label><select id="qqType"><option>GiriÃÂ KontrolÃÂ¼</option><option>SÃÂ¼reÃÂ§ KontrolÃÂ¼</option><option>Final Kontrol</option><option>Sevkiyat ÃÂncesi</option></select></div>
+    <div class="form-group"><label class="label">SonuÃÂ§</label><select id="qqResult"><option>Bekliyor</option><option>GeÃÂ§ti</option><option>BaÃÂarÃÂ±sÃÂ±z</option><option>KoÃÂullu</option></select></div>
   </div>
   <div class="form-group"><label class="label">Notlar</label><textarea id="qqNotes" rows="3"></textarea></div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('qualityModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveQuality()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('qualityModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveQuality()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="shipModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">Yeni Sevkiyat</h3><button onclick="closeModal('shipModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0">Yeni Sevkiyat</h3><button onclick="closeModal('shipModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div class="form-group"><label class="label">MÃ¼Återi *</label><input id="shCustomer" placeholder="MÃ¼Återi adÄ±"></div>
-    <div class="form-group"><label class="label">SipariÅ No</label><select id="shOrder"><option value="">-- SeÃ§iniz --</option></select></div>
-    <div class="form-group"><label class="label">ÃrÃ¼n</label><select id="shProduct"></select></div>
+    <div class="form-group"><label class="label">MÃÂ¼ÃÂteri *</label><input id="shCustomer" placeholder="MÃÂ¼ÃÂteri adÃÂ±"></div>
+    <div class="form-group"><label class="label">SipariÃÂ No</label><select id="shOrder"><option value="">-- SeÃÂ§iniz --</option></select></div>
+    <div class="form-group"><label class="label">ÃÂrÃÂ¼n</label><select id="shProduct"></select></div>
     <div class="form-group"><label class="label">Miktar</label><input type="number" id="shQty" value="1"></div>
-    <div class="form-group"><label class="label">TaÅÄ±yÄ±cÄ±</label><input id="shCarrier" placeholder="TaÅÄ±yÄ±cÄ± firma"></div>
-    <div class="form-group"><label class="label">AraÃ§ PlakasÄ±</label><input id="shPlate" placeholder="34 AB 1234"></div>
+    <div class="form-group"><label class="label">TaÃÂÃÂ±yÃÂ±cÃÂ±</label><input id="shCarrier" placeholder="TaÃÂÃÂ±yÃÂ±cÃÂ± firma"></div>
+    <div class="form-group"><label class="label">AraÃÂ§ PlakasÃÂ±</label><input id="shPlate" placeholder="34 AB 1234"></div>
     <div class="form-group"><label class="label">Sevkiyat Tarihi</label><input type="date" id="shDate"></div>
-    <div class="form-group"><label class="label">Durum</label><select id="shStatus"><option>HazÄ±rlanÄ±yor</option><option>YÃ¼klendi</option><option>Yolda</option><option>Teslim Edildi</option></select></div>
+    <div class="form-group"><label class="label">Durum</label><select id="shStatus"><option>HazÃÂ±rlanÃÂ±yor</option><option>YÃÂ¼klendi</option><option>Yolda</option><option>Teslim Edildi</option></select></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('shipModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveShipment()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('shipModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveShipment()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div>
 <div class="modal" id="userModal"><div class="modal-box">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="userModalTitle">KullanÄ±cÄ±</h3><button onclick="closeModal('userModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">â</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="color:#f1f5f9;margin:0" id="userModalTitle">KullanÃÂ±cÃÂ±</h3><button onclick="closeModal('userModal')" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer">Ã¢ÂÂ</button></div>
   <input type="hidden" id="userId">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div class="form-group"><label class="label">Ad Soyad *</label><input id="uName" placeholder="Ad Soyad"></div>
     <div class="form-group"><label class="label">E-posta *</label><input id="uEmail" type="email" placeholder="ad@geoser.net"></div>
-    <div class="form-group"><label class="label">Åifre</label><input type="password" id="uPass" placeholder="Åifre"></div>
-    <div class="form-group"><label class="label">Rol</label><select id="uRole"><option value="super_admin">SÃ¼per Admin</option><option value="admin">Admin</option><option value="engineer">MÃ¼hendis</option><option value="factory_manager">Fabrika MÃ¼dÃ¼rÃ¼</option><option value="production_manager">Ãretim MÃ¼dÃ¼rÃ¼</option></select></div>
+    <div class="form-group"><label class="label">ÃÂifre</label><input type="password" id="uPass" placeholder="ÃÂifre"></div>
+    <div class="form-group"><label class="label">Rol</label><select id="uRole"><option value="super_admin">SÃÂ¼per Admin</option><option value="admin">Admin</option><option value="engineer">MÃÂ¼hendis</option><option value="factory_manager">Fabrika MÃÂ¼dÃÂ¼rÃÂ¼</option><option value="production_manager">ÃÂretim MÃÂ¼dÃÂ¼rÃÂ¼</option></select></div>
     <div class="form-group"><label class="label">Durum</label><select id="uStatus"><option>Aktif</option><option>Pasif</option></select></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('userModal')">Ä°ptal</button><button class="btn btn-primary" onclick="saveUser()">ð¾ Kaydet</button></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('userModal')">ÃÂ°ptal</button><button class="btn btn-primary" onclick="saveUser()">Ã°ÂÂÂ¾ Kaydet</button></div>
 </div></div><script>
-const USERS=[{id:1,name:'Erdal GÃ¼Ã§in',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status:'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre MÃ¼hendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'GÃ¼rsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
-const ROLE_LABELS={super_admin:'SÃ¼per Admin',admin:'Admin',engineer:'MÃ¼hendis',factory_manager:'Fabrika MÃ¼dÃ¼rÃ¼',production_manager:'Ãretim MÃ¼dÃ¼rÃ¼'};
-const APP={currentUser:null,products:[],rawMaterials:[],recipes:[],orders:[],production:[],quality:[],shipments:[],logs:[],settings:{companyName:'GEOSER A.Å.',address:'Ä°stanbul, TÃ¼rkiye',phone:'+90 212 000 0000',email:'info@geoser.net',currency:'âº',taxRate:18},nextId:{product:100,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10}};
+const USERS=[{id:1,name:'Erdal GÃÂ¼ÃÂ§in',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status:'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre MÃÂ¼hendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'GÃÂ¼rsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
+const ROLE_LABELS={super_admin:'SÃÂ¼per Admin',admin:'Admin',engineer:'MÃÂ¼hendis',factory_manager:'Fabrika MÃÂ¼dÃÂ¼rÃÂ¼',production_manager:'ÃÂretim MÃÂ¼dÃÂ¼rÃÂ¼'};
+const APP={currentUser:null,products:[],rawMaterials:[],recipes:[],orders:[],production:[],quality:[],shipments:[],logs:[],settings:{companyName:'GEOSER A.ÃÂ.',address:'ÃÂ°stanbul, TÃÂ¼rkiye',phone:'+90 212 000 0000',email:'info@geoser.net',currency:'Ã¢ÂÂº',taxRate:18},nextId:{product:100,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10}};
 const LS=k=>{try{return JSON.parse(localStorage.getItem('geoser_'+k)||'null');}catch(e){return null;}};
 const SS=(k,v)=>localStorage.setItem('geoser_'+k,JSON.stringify(v));
 function loadData(){['products','rawMaterials','recipes','orders','production','quality','shipments','logs','settings','nextId'].forEach(k=>{const d=LS(k);if(d)APP[k]=d;});}
@@ -353,16 +363,16 @@ function doLogin(){
   const email=document.getElementById('loginEmail').value.trim().toLowerCase();
   const pass=document.getElementById('loginPass').value;
   const u=USERS.find(u=>u.email===email&&u.pass===pass&&u.status==='Aktif');
-  if(!u){document.getElementById('loginAlert').innerHTML='<div class="alert alert-error">â GeÃ§ersiz e-posta veya Åifre</div>';return;}
+  if(!u){document.getElementById('loginAlert').innerHTML='<div class="alert alert-error">Ã¢ÂÂ GeÃÂ§ersiz e-posta veya ÃÂifre</div>';return;}
   u.lastLogin=new Date().toLocaleString('tr-TR');APP.currentUser=u;
   document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('sidebarAvatar').textContent=u.name.charAt(0);
   document.getElementById('sidebarName').textContent=u.name;
   document.getElementById('sidebarRole').textContent=ROLE_LABELS[u.role]||u.role;
-  document.getElementById('topUserBadge').textContent='ð¤ '+u.name;
+  document.getElementById('topUserBadge').textContent='Ã°ÂÂÂ¤ '+u.name;
   if(['super_admin','admin'].includes(u.role))document.getElementById('adminNav').style.display='block';
-  addLog('Sistem','GiriÅ','KullanÄ±cÄ± giriÅ yaptÄ±');startClock();initApp();
+  addLog('Sistem','GiriÃÂ','KullanÃÂ±cÃÂ± giriÃÂ yaptÃÂ±');startClock();initApp();
 }
 function doLogout(){APP.currentUser=null;location.reload();}
 function startClock(){const el=document.getElementById('clockEl');const t=()=>{el.textContent=new Date().toLocaleString('tr-TR');};t();setInterval(t,1000);}
@@ -371,10 +381,10 @@ function showSection(id,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
   if(el)el.classList.add('active');
-  const titles={dashboard:'Dashboard',products:'ÃrÃ¼n StoklarÄ±',rawmaterials:'Hammadde StoklarÄ±',recipes:'ReÃ§eteler / BOM',orders:'SipariÅler',production:'Ãretim Emirleri',quality:'Kalite Kontrol',shipment:'Sevkiyat',reports:'Raporlar',users:'KullanÄ±cÄ±lar',settings:'Ayarlar',logs:'Sistem LoglarÄ±'};
+  const titles={dashboard:'Dashboard',products:'ÃÂrÃÂ¼n StoklarÃÂ±',rawmaterials:'Hammadde StoklarÃÂ±',recipes:'ReÃÂ§eteler / BOM',orders:'SipariÃÂler',production:'ÃÂretim Emirleri',quality:'Kalite Kontrol',shipment:'Sevkiyat',reports:'Raporlar',users:'KullanÃÂ±cÃÂ±lar',settings:'Ayarlar',logs:'Sistem LoglarÃÂ±'};
   document.getElementById('pageTitle').textContent=titles[id]||id;
   const counts={products:APP.products.length,rawmaterials:APP.rawMaterials.length,orders:APP.orders.length,production:APP.production.length,quality:APP.quality.length,shipment:APP.shipments.length};
-  document.getElementById('pageBadge').textContent=counts[id]!==undefined?counts[id]+' kayÄ±t':'';
+  document.getElementById('pageBadge').textContent=counts[id]!==undefined?counts[id]+' kayÃÂ±t':'';
   if(id==='dashboard')renderDashboard();if(id==='products')renderProducts();if(id==='rawmaterials')renderRaw();
   if(id==='recipes')renderRecipes();if(id==='orders')renderOrders();if(id==='production')renderProduction();
   if(id==='quality')renderQuality();if(id==='shipment')renderShipment();if(id==='reports')renderReports();
@@ -382,113 +392,143 @@ function showSection(id,el){
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function initApp(){loadData();if(APP.products.length===0)seedData();renderDashboard();populateSelects();}
+function initApp(){
+  loadData();
+  renderDashboard();
+  populateSelects();
+  // Firebase'den ürünleri yükle
+  db.collection('urunler').get().then(snap=>{
+    if(!snap.empty){
+      APP.products=[];
+      snap.forEach(doc=>{
+        const d=doc.data();
+        APP.products.push({
+          id: doc.id,
+          code: d.kod||d.code||('PRD-'+(APP.products.length+1)),
+          name: d.ad||d.name||'',
+          category: d.kategori||d.category||'',
+          unit: d.birim||d.unit||'m²',
+          stock: Number(d.stokMiktari||d.stok||d.stock||0),
+          minStock: Number(d.minStok||d.minStock||0),
+          status: d.durum||d.status||'Aktif',
+          desc: d.aciklama||''
+        });
+      });
+      saveAll();
+      renderDashboard();
+      renderProducts();
+      populateSelects();
+    } else if(APP.products.length===0){
+      seedData();
+    }
+  }).catch(()=>{ if(APP.products.length===0)seedData(); });
+}
 function seedData(){
-  APP.products=[{id:101,code:'PRD-001',name:'Plastik Boru 20mm',category:'Boru',unit:'Mt',stock:850,minStock:200,status:'Aktif',desc:''},{id:102,code:'PRD-002',name:'Plastik Boru 32mm',category:'Boru',unit:'Mt',stock:620,minStock:200,status:'Aktif',desc:''},{id:103,code:'PRD-003',name:'Plastik Fitting 90Â°',category:'Fitting',unit:'Adet',stock:1240,minStock:500,status:'Aktif',desc:''},{id:104,code:'PRD-004',name:'Plastik Fitting T-Tip',category:'Fitting',unit:'Adet',stock:875,minStock:300,status:'Aktif',desc:''},{id:105,code:'PRD-005',name:'Vana 1/2"',category:'Vana',unit:'Adet',stock:320,minStock:100,status:'Aktif',desc:''},{id:106,code:'PRD-006',name:'Vana 3/4"',category:'Vana',unit:'Adet',stock:88,minStock:100,status:'Aktif',desc:''},{id:107,code:'PRD-007',name:'BaÄlantÄ± ParÃ§asÄ±',category:'Aksesuar',unit:'Adet',stock:2100,minStock:400,status:'Aktif',desc:''},{id:108,code:'PRD-008',name:'FlanÅ DN50',category:'FlanÅ',unit:'Adet',stock:45,minStock:50,status:'Aktif',desc:''}];
-  APP.rawMaterials=[{id:101,code:'HM-001',name:'Polipropilen (PP-R)',supplier:'PetroKim A.Å.',unit:'Kg',stock:8500,minStock:2000,cost:28.50,status:'Aktif'},{id:102,code:'HM-002',name:'HDPE GranÃ¼l',supplier:'PetroKim A.Å.',unit:'Kg',stock:4200,minStock:1500,cost:32.00,status:'Aktif'},{id:103,code:'HM-003',name:'PirinÃ§ Ham Madde',supplier:'MetalTek Ltd.',unit:'Kg',stock:650,minStock:200,cost:185.00,status:'Aktif'},{id:104,code:'HM-004',name:'EPDM Conta',supplier:'ElastomerCo.',unit:'Adet',stock:3800,minStock:1000,cost:4.50,status:'Aktif'},{id:105,code:'HM-005',name:'Karbon Siyah',supplier:'Kimya A.Å.',unit:'Kg',stock:320,minStock:500,cost:18.00,status:'Aktif'},{id:106,code:'HM-006',name:'StabilizatÃ¶r',supplier:'Kimya A.Å.',unit:'Kg',stock:180,minStock:200,cost:45.00,status:'Aktif'}];
-  APP.recipes=[{id:101,productId:101,product:'Plastik Boru 20mm',version:'v1.0',status:'Aktif',items:[{rawId:101,raw:'Polipropilen (PP-R)',qty:0.45,unit:'Kg'},{rawId:105,raw:'Karbon Siyah',qty:0.02,unit:'Kg'}]},{id:102,productId:103,product:'Plastik Fitting 90Â°',version:'v2.1',status:'Aktif',items:[{rawId:101,raw:'Polipropilen (PP-R)',qty:0.12,unit:'Kg'},{rawId:104,raw:'EPDM Conta',qty:1,unit:'Adet'}]},{id:103,productId:105,product:'Vana 1/2"',version:'v1.3',status:'Aktif',items:[{rawId:103,raw:'PirinÃ§ Ham Madde',qty:0.35,unit:'Kg'},{rawId:104,raw:'EPDM Conta',qty:2,unit:'Adet'}]}];
+  APP.products=[{id:101,code:'PRD-001',name:'Plastik Boru 20mm',category:'Boru',unit:'Mt',stock:850,minStock:200,status:'Aktif',desc:''},{id:102,code:'PRD-002',name:'Plastik Boru 32mm',category:'Boru',unit:'Mt',stock:620,minStock:200,status:'Aktif',desc:''},{id:103,code:'PRD-003',name:'Plastik Fitting 90ÃÂ°',category:'Fitting',unit:'Adet',stock:1240,minStock:500,status:'Aktif',desc:''},{id:104,code:'PRD-004',name:'Plastik Fitting T-Tip',category:'Fitting',unit:'Adet',stock:875,minStock:300,status:'Aktif',desc:''},{id:105,code:'PRD-005',name:'Vana 1/2"',category:'Vana',unit:'Adet',stock:320,minStock:100,status:'Aktif',desc:''},{id:106,code:'PRD-006',name:'Vana 3/4"',category:'Vana',unit:'Adet',stock:88,minStock:100,status:'Aktif',desc:''},{id:107,code:'PRD-007',name:'BaÃÂlantÃÂ± ParÃÂ§asÃÂ±',category:'Aksesuar',unit:'Adet',stock:2100,minStock:400,status:'Aktif',desc:''},{id:108,code:'PRD-008',name:'FlanÃÂ DN50',category:'FlanÃÂ',unit:'Adet',stock:45,minStock:50,status:'Aktif',desc:''}];
+  APP.rawMaterials=[{id:101,code:'HM-001',name:'Polipropilen (PP-R)',supplier:'PetroKim A.ÃÂ.',unit:'Kg',stock:8500,minStock:2000,cost:28.50,status:'Aktif'},{id:102,code:'HM-002',name:'HDPE GranÃÂ¼l',supplier:'PetroKim A.ÃÂ.',unit:'Kg',stock:4200,minStock:1500,cost:32.00,status:'Aktif'},{id:103,code:'HM-003',name:'PirinÃÂ§ Ham Madde',supplier:'MetalTek Ltd.',unit:'Kg',stock:650,minStock:200,cost:185.00,status:'Aktif'},{id:104,code:'HM-004',name:'EPDM Conta',supplier:'ElastomerCo.',unit:'Adet',stock:3800,minStock:1000,cost:4.50,status:'Aktif'},{id:105,code:'HM-005',name:'Karbon Siyah',supplier:'Kimya A.ÃÂ.',unit:'Kg',stock:320,minStock:500,cost:18.00,status:'Aktif'},{id:106,code:'HM-006',name:'StabilizatÃÂ¶r',supplier:'Kimya A.ÃÂ.',unit:'Kg',stock:180,minStock:200,cost:45.00,status:'Aktif'}];
+  APP.recipes=[{id:101,productId:101,product:'Plastik Boru 20mm',version:'v1.0',status:'Aktif',items:[{rawId:101,raw:'Polipropilen (PP-R)',qty:0.45,unit:'Kg'},{rawId:105,raw:'Karbon Siyah',qty:0.02,unit:'Kg'}]},{id:102,productId:103,product:'Plastik Fitting 90ÃÂ°',version:'v2.1',status:'Aktif',items:[{rawId:101,raw:'Polipropilen (PP-R)',qty:0.12,unit:'Kg'},{rawId:104,raw:'EPDM Conta',qty:1,unit:'Adet'}]},{id:103,productId:105,product:'Vana 1/2"',version:'v1.3',status:'Aktif',items:[{rawId:103,raw:'PirinÃÂ§ Ham Madde',qty:0.35,unit:'Kg'},{rawId:104,raw:'EPDM Conta',qty:2,unit:'Adet'}]}];
   const today=new Date();const fmt=d=>d.toISOString().split('T')[0];const add=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return fmt(d);};
-  APP.orders=[{id:1001,customer:'Ege YapÄ± A.Å.',productId:101,product:'Plastik Boru 20mm',qty:500,date:fmt(today),delivery:add(14),status:'Ãretimde',priority:'YÃ¼ksek',notes:'Acele!'},{id:1002,customer:'Marmara Ä°nÅaat',productId:103,product:'Plastik Fitting 90Â°',qty:1000,date:fmt(today),delivery:add(7),status:'OnaylandÄ±',priority:'Normal',notes:''},{id:1003,customer:'Karadeniz TaahhÃ¼t',productId:105,product:'Vana 1/2"',qty:200,date:fmt(today),delivery:add(21),status:'Bekliyor',priority:'Normal',notes:''},{id:1004,customer:'Ä°stanbul Su Ä°daresi',productId:102,product:'Plastik Boru 32mm',qty:1200,date:fmt(today),delivery:add(30),status:'Bekliyor',priority:'Acil',notes:'Kamu ihale'},{id:1005,customer:'Ege YapÄ± A.Å.',productId:104,product:'Plastik Fitting T-Tip',qty:600,date:fmt(today),delivery:add(10),status:'HazÄ±r',priority:'Normal',notes:''}];
-  APP.production=[{id:5001,product:'Plastik Boru 20mm',productId:101,orderId:1001,planned:500,actual:320,progress:64,start:fmt(today),end:add(5),status:'BaÅladÄ±'},{id:5002,product:'Plastik Fitting 90Â°',productId:103,orderId:1002,planned:1000,actual:0,progress:0,start:add(1),end:add(8),status:'PlanlandÄ±'},{id:5003,product:'Plastik Fitting T-Tip',productId:104,orderId:1005,planned:600,actual:600,progress:100,start:add(-7),end:fmt(today),status:'TamamlandÄ±'}];
-  APP.quality=[{id:9001,productId:101,product:'Plastik Boru 20mm',productionId:5001,type:'SÃ¼reÃ§ KontrolÃ¼',inspector:'Emre MÃ¼hendis',date:fmt(today),result:'GeÃ§ti',notes:'Boyutlar spesifikasyon dahilinde'},{id:9002,productId:104,product:'Plastik Fitting T-Tip',productionId:5003,type:'Final Kontrol',inspector:'Emre MÃ¼hendis',date:fmt(today),result:'GeÃ§ti',notes:'Tamamen uyumlu'},{id:9003,productId:101,product:'Plastik Boru 20mm',productionId:5001,type:'SÃ¼reÃ§ KontrolÃ¼',inspector:'GÃ¼rsel Fabrika',date:add(-1),result:'KoÅullu',notes:'Renk tonu farklÄ±lÄ±ÄÄ± â kabul'}];
-  APP.shipments=[{id:7001,customer:'Ege YapÄ± A.Å.',orderId:1005,product:'Plastik Fitting T-Tip',qty:600,carrier:'Aras Kargo',plate:'34 AK 5678',date:add(1),status:'HazÄ±rlanÄ±yor'}];
+  APP.orders=[{id:1001,customer:'Ege YapÃÂ± A.ÃÂ.',productId:101,product:'Plastik Boru 20mm',qty:500,date:fmt(today),delivery:add(14),status:'ÃÂretimde',priority:'YÃÂ¼ksek',notes:'Acele!'},{id:1002,customer:'Marmara ÃÂ°nÃÂaat',productId:103,product:'Plastik Fitting 90ÃÂ°',qty:1000,date:fmt(today),delivery:add(7),status:'OnaylandÃÂ±',priority:'Normal',notes:''},{id:1003,customer:'Karadeniz TaahhÃÂ¼t',productId:105,product:'Vana 1/2"',qty:200,date:fmt(today),delivery:add(21),status:'Bekliyor',priority:'Normal',notes:''},{id:1004,customer:'ÃÂ°stanbul Su ÃÂ°daresi',productId:102,product:'Plastik Boru 32mm',qty:1200,date:fmt(today),delivery:add(30),status:'Bekliyor',priority:'Acil',notes:'Kamu ihale'},{id:1005,customer:'Ege YapÃÂ± A.ÃÂ.',productId:104,product:'Plastik Fitting T-Tip',qty:600,date:fmt(today),delivery:add(10),status:'HazÃÂ±r',priority:'Normal',notes:''}];
+  APP.production=[{id:5001,product:'Plastik Boru 20mm',productId:101,orderId:1001,planned:500,actual:320,progress:64,start:fmt(today),end:add(5),status:'BaÃÂladÃÂ±'},{id:5002,product:'Plastik Fitting 90ÃÂ°',productId:103,orderId:1002,planned:1000,actual:0,progress:0,start:add(1),end:add(8),status:'PlanlandÃÂ±'},{id:5003,product:'Plastik Fitting T-Tip',productId:104,orderId:1005,planned:600,actual:600,progress:100,start:add(-7),end:fmt(today),status:'TamamlandÃÂ±'}];
+  APP.quality=[{id:9001,productId:101,product:'Plastik Boru 20mm',productionId:5001,type:'SÃÂ¼reÃÂ§ KontrolÃÂ¼',inspector:'Emre MÃÂ¼hendis',date:fmt(today),result:'GeÃÂ§ti',notes:'Boyutlar spesifikasyon dahilinde'},{id:9002,productId:104,product:'Plastik Fitting T-Tip',productionId:5003,type:'Final Kontrol',inspector:'Emre MÃÂ¼hendis',date:fmt(today),result:'GeÃÂ§ti',notes:'Tamamen uyumlu'},{id:9003,productId:101,product:'Plastik Boru 20mm',productionId:5001,type:'SÃÂ¼reÃÂ§ KontrolÃÂ¼',inspector:'GÃÂ¼rsel Fabrika',date:add(-1),result:'KoÃÂullu',notes:'Renk tonu farklÃÂ±lÃÂ±ÃÂÃÂ± Ã¢ÂÂ kabul'}];
+  APP.shipments=[{id:7001,customer:'Ege YapÃÂ± A.ÃÂ.',orderId:1005,product:'Plastik Fitting T-Tip',qty:600,carrier:'Aras Kargo',plate:'34 AK 5678',date:add(1),status:'HazÃÂ±rlanÃÂ±yor'}];
   APP.nextId={product:108,raw:106,recipe:103,order:1005,production:5003,quality:9003,shipment:7001,user:10};
   saveAll();saveLogs();
 }
 function populateSelects(){
   const products=APP.products.filter(p=>p.status==='Aktif');
   ['oProduct','woProduct','qqProduct','shProduct','recProduct'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=products.map(p=>`<option value="${p.id}">${p.code} - ${p.name}</option>`).join('');});
-  ['woOrder','shOrder'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">-- SeÃ§iniz --</option>'+APP.orders.map(o=>`<option value="${o.id}">#${o.id} - ${o.customer}</option>`).join('');});
-  document.getElementById('qqProd').innerHTML='<option value="">-- SeÃ§iniz --</option>'+APP.production.map(p=>`<option value="${p.id}">#${p.id} - ${p.product}</option>`).join('');
+  ['woOrder','shOrder'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">-- SeÃÂ§iniz --</option>'+APP.orders.map(o=>`<option value="${o.id}">#${o.id} - ${o.customer}</option>`).join('');});
+  document.getElementById('qqProd').innerHTML='<option value="">-- SeÃÂ§iniz --</option>'+APP.production.map(p=>`<option value="${p.id}">#${p.id} - ${p.product}</option>`).join('');
   const cats=[...new Set(APP.products.map(p=>p.category).filter(Boolean))];
-  const cf=document.getElementById('prodCatFilter');if(cf)cf.innerHTML='<option value="">TÃ¼m Kategoriler</option>'+cats.map(c=>`<option>${c}</option>`).join('');
+  const cf=document.getElementById('prodCatFilter');if(cf)cf.innerHTML='<option value="">TÃÂ¼m Kategoriler</option>'+cats.map(c=>`<option>${c}</option>`).join('');
 }
 let _mc=null,_pc=null;
-function statusClass(s){const m={Bekliyor:'badge-yellow',OnaylandÄ±:'badge-blue',Ãretimde:'badge-purple',BaÅladÄ±:'badge-purple',TamamlandÄ±:'badge-green','Sevk Edildi':'badge-green','Teslim Edildi':'badge-green',GeÃ§ti:'badge-green',HazÄ±r:'badge-green',Ä°ptal:'badge-red',BaÅarÄ±sÄ±z:'badge-red',KoÅullu:'badge-yellow',HazÄ±rlanÄ±yor:'badge-yellow',YÃ¼klendi:'badge-blue',Yolda:'badge-purple',PlanlandÄ±:'badge-blue'};return m[s]||'badge-blue';}
+function statusClass(s){const m={Bekliyor:'badge-yellow',OnaylandÃÂ±:'badge-blue',ÃÂretimde:'badge-purple',BaÃÂladÃÂ±:'badge-purple',TamamlandÃÂ±:'badge-green','Sevk Edildi':'badge-green','Teslim Edildi':'badge-green',GeÃÂ§ti:'badge-green',HazÃÂ±r:'badge-green',ÃÂ°ptal:'badge-red',BaÃÂarÃÂ±sÃÂ±z:'badge-red',KoÃÂullu:'badge-yellow',HazÃÂ±rlanÃÂ±yor:'badge-yellow',YÃÂ¼klendi:'badge-blue',Yolda:'badge-purple',PlanlandÃÂ±:'badge-blue'};return m[s]||'badge-blue';}
 function renderDashboard(){
   const tp=APP.products.reduce((s,p)=>s+p.stock,0);const tr=APP.rawMaterials.reduce((s,r)=>s+r.stock,0);
-  const ao=APP.orders.filter(o=>!['Sevk Edildi','Ä°ptal'].includes(o.status)).length;
+  const ao=APP.orders.filter(o=>!['Sevk Edildi','ÃÂ°ptal'].includes(o.status)).length;
   const pq=APP.quality.filter(q=>q.result==='Bekliyor').length;
   document.getElementById('kpiRow').innerHTML=`
-    <div class="kpi" style="--c1:#1d4ed8;--c2:#7c3aed"><div style="font-size:28px;font-weight:800">${APP.products.length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">ð¦ Toplam ÃrÃ¼n ÃeÅidi</div><div style="font-size:11px;opacity:.6;margin-top:4px">${tp.toLocaleString('tr')} birim stok</div></div>
-    <div class="kpi" style="--c1:#065f46;--c2:#047857"><div style="font-size:28px;font-weight:800">${APP.rawMaterials.length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">ð§ª Hammadde ÃeÅidi</div><div style="font-size:11px;opacity:.6;margin-top:4px">${tr.toLocaleString('tr')} birim stok</div></div>
-    <div class="kpi" style="--c1:#92400e;--c2:#b45309"><div style="font-size:28px;font-weight:800">${ao}</div><div style="font-size:13px;opacity:.8;margin-top:4px">ð Aktif SipariÅ</div><div style="font-size:11px;opacity:.6;margin-top:4px">${APP.orders.length} toplam</div></div>
-    <div class="kpi" style="--c1:#7c3aed;--c2:#a855f7"><div style="font-size:28px;font-weight:800">${APP.production.filter(p=>p.status==='BaÅladÄ±').length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">âï¸ Aktif Ãretim</div><div style="font-size:11px;opacity:.6;margin-top:4px">${pq} KK bekliyor</div></div>
+    <div class="kpi" style="--c1:#1d4ed8;--c2:#7c3aed"><div style="font-size:28px;font-weight:800">${APP.products.length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">Ã°ÂÂÂ¦ Toplam ÃÂrÃÂ¼n ÃÂeÃÂidi</div><div style="font-size:11px;opacity:.6;margin-top:4px">${tp.toLocaleString('tr')} birim stok</div></div>
+    <div class="kpi" style="--c1:#065f46;--c2:#047857"><div style="font-size:28px;font-weight:800">${APP.rawMaterials.length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">Ã°ÂÂ§Âª Hammadde ÃÂeÃÂidi</div><div style="font-size:11px;opacity:.6;margin-top:4px">${tr.toLocaleString('tr')} birim stok</div></div>
+    <div class="kpi" style="--c1:#92400e;--c2:#b45309"><div style="font-size:28px;font-weight:800">${ao}</div><div style="font-size:13px;opacity:.8;margin-top:4px">Ã°ÂÂÂ Aktif SipariÃÂ</div><div style="font-size:11px;opacity:.6;margin-top:4px">${APP.orders.length} toplam</div></div>
+    <div class="kpi" style="--c1:#7c3aed;--c2:#a855f7"><div style="font-size:28px;font-weight:800">${APP.production.filter(p=>p.status==='BaÃÂladÃÂ±').length}</div><div style="font-size:13px;opacity:.8;margin-top:4px">Ã¢ÂÂÃ¯Â¸Â Aktif ÃÂretim</div><div style="font-size:11px;opacity:.6;margin-top:4px">${pq} KK bekliyor</div></div>
   `;
   const criticals=APP.products.filter(p=>p.stock<=p.minStock);
-  document.getElementById('stockAlerts').innerHTML=criticals.length===0?'<div style="color:#64748b;text-align:center;padding:20px">â Kritik stok yok</div>':criticals.map(p=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #334155"><div><div style="font-size:13px;font-weight:500;color:#f1f5f9">${p.name}</div><div style="font-size:11px;color:#64748b">${p.code}</div></div><div style="text-align:right"><div style="font-size:13px;color:#f87171;font-weight:600">${p.stock} ${p.unit}</div><div style="font-size:11px;color:#64748b">Min: ${p.minStock}</div></div></div>`).join('');
-  document.getElementById('recentOrders').innerHTML=APP.orders.slice(-5).reverse().map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #334155"><div><div style="font-size:13px;font-weight:500;color:#f1f5f9">#${o.id} - ${o.customer}</div><div style="font-size:11px;color:#64748b">${o.product} Ã ${o.qty}</div></div><span class="badge ${statusClass(o.status)}">${o.status}</span></div>`).join('');
+  document.getElementById('stockAlerts').innerHTML=criticals.length===0?'<div style="color:#64748b;text-align:center;padding:20px">Ã¢ÂÂ Kritik stok yok</div>':criticals.map(p=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #334155"><div><div style="font-size:13px;font-weight:500;color:#f1f5f9">${p.name}</div><div style="font-size:11px;color:#64748b">${p.code}</div></div><div style="text-align:right"><div style="font-size:13px;color:#f87171;font-weight:600">${p.stock} ${p.unit}</div><div style="font-size:11px;color:#64748b">Min: ${p.minStock}</div></div></div>`).join('');
+  document.getElementById('recentOrders').innerHTML=APP.orders.slice(-5).reverse().map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #334155"><div><div style="font-size:13px;font-weight:500;color:#f1f5f9">#${o.id} - ${o.customer}</div><div style="font-size:11px;color:#64748b">${o.product} ÃÂ ${o.qty}</div></div><span class="badge ${statusClass(o.status)}">${o.status}</span></div>`).join('');
   if(_mc)_mc.destroy();const ctx1=document.getElementById('mainChart')?.getContext('2d');
-  if(ctx1)_mc=new Chart(ctx1,{type:'bar',data:{labels:['Oca','Åub','Mar','Nis','May','Haz'],datasets:[{label:'Ãretim',data:[4200,3800,5100,4700,5600,4900],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'SatÄ±Å',data:[3900,3500,4800,4300,5200,4600],backgroundColor:'rgba(139,92,246,.7)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}});
+  if(ctx1)_mc=new Chart(ctx1,{type:'bar',data:{labels:['Oca','ÃÂub','Mar','Nis','May','Haz'],datasets:[{label:'ÃÂretim',data:[4200,3800,5100,4700,5600,4900],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},{label:'SatÃÂ±ÃÂ',data:[3900,3500,4800,4300,5200,4600],backgroundColor:'rgba(139,92,246,.7)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}});
   if(_pc)_pc.destroy();const ctx2=document.getElementById('pieChart')?.getContext('2d');
-  const sts=['Bekliyor','OnaylandÄ±','Ãretimde','HazÄ±r','Sevk Edildi'];
+  const sts=['Bekliyor','OnaylandÃÂ±','ÃÂretimde','HazÃÂ±r','Sevk Edildi'];
   if(ctx2)_pc=new Chart(ctx2,{type:'doughnut',data:{labels:sts,datasets:[{data:sts.map(s=>APP.orders.filter(o=>o.status===s).length),backgroundColor:['#64748b','#3b82f6','#f59e0b','#10b981','#8b5cf6'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}}}});
 }
 function renderProducts(){
   const q=document.getElementById('prodSearch').value.toLowerCase();const cat=document.getElementById('prodCatFilter').value;
   const rows=APP.products.filter(p=>(p.name.toLowerCase().includes(q)||p.code.toLowerCase().includes(q))&&(!cat||p.category===cat));
-  document.getElementById('productsTbl').innerHTML=rows.length===0?'<tr><td colspan="8" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(p=>`<tr><td style="color:#93c5fd;font-weight:500">${p.code}</td><td style="font-weight:500">${p.name}</td><td>${p.category||'-'}</td><td style="color:${p.stock<=p.minStock?'#f87171':'#6ee7b7'};font-weight:600">${p.stock}</td><td>${p.minStock}</td><td>${p.unit}</td><td>âº${Number(p.price).toLocaleString('tr')}</td><td><span class="badge ${p.status==='Aktif'?'badge-green':'badge-red'}">${p.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editProduct(${p.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteProduct(${p.id})">ðï¸</button></td></tr>`).join('');
+  document.getElementById('productsTbl').innerHTML=rows.length===0?'<tr><td colspan="8" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(p=>`<tr><td style="color:#93c5fd;font-weight:500">${p.code}</td><td style="font-weight:500">${p.name}</td><td>${p.category||'-'}</td><td style="color:${p.stock<=p.minStock?'#f87171':'#6ee7b7'};font-weight:600">${p.stock}</td><td>${p.minStock}</td><td>${p.unit}</td><td><span class="badge ${p.status==='Aktif'?'badge-green':'badge-red'}">${p.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editProduct(${p.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteProduct(${p.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');
 }
 function filterProducts(){renderProducts();}
-function editProduct(id){const p=APP.products.find(x=>x.id===id);if(!p)return;document.getElementById('productId').value=id;document.getElementById('productModalTitle').textContent='ÃrÃ¼n DÃ¼zenle';document.getElementById('pCode').value=p.code;document.getElementById('pName').value=p.name;document.getElementById('pCat').value=p.category||'';document.getElementById('pStock').value=p.stock;document.getElementById('pMinStock').value=p.minStock;document.getElementById('pStatus').value=p.status;document.getElementById('pUnit').value=p.unit;document.getElementById('pDesc').value=p.desc||'';openModal('productModal');}
-function saveProduct(){const id=document.getElementById('productId').value;const obj={code:document.getElementById('pCode').value.trim(),name:document.getElementById('pName').value.trim(),category:document.getElementById('pCat').value.trim(),unit:document.getElementById('pUnit').value,stock:+document.getElementById('pStock').value,minStock:+document.getElementById('pMinStock').value,status:document.getElementById('pStatus').value,desc:document.getElementById('pDesc').value};if(!obj.code||!obj.name){alert('Kod ve ad zorunludur!');return;}if(id){const i=APP.products.findIndex(x=>x.id==id);APP.products[i]={...APP.products[i],...obj};addLog('ÃrÃ¼n','GÃ¼ncellendi',obj.name);}else{obj.id=nid('product');APP.products.push(obj);addLog('ÃrÃ¼n','Eklendi',obj.name);}saveAll();closeModal('productModal');renderProducts();populateSelects();}
-function deleteProduct(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.products=APP.products.filter(x=>x.id!==id);saveAll();addLog('ÃrÃ¼n','Silindi','ID: '+id);renderProducts();populateSelects();}
-function renderRaw(){const q=document.getElementById('rawSearch').value.toLowerCase();const rows=APP.rawMaterials.filter(r=>r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q));document.getElementById('rawTbl').innerHTML=rows.length===0?'<tr><td colspan="9" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(r=>`<tr><td style="color:#93c5fd;font-weight:500">${r.code}</td><td style="font-weight:500">${r.name}</td><td>${r.supplier||'-'}</td><td style="color:${r.stock<=r.minStock?'#f87171':'#6ee7b7'};font-weight:600">${r.stock}</td><td>${r.minStock}</td><td>${r.unit}</td><td>âº${Number(r.cost).toLocaleString('tr')}</td><td><span class="badge ${r.status==='Aktif'?'badge-green':'badge-red'}">${r.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editRaw(${r.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteRaw(${r.id})">ðï¸</button></td></tr>`).join('');}
+function editProduct(id){const p=APP.products.find(x=>x.id===id);if(!p)return;document.getElementById('productId').value=id;document.getElementById('productModalTitle').textContent='ÃÂrÃÂ¼n DÃÂ¼zenle';document.getElementById('pCode').value=p.code;document.getElementById('pName').value=p.name;document.getElementById('pCat').value=p.category||'';document.getElementById('pStock').value=p.stock;document.getElementById('pMinStock').value=p.minStock;document.getElementById('pStatus').value=p.status;document.getElementById('pUnit').value=p.unit;document.getElementById('pDesc').value=p.desc||'';openModal('productModal');}
+function saveProduct(){const id=document.getElementById('productId').value;const obj={code:document.getElementById('pCode').value.trim(),name:document.getElementById('pName').value.trim(),category:document.getElementById('pCat').value.trim(),unit:document.getElementById('pUnit').value,stock:+document.getElementById('pStock').value,minStock:+document.getElementById('pMinStock').value,status:document.getElementById('pStatus').value,desc:document.getElementById('pDesc').value};if(!obj.code||!obj.name){alert('Kod ve ad zorunludur!');return;}if(id){const i=APP.products.findIndex(x=>x.id==id);APP.products[i]={...APP.products[i],...obj};addLog('ÃÂrÃÂ¼n','GÃÂ¼ncellendi',obj.name);}else{obj.id=nid('product');APP.products.push(obj);addLog('ÃÂrÃÂ¼n','Eklendi',obj.name);}saveAll();closeModal('productModal');renderProducts();populateSelects();}
+function deleteProduct(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.products=APP.products.filter(x=>x.id!==id);saveAll();addLog('ÃÂrÃÂ¼n','Silindi','ID: '+id);renderProducts();populateSelects();}
+function renderRaw(){const q=document.getElementById('rawSearch').value.toLowerCase();const rows=APP.rawMaterials.filter(r=>r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q));document.getElementById('rawTbl').innerHTML=rows.length===0?'<tr><td colspan="8" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(r=>`<tr><td style="color:#93c5fd;font-weight:500">${r.code}</td><td style="font-weight:500">${r.name}</td><td>${r.supplier||'-'}</td><td style="color:${r.stock<=r.minStock?'#f87171':'#6ee7b7'};font-weight:600">${r.stock}</td><td>${r.minStock}</td><td>${r.unit}</td><td>Ã¢ÂÂº${Number(r.cost).toLocaleString('tr')}</td><td><span class="badge ${r.status==='Aktif'?'badge-green':'badge-red'}">${r.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editRaw(${r.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteRaw(${r.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
 function filterRaw(){renderRaw();}
-function editRaw(id){const r=APP.rawMaterials.find(x=>x.id===id);if(!r)return;document.getElementById('rawId').value=id;document.getElementById('rawModalTitle').textContent='Hammadde DÃ¼zenle';document.getElementById('rCode').value=r.code;document.getElementById('rName').value=r.name;document.getElementById('rSupplier').value=r.supplier||'';document.getElementById('rStock').value=r.stock;document.getElementById('rMinStock').value=r.minStock;document.getElementById('rCost').value=r.cost;document.getElementById('rStatus').value=r.status;document.getElementById('rUnit').value=r.unit;openModal('rawModal');}
-function saveRaw(){const id=document.getElementById('rawId').value;const obj={code:document.getElementById('rCode').value.trim(),name:document.getElementById('rName').value.trim(),supplier:document.getElementById('rSupplier').value.trim(),unit:document.getElementById('rUnit').value,stock:+document.getElementById('rStock').value,minStock:+document.getElementById('rMinStock').value,cost:+document.getElementById('rCost').value,status:document.getElementById('rStatus').value};if(!obj.code||!obj.name){alert('Kod ve ad zorunludur!');return;}if(id){const i=APP.rawMaterials.findIndex(x=>x.id==id);APP.rawMaterials[i]={...APP.rawMaterials[i],...obj};addLog('Hammadde','GÃ¼ncellendi',obj.name);}else{obj.id=nid('raw');APP.rawMaterials.push(obj);addLog('Hammadde','Eklendi',obj.name);}saveAll();closeModal('rawModal');renderRaw();}
+function editRaw(id){const r=APP.rawMaterials.find(x=>x.id===id);if(!r)return;document.getElementById('rawId').value=id;document.getElementById('rawModalTitle').textContent='Hammadde DÃÂ¼zenle';document.getElementById('rCode').value=r.code;document.getElementById('rName').value=r.name;document.getElementById('rSupplier').value=r.supplier||'';document.getElementById('rStock').value=r.stock;document.getElementById('rMinStock').value=r.minStock;document.getElementById('rCost').value=r.cost;document.getElementById('rStatus').value=r.status;document.getElementById('rUnit').value=r.unit;openModal('rawModal');}
+function saveRaw(){const id=document.getElementById('rawId').value;const obj={code:document.getElementById('rCode').value.trim(),name:document.getElementById('rName').value.trim(),supplier:document.getElementById('rSupplier').value.trim(),unit:document.getElementById('rUnit').value,stock:+document.getElementById('rStock').value,minStock:+document.getElementById('rMinStock').value,cost:+document.getElementById('rCost').value,status:document.getElementById('rStatus').value};if(!obj.code||!obj.name){alert('Kod ve ad zorunludur!');return;}if(id){const i=APP.rawMaterials.findIndex(x=>x.id==id);APP.rawMaterials[i]={...APP.rawMaterials[i],...obj};addLog('Hammadde','GÃÂ¼ncellendi',obj.name);}else{obj.id=nid('raw');APP.rawMaterials.push(obj);addLog('Hammadde','Eklendi',obj.name);}saveAll();closeModal('rawModal');renderRaw();}
 function deleteRaw(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.rawMaterials=APP.rawMaterials.filter(x=>x.id!==id);saveAll();addLog('Hammadde','Silindi','ID: '+id);renderRaw();}
-function renderRecipes(){const q=document.getElementById('recSearch').value.toLowerCase();const rows=APP.recipes.filter(r=>r.product.toLowerCase().includes(q));document.getElementById('recipesTbl').innerHTML=rows.length===0?'<tr><td colspan="5" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(r=>`<tr style="cursor:pointer" onclick="showRecipeDetail(${r.id})"><td style="font-weight:500">${r.product}</td><td><span class="badge badge-blue">${r.version}</span></td><td>${r.items.length} malzeme</td><td><span class="badge ${r.status==='Aktif'?'badge-green':'badge-red'}">${r.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();editRecipe(${r.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="event.stopPropagation();deleteRecipe(${r.id})">ðï¸</button></td></tr>`).join('');}
+function renderRecipes(){const q=document.getElementById('recSearch').value.toLowerCase();const rows=APP.recipes.filter(r=>r.product.toLowerCase().includes(q));document.getElementById('recipesTbl').innerHTML=rows.length===0?'<tr><td colspan="5" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(r=>`<tr style="cursor:pointer" onclick="showRecipeDetail(${r.id})"><td style="font-weight:500">${r.product}</td><td><span class="badge badge-blue">${r.version}</span></td><td>${r.items.length} malzeme</td><td><span class="badge ${r.status==='Aktif'?'badge-green':'badge-red'}">${r.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();editRecipe(${r.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="event.stopPropagation();deleteRecipe(${r.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
 function filterRecipes(){renderRecipes();}
-function showRecipeDetail(id){const r=APP.recipes.find(x=>x.id===id);if(!r)return;document.getElementById('recipeDetail').innerHTML=`<div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð ${r.product} â ${r.version}</div><table><thead><tr><th>Hammadde</th><th>Miktar</th><th>Birim</th></tr></thead><tbody>${r.items.map(it=>`<tr><td>${it.raw}</td><td style="font-weight:600;color:#93c5fd">${it.qty}</td><td>${it.unit}</td></tr>`).join('')}</tbody></table>`;}
-function addRecipeRow(){const rawOpts=APP.rawMaterials.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');const div=document.createElement('div');div.style.cssText='display:flex;gap:8px;align-items:center;margin-bottom:8px';div.innerHTML=`<select style="flex:3">${rawOpts}</select><input type="number" placeholder="Miktar" style="flex:1" value="1"><select style="flex:1"><option>Kg</option><option>Lt</option><option>Adet</option><option>Mt</option></select><button class="btn btn-danger" style="padding:4px 8px;font-size:12px" onclick="this.parentElement.remove()">â</button>`;document.getElementById('recipeRows').appendChild(div);}
-function saveRecipe(){const id=document.getElementById('recipeId').value;const prodId=+document.getElementById('recProduct').value;const prod=APP.products.find(p=>p.id===prodId);const rows=[...document.getElementById('recipeRows').querySelectorAll('div')];const items=rows.map(r=>{const sels=r.querySelectorAll('select');const inp=r.querySelector('input');const raw=APP.rawMaterials.find(x=>x.id==sels[0].value);return{rawId:+sels[0].value,raw:raw?.name||'',qty:+inp.value,unit:sels[1].value};}).filter(i=>i.rawId);if(!prodId){alert('ÃrÃ¼n seÃ§iniz!');return;}const obj={productId:prodId,product:prod?.name||'',version:document.getElementById('recVersion').value,status:'Aktif',items};if(id){const i=APP.recipes.findIndex(x=>x.id==id);APP.recipes[i]={...APP.recipes[i],...obj};addLog('ReÃ§ete','GÃ¼ncellendi',obj.product);}else{obj.id=nid('recipe');APP.recipes.push(obj);addLog('ReÃ§ete','Eklendi',obj.product);}saveAll();closeModal('recipeModal');renderRecipes();}
+function showRecipeDetail(id){const r=APP.recipes.find(x=>x.id===id);if(!r)return;document.getElementById('recipeDetail').innerHTML=`<div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ ${r.product} Ã¢ÂÂ ${r.version}</div><table><thead><tr><th>Hammadde</th><th>Miktar</th><th>Birim</th></tr></thead><tbody>${r.items.map(it=>`<tr><td>${it.raw}</td><td style="font-weight:600;color:#93c5fd">${it.qty}</td><td>${it.unit}</td></tr>`).join('')}</tbody></table>`;}
+function addRecipeRow(){const rawOpts=APP.rawMaterials.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');const div=document.createElement('div');div.style.cssText='display:flex;gap:8px;align-items:center;margin-bottom:8px';div.innerHTML=`<select style="flex:3">${rawOpts}</select><input type="number" placeholder="Miktar" style="flex:1" value="1"><select style="flex:1"><option>Kg</option><option>Lt</option><option>Adet</option><option>Mt</option></select><button class="btn btn-danger" style="padding:4px 8px;font-size:12px" onclick="this.parentElement.remove()">Ã¢ÂÂ</button>`;document.getElementById('recipeRows').appendChild(div);}
+function saveRecipe(){const id=document.getElementById('recipeId').value;const prodId=+document.getElementById('recProduct').value;const prod=APP.products.find(p=>p.id===prodId);const rows=[...document.getElementById('recipeRows').querySelectorAll('div')];const items=rows.map(r=>{const sels=r.querySelectorAll('select');const inp=r.querySelector('input');const raw=APP.rawMaterials.find(x=>x.id==sels[0].value);return{rawId:+sels[0].value,raw:raw?.name||'',qty:+inp.value,unit:sels[1].value};}).filter(i=>i.rawId);if(!prodId){alert('ÃÂrÃÂ¼n seÃÂ§iniz!');return;}const obj={productId:prodId,product:prod?.name||'',version:document.getElementById('recVersion').value,status:'Aktif',items};if(id){const i=APP.recipes.findIndex(x=>x.id==id);APP.recipes[i]={...APP.recipes[i],...obj};addLog('ReÃÂ§ete','GÃÂ¼ncellendi',obj.product);}else{obj.id=nid('recipe');APP.recipes.push(obj);addLog('ReÃÂ§ete','Eklendi',obj.product);}saveAll();closeModal('recipeModal');renderRecipes();}
 function editRecipe(id){const r=APP.recipes.find(x=>x.id===id);if(!r)return;document.getElementById('recipeId').value=id;document.getElementById('recProduct').value=r.productId;document.getElementById('recVersion').value=r.version;document.getElementById('recipeRows').innerHTML='';r.items.forEach(()=>addRecipeRow());const rows=document.getElementById('recipeRows').querySelectorAll('div');r.items.forEach((it,i)=>{const sels=rows[i].querySelectorAll('select');const inp=rows[i].querySelector('input');sels[0].value=it.rawId;inp.value=it.qty;sels[1].value=it.unit;});openModal('recipeModal');}
-function deleteRecipe(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.recipes=APP.recipes.filter(x=>x.id!==id);saveAll();addLog('ReÃ§ete','Silindi','ID: '+id);renderRecipes();}
-function renderOrders(){const q=document.getElementById('ordSearch').value.toLowerCase();const st=document.getElementById('ordStatusFilter').value;const rows=APP.orders.filter(o=>(o.customer.toLowerCase().includes(q)||String(o.id).includes(q))&&(!st||o.status===st));document.getElementById('ordersTbl').innerHTML=rows.length===0?'<tr><td colspan="9" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(o=>`<tr><td style="color:#93c5fd;font-weight:500">#${o.id}</td><td style="font-weight:500">${o.customer}</td><td>${o.product}</td><td style="font-weight:600">${o.qty}</td><td>${o.date}</td><td>${o.delivery}</td><td><span class="badge ${statusClass(o.status)}">${o.status}</span></td><td><span class="badge ${o.priority==='Acil'?'badge-red':o.priority==='YÃ¼ksek'?'badge-yellow':'badge-blue'}">${o.priority}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editOrder(${o.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteOrder(${o.id})">ðï¸</button></td></tr>`).join('');}
+function deleteRecipe(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.recipes=APP.recipes.filter(x=>x.id!==id);saveAll();addLog('ReÃÂ§ete','Silindi','ID: '+id);renderRecipes();}
+function renderOrders(){const q=document.getElementById('ordSearch').value.toLowerCase();const st=document.getElementById('ordStatusFilter').value;const rows=APP.orders.filter(o=>(o.customer.toLowerCase().includes(q)||String(o.id).includes(q))&&(!st||o.status===st));document.getElementById('ordersTbl').innerHTML=rows.length===0?'<tr><td colspan="9" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(o=>`<tr><td style="color:#93c5fd;font-weight:500">#${o.id}</td><td style="font-weight:500">${o.customer}</td><td>${o.product}</td><td style="font-weight:600">${o.qty}</td><td>${o.date}</td><td>${o.delivery}</td><td><span class="badge ${statusClass(o.status)}">${o.status}</span></td><td><span class="badge ${o.priority==='Acil'?'badge-red':o.priority==='YÃÂ¼ksek'?'badge-yellow':'badge-blue'}">${o.priority}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editOrder(${o.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteOrder(${o.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
 function filterOrders(){renderOrders();}
-function editOrder(id){const o=APP.orders.find(x=>x.id===id);if(!o)return;document.getElementById('orderId').value=id;document.getElementById('orderModalTitle').textContent='SipariÅ DÃ¼zenle';document.getElementById('oCustomer').value=o.customer;document.getElementById('oProduct').value=o.productId;document.getElementById('oQty').value=o.qty;document.getElementById('oDelivery').value=o.delivery;document.getElementById('oPriority').value=o.priority;document.getElementById('oStatus').value=o.status;document.getElementById('oNotes').value=o.notes||'';openModal('orderModal');}
-function saveOrder(){const id=document.getElementById('orderId').value;const prodId=+document.getElementById('oProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={customer:document.getElementById('oCustomer').value.trim(),productId:prodId,product:prod?.name||'',qty:+document.getElementById('oQty').value,delivery:document.getElementById('oDelivery').value,priority:document.getElementById('oPriority').value,status:document.getElementById('oStatus').value,notes:document.getElementById('oNotes').value};if(!obj.customer||!obj.productId){alert('MÃ¼Återi ve Ã¼rÃ¼n zorunludur!');return;}if(id){const i=APP.orders.findIndex(x=>x.id==id);APP.orders[i]={...APP.orders[i],...obj};addLog('SipariÅ','GÃ¼ncellendi','#'+id);}else{obj.id=nid('order');obj.date=new Date().toISOString().split('T')[0];APP.orders.push(obj);addLog('SipariÅ','Eklendi','#'+obj.id+' - '+obj.customer);}saveAll();closeModal('orderModal');renderOrders();populateSelects();}
-function deleteOrder(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.orders=APP.orders.filter(x=>x.id!==id);saveAll();addLog('SipariÅ','Silindi','#'+id);renderOrders();populateSelects();}
-function renderProduction(){const st=document.getElementById('prodStatusFilter').value;const rows=APP.production.filter(p=>!st||p.status===st);document.getElementById('productionTbl').innerHTML=rows.length===0?'<tr><td colspan="10" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(p=>`<tr><td style="color:#93c5fd;font-weight:500">#${p.id}</td><td style="font-weight:500">${p.product}</td><td>${p.orderId?'#'+p.orderId:'-'}</td><td>${p.planned}</td><td>${p.actual}</td><td><div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:${p.progress}%;background:linear-gradient(90deg,#3b82f6,#8b5cf6)"></div></div><span style="font-size:11px;color:#64748b;margin-left:6px">${p.progress}%</span></td><td>${p.start}</td><td>${p.end}</td><td><span class="badge ${statusClass(p.status)}">${p.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editProduction(${p.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteProd(${p.id})">ðï¸</button></td></tr>`).join('');}
+function editOrder(id){const o=APP.orders.find(x=>x.id===id);if(!o)return;document.getElementById('orderId').value=id;document.getElementById('orderModalTitle').textContent='SipariÃÂ DÃÂ¼zenle';document.getElementById('oCustomer').value=o.customer;document.getElementById('oProduct').value=o.productId;document.getElementById('oQty').value=o.qty;document.getElementById('oDelivery').value=o.delivery;document.getElementById('oPriority').value=o.priority;document.getElementById('oStatus').value=o.status;document.getElementById('oNotes').value=o.notes||'';openModal('orderModal');}
+function saveOrder(){const id=document.getElementById('orderId').value;const prodId=+document.getElementById('oProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={customer:document.getElementById('oCustomer').value.trim(),productId:prodId,product:prod?.name||'',qty:+document.getElementById('oQty').value,delivery:document.getElementById('oDelivery').value,priority:document.getElementById('oPriority').value,status:document.getElementById('oStatus').value,notes:document.getElementById('oNotes').value};if(!obj.customer||!obj.productId){alert('MÃÂ¼ÃÂteri ve ÃÂ¼rÃÂ¼n zorunludur!');return;}if(id){const i=APP.orders.findIndex(x=>x.id==id);APP.orders[i]={...APP.orders[i],...obj};addLog('SipariÃÂ','GÃÂ¼ncellendi','#'+id);}else{obj.id=nid('order');obj.date=new Date().toISOString().split('T')[0];APP.orders.push(obj);addLog('SipariÃÂ','Eklendi','#'+obj.id+' - '+obj.customer);}saveAll();closeModal('orderModal');renderOrders();populateSelects();}
+function deleteOrder(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.orders=APP.orders.filter(x=>x.id!==id);saveAll();addLog('SipariÃÂ','Silindi','#'+id);renderOrders();populateSelects();}
+function renderProduction(){const st=document.getElementById('prodStatusFilter').value;const rows=APP.production.filter(p=>!st||p.status===st);document.getElementById('productionTbl').innerHTML=rows.length===0?'<tr><td colspan="10" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(p=>`<tr><td style="color:#93c5fd;font-weight:500">#${p.id}</td><td style="font-weight:500">${p.product}</td><td>${p.orderId?'#'+p.orderId:'-'}</td><td>${p.planned}</td><td>${p.actual}</td><td><div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:${p.progress}%;background:linear-gradient(90deg,#3b82f6,#8b5cf6)"></div></div><span style="font-size:11px;color:#64748b;margin-left:6px">${p.progress}%</span></td><td>${p.start}</td><td>${p.end}</td><td><span class="badge ${statusClass(p.status)}">${p.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editProduction(${p.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteProd(${p.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
 function filterProduction(){renderProduction();}
-function editProduction(id){const p=APP.production.find(x=>x.id===id);if(!p)return;document.getElementById('productionId').value=id;document.getElementById('prodModalTitle').textContent='Ãretim Emri DÃ¼zenle';document.getElementById('woProduct').value=p.productId;document.getElementById('woOrder').value=p.orderId||'';document.getElementById('woPlanned').value=p.planned;document.getElementById('woActual').value=p.actual;document.getElementById('woStart').value=p.start;document.getElementById('woEnd').value=p.end;document.getElementById('woStatus').value=p.status;document.getElementById('woProgress').value=p.progress;openModal('productionModal');}
-function saveProduction(){const id=document.getElementById('productionId').value;const prodId=+document.getElementById('woProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={productId:prodId,product:prod?.name||'',orderId:+document.getElementById('woOrder').value||null,planned:+document.getElementById('woPlanned').value,actual:+document.getElementById('woActual').value,start:document.getElementById('woStart').value,end:document.getElementById('woEnd').value,status:document.getElementById('woStatus').value,progress:+document.getElementById('woProgress').value};if(id){const i=APP.production.findIndex(x=>x.id==id);APP.production[i]={...APP.production[i],...obj};addLog('Ãretim','GÃ¼ncellendi','#'+id);}else{obj.id=nid('production');APP.production.push(obj);addLog('Ãretim','Eklendi','#'+obj.id);}saveAll();closeModal('productionModal');renderProduction();populateSelects();}
-function deleteProd(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.production=APP.production.filter(x=>x.id!==id);saveAll();addLog('Ãretim','Silindi','#'+id);renderProduction();}
-function renderQuality(){const st=document.getElementById('qualStatusFilter').value;const rows=APP.quality.filter(q=>!st||q.result===st);document.getElementById('qualityTbl').innerHTML=rows.length===0?'<tr><td colspan="8" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(q=>`<tr><td style="color:#93c5fd;font-weight:500">#${q.id}</td><td style="font-weight:500">${q.product}</td><td>${q.productionId?'#'+q.productionId:'-'}</td><td>${q.type}</td><td>${q.inspector||'-'}</td><td>${q.date}</td><td><span class="badge ${statusClass(q.result)}">${q.result}</span></td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.notes||'-'}</td></tr>`).join('');}
+function editProduction(id){const p=APP.production.find(x=>x.id===id);if(!p)return;document.getElementById('productionId').value=id;document.getElementById('prodModalTitle').textContent='ÃÂretim Emri DÃÂ¼zenle';document.getElementById('woProduct').value=p.productId;document.getElementById('woOrder').value=p.orderId||'';document.getElementById('woPlanned').value=p.planned;document.getElementById('woActual').value=p.actual;document.getElementById('woStart').value=p.start;document.getElementById('woEnd').value=p.end;document.getElementById('woStatus').value=p.status;document.getElementById('woProgress').value=p.progress;openModal('productionModal');}
+function saveProduction(){const id=document.getElementById('productionId').value;const prodId=+document.getElementById('woProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={productId:prodId,product:prod?.name||'',orderId:+document.getElementById('woOrder').value||null,planned:+document.getElementById('woPlanned').value,actual:+document.getElementById('woActual').value,start:document.getElementById('woStart').value,end:document.getElementById('woEnd').value,status:document.getElementById('woStatus').value,progress:+document.getElementById('woProgress').value};if(id){const i=APP.production.findIndex(x=>x.id==id);APP.production[i]={...APP.production[i],...obj};addLog('ÃÂretim','GÃÂ¼ncellendi','#'+id);}else{obj.id=nid('production');APP.production.push(obj);addLog('ÃÂretim','Eklendi','#'+obj.id);}saveAll();closeModal('productionModal');renderProduction();populateSelects();}
+function deleteProd(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.production=APP.production.filter(x=>x.id!==id);saveAll();addLog('ÃÂretim','Silindi','#'+id);renderProduction();}
+function renderQuality(){const st=document.getElementById('qualStatusFilter').value;const rows=APP.quality.filter(q=>!st||q.result===st);document.getElementById('qualityTbl').innerHTML=rows.length===0?'<tr><td colspan="8" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(q=>`<tr><td style="color:#93c5fd;font-weight:500">#${q.id}</td><td style="font-weight:500">${q.product}</td><td>${q.productionId?'#'+q.productionId:'-'}</td><td>${q.type}</td><td>${q.inspector||'-'}</td><td>${q.date}</td><td><span class="badge ${statusClass(q.result)}">${q.result}</span></td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.notes||'-'}</td></tr>`).join('');}
 function filterQuality(){renderQuality();}
 function saveQuality(){const prodId=+document.getElementById('qqProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={productId:prodId,product:prod?.name||'',productionId:+document.getElementById('qqProd').value||null,type:document.getElementById('qqType').value,result:document.getElementById('qqResult').value,notes:document.getElementById('qqNotes').value,inspector:APP.currentUser?.name||'',date:new Date().toISOString().split('T')[0]};obj.id=nid('quality');APP.quality.push(obj);addLog('Kalite','Eklendi','#'+obj.id);saveAll();closeModal('qualityModal');renderQuality();document.getElementById('qqNotes').value='';}
-function renderShipment(){const st=document.getElementById('shipStatusFilter').value;const rows=APP.shipments.filter(s=>!st||s.status===st);document.getElementById('shipTbl').innerHTML=rows.length===0?'<tr><td colspan="10" style="text-align:center;color:#64748b;padding:30px">KayÄ±t bulunamadÄ±</td></tr>':rows.map(s=>`<tr><td style="color:#93c5fd;font-weight:500">#${s.id}</td><td style="font-weight:500">${s.customer}</td><td>${s.orderId?'#'+s.orderId:'-'}</td><td>${s.product}</td><td>${s.qty}</td><td>${s.carrier||'-'}</td><td>${s.plate||'-'}</td><td>${s.date}</td><td><span class="badge ${statusClass(s.status)}">${s.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editShipment(${s.id})">âï¸</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteShipment(${s.id})">ðï¸</button></td></tr>`).join('');}
+function renderShipment(){const st=document.getElementById('shipStatusFilter').value;const rows=APP.shipments.filter(s=>!st||s.status===st);document.getElementById('shipTbl').innerHTML=rows.length===0?'<tr><td colspan="10" style="text-align:center;color:#64748b;padding:30px">KayÃÂ±t bulunamadÃÂ±</td></tr>':rows.map(s=>`<tr><td style="color:#93c5fd;font-weight:500">#${s.id}</td><td style="font-weight:500">${s.customer}</td><td>${s.orderId?'#'+s.orderId:'-'}</td><td>${s.product}</td><td>${s.qty}</td><td>${s.carrier||'-'}</td><td>${s.plate||'-'}</td><td>${s.date}</td><td><span class="badge ${statusClass(s.status)}">${s.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editShipment(${s.id})">Ã¢ÂÂÃ¯Â¸Â</button><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;margin-left:4px" onclick="deleteShipment(${s.id})">Ã°ÂÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
 function filterShipment(){renderShipment();}
 function editShipment(id){const s=APP.shipments.find(x=>x.id===id);if(!s)return;document.getElementById('shCustomer').value=s.customer;document.getElementById('shOrder').value=s.orderId||'';document.getElementById('shProduct').value=s.productId||APP.products[0]?.id;document.getElementById('shQty').value=s.qty;document.getElementById('shCarrier').value=s.carrier||'';document.getElementById('shPlate').value=s.plate||'';document.getElementById('shDate').value=s.date;document.getElementById('shStatus').value=s.status;openModal('shipModal');}
-function saveShipment(){const prodId=+document.getElementById('shProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={customer:document.getElementById('shCustomer').value.trim(),orderId:+document.getElementById('shOrder').value||null,productId:prodId,product:prod?.name||'',qty:+document.getElementById('shQty').value,carrier:document.getElementById('shCarrier').value,plate:document.getElementById('shPlate').value,date:document.getElementById('shDate').value,status:document.getElementById('shStatus').value};if(!obj.customer){alert('MÃ¼Återi zorunludur!');return;}obj.id=nid('shipment');APP.shipments.push(obj);addLog('Sevkiyat','Eklendi','#'+obj.id+' - '+obj.customer);saveAll();closeModal('shipModal');renderShipment();}
+function saveShipment(){const prodId=+document.getElementById('shProduct').value;const prod=APP.products.find(p=>p.id===prodId);const obj={customer:document.getElementById('shCustomer').value.trim(),orderId:+document.getElementById('shOrder').value||null,productId:prodId,product:prod?.name||'',qty:+document.getElementById('shQty').value,carrier:document.getElementById('shCarrier').value,plate:document.getElementById('shPlate').value,date:document.getElementById('shDate').value,status:document.getElementById('shStatus').value};if(!obj.customer){alert('MÃÂ¼ÃÂteri zorunludur!');return;}obj.id=nid('shipment');APP.shipments.push(obj);addLog('Sevkiyat','Eklendi','#'+obj.id+' - '+obj.customer);saveAll();closeModal('shipModal');renderShipment();}
 function deleteShipment(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.shipments=APP.shipments.filter(x=>x.id!==id);saveAll();addLog('Sevkiyat','Silindi','#'+id);renderShipment();}
 let _rc1=null,_rc2=null;
 function renderReports(){
-  const rev=0;return s+(p?p.price*o.qty:0);},0);
-  const cp=APP.production.filter(p=>p.status==='TamamlandÄ±').length;
-  const pr=APP.quality.length>0?(APP.quality.filter(q=>q.result==='GeÃ§ti').length/APP.quality.length*100).toFixed(1):0;
+  const rev=0;},0);
+  const cp=APP.production.filter(p=>p.status==='TamamlandÃÂ±').length;
+  const pr=APP.quality.length>0?(APP.quality.filter(q=>q.result==='GeÃÂ§ti').length/APP.quality.length*100).toFixed(1):0;
   const ls=APP.products.filter(p=>p.stock<=p.minStock).length;
   document.getElementById('reportCards').innerHTML=`
-    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#3b82f6">âº${rev.toLocaleString('tr')}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Toplam SatÄ±Å Geliri</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#10b981">${cp}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Tamamlanan Ãretim</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:${pr>=90?'#10b981':pr>=70?'#f59e0b':'#ef4444'}">${pr}%</div><div style="font-size:13px;color:#64748b;margin-top:6px">KK GeÃ§me OranÄ±</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#3b82f6">Ã¢ÂÂº${rev.toLocaleString('tr')}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Toplam SatÃÂ±ÃÂ Geliri</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#10b981">${cp}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Tamamlanan ÃÂretim</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:${pr>=90?'#10b981':pr>=70?'#f59e0b':'#ef4444'}">${pr}%</div><div style="font-size:13px;color:#64748b;margin-top:6px">KK GeÃÂ§me OranÃÂ±</div></div>
     <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#8b5cf6">${APP.shipments.filter(s=>s.status==='Teslim Edildi').length}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Teslim Edilen</div></div>
     <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:${ls>0?'#ef4444':'#10b981'}">${ls}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Kritik Stok</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#f59e0b">${APP.orders.filter(o=>o.priority==='Acil').length}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Acil SipariÅ</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:32px;font-weight:800;color:#f59e0b">${APP.orders.filter(o=>o.priority==='Acil').length}</div><div style="font-size:13px;color:#64748b;margin-top:6px">Acil SipariÃÂ</div></div>
   `;
   if(_rc1)_rc1.destroy();const c1=document.getElementById('reportChart1')?.getContext('2d');const prods=APP.production.slice(-6);
-  if(c1)_rc1=new Chart(c1,{type:'bar',data:{labels:prods.map(p=>'#'+p.id),datasets:[{label:'Planlanan',data:prods.map(p=>p.planned),backgroundColor:'rgba(59,130,246,.6)',borderRadius:4},{label:'GerÃ§ekleÅen',data:prods.map(p=>p.actual),backgroundColor:'rgba(16,185,129,.6)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}});
+  if(c1)_rc1=new Chart(c1,{type:'bar',data:{labels:prods.map(p=>'#'+p.id),datasets:[{label:'Planlanan',data:prods.map(p=>p.planned),backgroundColor:'rgba(59,130,246,.6)',borderRadius:4},{label:'GerÃÂ§ekleÃÂen',data:prods.map(p=>p.actual),backgroundColor:'rgba(16,185,129,.6)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}});
   if(_rc2)_rc2.destroy();const c2=document.getElementById('reportChart2')?.getContext('2d');const prds=APP.products.slice(0,6);
   if(c2)_rc2=new Chart(c2,{type:'bar',data:{labels:prds.map(p=>p.name.substring(0,12)),datasets:[{label:'Stok',data:prds.map(p=>p.stock),backgroundColor:'rgba(139,92,246,.6)',borderRadius:4},{label:'Min Stok',data:prds.map(p=>p.minStock),backgroundColor:'rgba(239,68,68,.4)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}});
 }
-function renderUsers(){document.getElementById('usersTbl').innerHTML=USERS.map(u=>`<tr><td style="font-weight:500">${u.name}</td><td>${u.email}</td><td><span class="badge badge-blue">${ROLE_LABELS[u.role]||u.role}</span></td><td style="font-size:12px;color:#64748b">${u.lastLogin||'HiÃ§ girilmedi'}</td><td><span class="badge ${u.status==='Aktif'?'badge-green':'badge-red'}">${u.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editUser(${u.id})">âï¸</button></td></tr>`).join('');}
-function editUser(id){const u=USERS.find(x=>x.id===id);if(!u)return;document.getElementById('userId').value=id;document.getElementById('userModalTitle').textContent='KullanÄ±cÄ± DÃ¼zenle';document.getElementById('uName').value=u.name;document.getElementById('uEmail').value=u.email;document.getElementById('uPass').value='';document.getElementById('uRole').value=u.role;document.getElementById('uStatus').value=u.status;openModal('userModal');}
-function saveUser(){const id=document.getElementById('userId').value;const name=document.getElementById('uName').value.trim();const email=document.getElementById('uEmail').value.trim().toLowerCase();const pass=document.getElementById('uPass').value;const role=document.getElementById('uRole').value;const status=document.getElementById('uStatus').value;if(!name||!email){alert('Ad ve e-posta zorunludur!');return;}if(id){const u=USERS.find(x=>x.id==id);if(!u)return;u.name=name;u.email=email;u.role=role;u.status=status;if(pass)u.pass=pass;addLog('KullanÄ±cÄ±','GÃ¼ncellendi',name);}else{USERS.push({id:nid('user'),name,email,pass:pass||'Geoser2026!',role,status,lastLogin:''});addLog('KullanÄ±cÄ±','Eklendi',name);}closeModal('userModal');renderUsers();}
-function renderSettings(){const s=APP.settings;document.getElementById('settingsContent').innerHTML=`<div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">ð¢ Åirket Bilgileri</div><div class="form-group"><label class="label">Åirket AdÄ±</label><input id="sCompany" value="${s.companyName}"></div><div class="form-group"><label class="label">Adres</label><input id="sAddress" value="${s.address}"></div><div class="form-group"><label class="label">Telefon</label><input id="sPhone" value="${s.phone}"></div><div class="form-group"><label class="label">E-posta</label><input id="sEmail" value="${s.email}"></div><button class="btn btn-primary" onclick="saveSettingsCo()">ð¾ Kaydet</button></div><div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">âï¸ Sistem Parametreleri</div><div class="form-group"><label class="label">Para Birimi</label><select id="sCurr"><option value="âº">âº TÃ¼rk LirasÄ±</option><option value="$">$ Dolar</option><option value="â¬">â¬ Euro</option></select></div><div class="form-group"><label class="label">KDV OranÄ± (%)</label><input type="number" id="sTax" value="${s.taxRate}"></div><button class="btn btn-primary" onclick="saveSettingsSys()">ð¾ Kaydet</button><div style="margin-top:20px;padding-top:20px;border-top:1px solid #334155"><div style="font-weight:600;margin-bottom:12px;color:#f1f5f9">ðï¸ Veri YÃ¶netimi</div><button class="btn btn-danger" onclick="if(confirm('TÃM VERÄ°LER silinecek!')){['products','rawMaterials','recipes','orders','production','quality','shipments','logs'].forEach(k=>localStorage.removeItem('geoser_'+k));location.reload();}">â ï¸ TÃ¼m Verileri SÄ±fÄ±rla</button></div></div>`;document.getElementById('sCurr').value=s.currency;}
-function saveSettingsCo(){APP.settings.companyName=document.getElementById('sCompany').value;APP.settings.address=document.getElementById('sAddress').value;APP.settings.phone=document.getElementById('sPhone').value;APP.settings.email=document.getElementById('sEmail').value;saveSettings();addLog('Ayarlar','GÃ¼ncellendi','Åirket bilgileri');alert('Kaydedildi!');}
-function saveSettingsSys(){APP.settings.currency=document.getElementById('sCurr').value;APP.settings.taxRate=+document.getElementById('sTax').value;saveSettings();addLog('Ayarlar','GÃ¼ncellendi','Sistem parametreleri');alert('Kaydedildi!');}
-function renderLogs(){const q=document.getElementById('logSearch')?.value.toLowerCase()||'';const rows=APP.logs.filter(l=>l.module.toLowerCase().includes(q)||l.action.toLowerCase().includes(q)||l.user.toLowerCase().includes(q)||l.detail.toLowerCase().includes(q));document.getElementById('logsTbl').innerHTML=rows.length===0?'<tr><td colspan="5" style="text-align:center;color:#64748b;padding:30px">Log bulunamadÄ±</td></tr>':rows.map(l=>`<tr><td style="font-size:12px;color:#64748b;white-space:nowrap">${l.time}</td><td>${l.user}</td><td><span class="badge badge-blue" style="font-size:10px">${l.module}</span></td><td style="font-weight:500">${l.action}</td><td style="font-size:12px;color:#94a3b8">${l.detail}</td></tr>`).join('');}
+function renderUsers(){document.getElementById('usersTbl').innerHTML=USERS.map(u=>`<tr><td style="font-weight:500">${u.name}</td><td>${u.email}</td><td><span class="badge badge-blue">${ROLE_LABELS[u.role]||u.role}</span></td><td style="font-size:12px;color:#64748b">${u.lastLogin||'HiÃÂ§ girilmedi'}</td><td><span class="badge ${u.status==='Aktif'?'badge-green':'badge-red'}">${u.status}</span></td><td><button class="btn btn-secondary" style="padding:4px 10px;font-size:12px" onclick="editUser(${u.id})">Ã¢ÂÂÃ¯Â¸Â</button></td></tr>`).join('');}
+function editUser(id){const u=USERS.find(x=>x.id===id);if(!u)return;document.getElementById('userId').value=id;document.getElementById('userModalTitle').textContent='KullanÃÂ±cÃÂ± DÃÂ¼zenle';document.getElementById('uName').value=u.name;document.getElementById('uEmail').value=u.email;document.getElementById('uPass').value='';document.getElementById('uRole').value=u.role;document.getElementById('uStatus').value=u.status;openModal('userModal');}
+function saveUser(){const id=document.getElementById('userId').value;const name=document.getElementById('uName').value.trim();const email=document.getElementById('uEmail').value.trim().toLowerCase();const pass=document.getElementById('uPass').value;const role=document.getElementById('uRole').value;const status=document.getElementById('uStatus').value;if(!name||!email){alert('Ad ve e-posta zorunludur!');return;}if(id){const u=USERS.find(x=>x.id==id);if(!u)return;u.name=name;u.email=email;u.role=role;u.status=status;if(pass)u.pass=pass;addLog('KullanÃÂ±cÃÂ±','GÃÂ¼ncellendi',name);}else{USERS.push({id:nid('user'),name,email,pass:pass||'Geoser2026!',role,status,lastLogin:''});addLog('KullanÃÂ±cÃÂ±','Eklendi',name);}closeModal('userModal');renderUsers();}
+function renderSettings(){const s=APP.settings;document.getElementById('settingsContent').innerHTML=`<div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã°ÂÂÂ¢ ÃÂirket Bilgileri</div><div class="form-group"><label class="label">ÃÂirket AdÃÂ±</label><input id="sCompany" value="${s.companyName}"></div><div class="form-group"><label class="label">Adres</label><input id="sAddress" value="${s.address}"></div><div class="form-group"><label class="label">Telefon</label><input id="sPhone" value="${s.phone}"></div><div class="form-group"><label class="label">E-posta</label><input id="sEmail" value="${s.email}"></div><button class="btn btn-primary" onclick="saveSettingsCo()">Ã°ÂÂÂ¾ Kaydet</button></div><div class="card"><div style="font-weight:600;margin-bottom:16px;color:#f1f5f9">Ã¢ÂÂÃ¯Â¸Â Sistem Parametreleri</div><div class="form-group"><label class="label">Para Birimi</label><select id="sCurr"><option value="Ã¢ÂÂº">Ã¢ÂÂº TÃÂ¼rk LirasÃÂ±</option><option value="$">$ Dolar</option><option value="Ã¢ÂÂ¬">Ã¢ÂÂ¬ Euro</option></select></div><div class="form-group"><label class="label">KDV OranÃÂ± (%)</label><input type="number" id="sTax" value="${s.taxRate}"></div><button class="btn btn-primary" onclick="saveSettingsSys()">Ã°ÂÂÂ¾ Kaydet</button><div style="margin-top:20px;padding-top:20px;border-top:1px solid #334155"><div style="font-weight:600;margin-bottom:12px;color:#f1f5f9">Ã°ÂÂÂÃ¯Â¸Â Veri YÃÂ¶netimi</div><button class="btn btn-danger" onclick="if(confirm('TÃÂM VERÃÂ°LER silinecek!')){['products','rawMaterials','recipes','orders','production','quality','shipments','logs'].forEach(k=>localStorage.removeItem('geoser_'+k));location.reload();}">Ã¢ÂÂ Ã¯Â¸Â TÃÂ¼m Verileri SÃÂ±fÃÂ±rla</button></div></div>`;document.getElementById('sCurr').value=s.currency;}
+function saveSettingsCo(){APP.settings.companyName=document.getElementById('sCompany').value;APP.settings.address=document.getElementById('sAddress').value;APP.settings.phone=document.getElementById('sPhone').value;APP.settings.email=document.getElementById('sEmail').value;saveSettings();addLog('Ayarlar','GÃÂ¼ncellendi','ÃÂirket bilgileri');alert('Kaydedildi!');}
+function saveSettingsSys(){APP.settings.currency=document.getElementById('sCurr').value;APP.settings.taxRate=+document.getElementById('sTax').value;saveSettings();addLog('Ayarlar','GÃÂ¼ncellendi','Sistem parametreleri');alert('Kaydedildi!');}
+function renderLogs(){const q=document.getElementById('logSearch')?.value.toLowerCase()||'';const rows=APP.logs.filter(l=>l.module.toLowerCase().includes(q)||l.action.toLowerCase().includes(q)||l.user.toLowerCase().includes(q)||l.detail.toLowerCase().includes(q));document.getElementById('logsTbl').innerHTML=rows.length===0?'<tr><td colspan="5" style="text-align:center;color:#64748b;padding:30px">Log bulunamadÃÂ±</td></tr>':rows.map(l=>`<tr><td style="font-size:12px;color:#64748b;white-space:nowrap">${l.time}</td><td>${l.user}</td><td><span class="badge badge-blue" style="font-size:10px">${l.module}</span></td><td style="font-weight:500">${l.action}</td><td style="font-size:12px;color:#94a3b8">${l.detail}</td></tr>`).join('');}
 function filterLogs(){renderLogs();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
