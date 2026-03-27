@@ -7,7 +7,7 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasehjs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
@@ -1102,7 +1102,7 @@ function Reports(){
       ${summary?`<div class="summary">${summary.map(([l,v])=>`<div class="s-card"><div class="val">${v}</div><div class="lbl">${l}</div></div>`).join("")}</div>`:""}
       <table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${tableRows}</tbody></table>
       <div style="margin-top:13px;text-align:right;font-size:9px;color:#999">Oluşturuldu: ${new Date().toLocaleString("tr-TR")} · GEOSER ERP</div>
-      <script>setTimeout(()=>window.print(),500)</script></body></html>`);
+      <scr\x69pt>setTimeout(()=>window.print(),500)<\/script></body></html>`);
     w.document.close();toast("PDF önizlemesi açıldı. Ctrl+P → PDF olarak kaydet.");
   };
   const rpts={
