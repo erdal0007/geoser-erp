@@ -56,8 +56,6 @@
   .progress-bar { height:8px; background:#1e293b; border-radius:4px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:4px; transition:width .5s; }
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div id="loginPage" class="login-bg">
@@ -340,13 +338,6 @@
   </div>
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('userModal')">İptal</button><button class="btn btn-primary" onclick="saveUser()">💾 Kaydet</button></div>
 </div></div><script>
-
-const _fbApp = firebase.initializeApp({
-  apiKey:"AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI",
-  authDomain:"geoser-erp.firebaseapp.com",
-  projectId:"geoser-erp"
-});
-const _db = firebase.firestore();
 const USERS=[{id:1,name:'Erdal Güçin',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status:'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre Mühendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'Gürsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
 const ROLE_LABELS={super_admin:'Süper Admin',admin:'Admin',engineer:'Mühendis',factory_manager:'Fabrika Müdürü',production_manager:'Üretim Müdürü'};
 const APP={currentUser:null,products:[],rawMaterials:[],recipes:[],orders:[],production:[],quality:[],shipments:[],logs:[],settings:{companyName:'GEOSER A.Ş.',address:'İstanbul, Türkiye',phone:'+90 212 000 0000',email:'info@geoser.net',currency:'₺',taxRate:18},nextId:{product:100,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10}};
@@ -395,42 +386,36 @@ function initApp(){
   loadData();
   renderDashboard();
   populateSelects();
-  // localStorage'i temizle - eski örnek veriler silinsin
-  localStorage.removeItem('geoser_products');
-  localStorage.removeItem('geoser_rawMaterials');
-  // Firebase'den ürünleri yükle
-  _db.collection('urunler').get().then(function(snap){
-    if(!snap.empty){
-      APP.products=[];
-      snap.forEach(function(doc){
-        var d=doc.data();
-        APP.products.push({
-          id:doc.id,
-          code:d.kod||d.code||('GEO-'+(APP.products.length+1)),
-          name:d.ad||d.name||'',
-          category:d.kategori||d.category||'Geomembran',
-          unit:d.birim||d.unit||'m²',
-          stock:Number(d.stokMiktari||d.stok||d.stock||0),
-          minStock:Number(d.minStok||d.minStock||0),
-          status:d.durum||d.status||'Aktif',
-          desc:d.aciklama||''
-        });
-      });
-      saveAll();
-      renderDashboard();
-      renderProducts();
-      populateSelects();
-      addLog('Sistem','Yüklendi',APP.products.length+' ürün Firebase'den yüklendi');
-    }
-  }).catch(function(e){
-    console.error('Firebase hatası:',e);
-  });
+  var PROJ='geoser-erp';
+  var URL='https://firestore.googleapis.com/v1/projects/'+PROJ+'/databases/(default)/documents/urunler?pageSize=200';
+  fetch(URL).then(function(r){return r.json();}).then(function(data){
+    if(!data.documents||data.documents.length===0){seedData();renderDashboard();return;}
+    APP.products=data.documents.map(function(doc,i){
+      var f=doc.fields||{};
+      function sv(field){return f[field]?f[field].stringValue||f[field].integerValue||f[field].doubleValue||'':'';}
+      function nv(field){return Number(f[field]?f[field].integerValue||f[field].doubleValue||0:0);}
+      return {
+        id:i+1001,
+        code:sv('kod')||sv('code')||('GEO-'+(i+1)),
+        name:sv('ad')||sv('name')||'',
+        category:sv('kategori')||sv('category')||'Geomembran',
+        unit:sv('birim')||sv('unit')||'m2',
+        stock:nv('stokMiktari')||nv('stok')||nv('stock'),
+        minStock:nv('minStok')||nv('minStock'),
+        status:sv('durum')||sv('status')||'Aktif',
+        desc:sv('aciklama')||''
+      };
+    });
+    saveAll();
+    renderDashboard();
+    renderProducts();
+    populateSelects();
+  }).catch(function(){seedData();renderDashboard();});
 }
 function seedData(){
   APP.nextId={product:1000,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10};
   saveAll();
 }
-
 function populateSelects(){
   const products=APP.products.filter(p=>p.status==='Aktif');
   ['oProduct','woProduct','qqProduct','shProduct','recProduct'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=products.map(p=>`<option value="${p.id}">${p.code} - ${p.name}</option>`).join('');});
@@ -501,7 +486,7 @@ function saveShipment(){const prodId=+document.getElementById('shProduct').value
 function deleteShipment(id){if(!confirm('Silmek istiyor musunuz?'))return;APP.shipments=APP.shipments.filter(x=>x.id!==id);saveAll();addLog('Sevkiyat','Silindi','#'+id);renderShipment();}
 let _rc1=null,_rc2=null;
 function renderReports(){
-  const rev=0;
+  const rev=APP.orders.filter(o=>o.status==='Sevk Edildi').reduce((s,o)=>{const p=APP.products.find(x=>x.id===o.productId);return s+(p?0:0);},0);
   const cp=APP.production.filter(p=>p.status==='Tamamlandı').length;
   const pr=APP.quality.length>0?(APP.quality.filter(q=>q.result==='Geçti').length/APP.quality.length*100).toFixed(1):0;
   const ls=APP.products.filter(p=>p.stock<=p.minStock).length;
