@@ -55,11 +55,61 @@
   .section.active { animation: fadeIn .25s ease; }
   .progress-bar { height:8px; background:#1e293b; border-radius:4px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:4px; transition:width .5s; }
+
+.print-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center}
+.print-modal.open{display:flex}
+.print-box{background:#fff;color:#111;border-radius:14px;padding:28px;max-width:94vw;max-height:90vh;overflow-y:auto;min-width:640px;font-family:'Segoe UI',sans-serif;font-size:13px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.print-box .pb-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #1e3a5f;padding-bottom:14px;margin-bottom:16px}
+.print-box h2{font-size:20px;font-weight:800;color:#1e3a5f;margin:0 0 4px}
+.print-box .pb-meta{font-size:11px;color:#64748b}
+.print-box .pb-logo{font-size:32px}
+.print-box .pb-actions{display:flex;gap:8px;margin-bottom:16px}
+.pb-btn{padding:8px 18px;border:none;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.pb-print{background:#3b82f6;color:#fff}.pb-print:hover{background:#2563eb}
+.pb-pdf{background:#10b981;color:#fff}.pb-pdf:hover{background:#059669}
+.pb-close{background:#f1f5f9;color:#475569}.pb-close:hover{background:#e2e8f0}
+.print-box table{width:100%;border-collapse:collapse;margin-top:6px}
+.print-box th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+.print-box td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.print-box tr:hover td{background:#f8fafc}
+.pb-badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.pb-ok{background:#dcfce7;color:#166534}.pb-warn{background:#fef9c3;color:#854d0e}
+.pb-err{background:#fee2e2;color:#991b1b}.pb-blue{background:#dbeafe;color:#1e40af}
+.pb-purple{background:#f3e8ff;color:#6b21a8}
+.pb-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.pb-kpi{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:14px}
+.pb-kpi-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.pb-kpi-val{font-size:22px;font-weight:800;color:#1e3a5f}
+.eye-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:linear-gradient(135deg,#0ea5e9,#3b82f6);color:#fff;transition:all .2s;margin-right:6px}
+.eye-btn:hover{opacity:.85;transform:translateY(-1px)}
+@media print{
+  .print-modal{position:static!important;background:none!important;display:block!important}
+  .print-box{box-shadow:none!important;max-height:none!important;overflow:visible!important;padding:0!important}
+  .pb-actions,.sidebar,.topbar{display:none!important}
+}
 </style>
 <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 <div id="ytPlayer" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"></div>
+
+<div class="print-modal" id="printModal">
+  <div class="print-box">
+    <div class="pb-header">
+      <div>
+        <h2 id="pbTitle">Rapor</h2>
+        <div class="pb-meta" id="pbMeta"></div>
+      </div>
+      <div class="pb-logo">🏭</div>
+    </div>
+    <div class="pb-actions">
+      <button class="pb-btn pb-print" onclick="window.print()">🖨️ Yazdır</button>
+      <button class="pb-btn pb-pdf" onclick="window.print()">📄 PDF Kaydet</button>
+      <button class="pb-btn pb-close" onclick="document.getElementById('printModal').classList.remove('open')">✕ Kapat</button>
+    </div>
+    <div id="pbContent"></div>
+  </div>
+</div>
 <div id="musicToast" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;padding:14px 22px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;align-items:center;gap:12px;box-shadow:0 4px 24px #0008;cursor:pointer" onclick="startMusic();this.style.display='none'" ><span style="font-size:20px">🎵</span><span>Müzik için dokunun</span><span style="opacity:.7;font-size:12px">▶</span></div>
 <div id="loginPage" class="login-bg">
   <div class="login-card">
@@ -139,7 +189,7 @@
           <input type="text" id="prodSearch" placeholder="🔍 Ürün ara..." style="width:280px" oninput="filterProducts()">
           <select id="prodCatFilter" onchange="filterProducts()" style="width:160px"><option value="">Tüm Kategoriler</option></select>
         </div>
-        <button class="btn btn-primary" onclick="openModal('productModal')">+ Yeni Ürün</button>
+        <button class="eye-btn" onclick="goster('urun')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('productModal')">+ Yeni Ürün</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>Kod</th><th>Ürün Adı</th><th>Kategori</th><th>Stok</th><th>Min</th><th>Birim</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="productsTbl"></tbody></table>
@@ -148,7 +198,7 @@
     <div class="section" id="sec-rawmaterials">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <input type="text" id="rawSearch" placeholder="🔍 Hammadde ara..." style="width:280px" oninput="filterRaw()">
-        <button class="btn btn-primary" onclick="openModal('rawModal')">+ Yeni Hammadde</button>
+        <button class="eye-btn" onclick="goster('hammadde')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('rawModal')">+ Yeni Hammadde</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>Kod</th><th>Ad</th><th>Tedarikçi</th><th>Stok</th><th>Min</th><th>Birim</th><th>Maliyet</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="rawTbl"></tbody></table>
@@ -172,7 +222,7 @@
           <input type="text" id="ordSearch" placeholder="🔍 Sipariş ara..." style="width:260px" oninput="filterOrders()">
           <select id="ordStatusFilter" onchange="filterOrders()" style="width:160px"><option value="">Tüm Durumlar</option><option>Bekliyor</option><option>Onaylandı</option><option>Üretimde</option><option>Hazır</option><option>Sevk Edildi</option><option>İptal</option></select>
         </div>
-        <button class="btn btn-primary" onclick="openModal('orderModal')">+ Yeni Sipariş</button>
+        <button class="eye-btn" onclick="goster('siparis')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('orderModal')">+ Yeni Sipariş</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>No</th><th>Müşteri</th><th>Ürün</th><th>Miktar</th><th>Tarih</th><th>Teslim</th><th>Durum</th><th>Öncelik</th><th>İşlem</th></tr></thead><tbody id="ordersTbl"></tbody></table>
@@ -181,7 +231,7 @@
     <div class="section" id="sec-production">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <select id="prodStatusFilter" onchange="filterProduction()" style="width:200px"><option value="">Tüm Emirler</option><option>Planlandı</option><option>Başladı</option><option>Tamamlandı</option><option>İptal</option></select>
-        <button class="btn btn-primary" onclick="openModal('productionModal')">+ Yeni Üretim Emri</button>
+        <button class="eye-btn" onclick="goster('uretim')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('productionModal')">+ Yeni Üretim Emri</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>Emir</th><th>Ürün</th><th>Sipariş</th><th>Planlanan</th><th>Gerçekleşen</th><th>İlerleme</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="productionTbl"></tbody></table>
@@ -190,7 +240,7 @@
     <div class="section" id="sec-quality">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <select id="qualStatusFilter" onchange="filterQuality()" style="width:200px"><option value="">Tüm Kontroller</option><option>Bekliyor</option><option>Geçti</option><option>Başarısız</option><option>Koşullu</option></select>
-        <button class="btn btn-primary" onclick="openModal('qualityModal')">+ Yeni KK Kaydı</button>
+        <button class="eye-btn" onclick="goster('kalite')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('qualityModal')">+ Yeni KK Kaydı</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>KK No</th><th>Ürün</th><th>Üretim</th><th>Tip</th><th>Kontrol Eden</th><th>Tarih</th><th>Sonuç</th><th>Notlar</th></tr></thead><tbody id="qualityTbl"></tbody></table>
@@ -199,13 +249,13 @@
     <div class="section" id="sec-shipment">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <select id="shipStatusFilter" onchange="filterShipment()" style="width:200px"><option value="">Tüm Sevkiyatlar</option><option>Hazırlanıyor</option><option>Yüklendi</option><option>Yolda</option><option>Teslim Edildi</option></select>
-        <button class="btn btn-primary" onclick="openModal('shipModal')">+ Yeni Sevkiyat</button>
+        <button class="eye-btn" onclick="goster('sevkiyat')">👁️ Görüntüle</button><button class="btn btn-primary" onclick="openModal('shipModal')">+ Yeni Sevkiyat</button>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>No</th><th>Müşteri</th><th>Sipariş</th><th>Ürün</th><th>Miktar</th><th>Taşıyıcı</th><th>Plaka</th><th>Tarih</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="shipTbl"></tbody></table>
       </div>
     </div>
-    <div class="section" id="sec-recete"><div style="display:grid;grid-template-columns:1fr 400px;gap:20px"><div><div class="card" style="margin-bottom:16px"><div style="padding:14px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📋 Reçete Bilgileri</div><div style="display:flex;gap:8px"><button class="btn btn-success" style="padding:6px 14px;font-size:12px" onclick="rtHesapla()">⚡ Hesapla</button><button class="btn btn-primary" style="padding:6px 14px;font-size:12px" onclick="rtKaydet()">💾 Kaydet</button><button class="btn btn-secondary" style="padding:6px 14px;font-size:12px" onclick="rtYeni()">+ Yeni</button></div></div><div style="padding:16px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px"><div><label class="label">Reçete Adı</label><input type="text" id="rtAdi" placeholder="örn: PVC Tünel 1.5mm"></div><div><label class="label">Ürün Tipi</label><select id="rtTip" onchange="rtTipiDegistir()"><option value="pvc">PVC Geomembran</option><option value="hdpe">HDPE Geomembran</option><option value="gpp">Geotekstil PP</option><option value="gpet">Geotekstil PET</option><option value="geocell">Geocell</option><option value="stb">Su Tutucu Bant</option><option value="diger">Diğer</option></select></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px"><div><label class="label">Şarj (KG)</label><input type="number" id="rtSarj" value="150" oninput="rtHesapla()"></div><div><label class="label">Özgül Ağırlık</label><input type="number" id="rtOzgul" value="1.30" step="0.01" oninput="rtHesapla()"></div><div><label class="label">Kar Oranı (%)</label><input type="number" id="rtKar" value="30" oninput="rtHesapla()"></div></div><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#64748b">💱 DÖVİZ:</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">USD</span><input type="number" id="rtKurUSD" value="32.50" step="0.01" oninput="rtHesapla()" style="width:80px;padding:5px 8px;font-size:12px;text-align:right"></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">EUR</span><input type="number" id="rtKurEUR" value="35.20" step="0.01" oninput="rtHesapla()" style="width:80px;padding:5px 8px;font-size:12px;text-align:right"></div></div></div></div><div class="card" style="margin-bottom:16px"><div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">🧪 Hammadde Bileşenleri</div><div id="rtOzet" style="font-size:12px;color:#64748b">—</div></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b;white-space:nowrap">No</th><th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Hammadde</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">KG</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">Birim Fiyat(TL)</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">TL Toplam</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">USD</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">%</th><th style="background:#0f172a;padding:8px 6px;width:34px"></th></tr></thead><tbody id="rtTbody"></tbody><tfoot><tr style="background:#0f172a55"><td colspan="2" style="padding:8px 10px;font-size:12px;font-weight:700;color:#64748b">TOPLAM</td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#38bdf8;text-align:right" id="rtFtKg">—</td><td></td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#facc15;text-align:right" id="rtFtTL">—</td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#60a5fa;text-align:right" id="rtFtUSD">—</td><td style="padding:8px 10px;font-size:11px;color:#64748b;text-align:right">100%</td><td></td></tr></tfoot></table></div><div style="padding:10px 14px"><button onclick="rtSatirEkle()" style="width:100%;padding:8px;background:#ffffff08;border:1px dashed #334155;color:#64748b;border-radius:7px;cursor:pointer;font-size:13px">+ Hammadde Satırı Ekle</button></div></div><div class="card"><div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📊 Kalınlığa Göre m² Maliyet Tablosu</div></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="background:#0f172a55;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Kalınlık</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">kg/m2</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Liste TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet $</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış $</th></tr></thead><tbody id="rtKalinlikTbody"></tbody></table></div></div></div><div><div class="card" style="margin-bottom:16px"><div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">⚡ Hesaplama Sonuçları</div></div><div style="padding:16px"><div style="background:linear-gradient(135deg,#1d4ed820,#7c3aed20);border:1px solid #3b82f640;border-radius:9px;padding:14px;margin-bottom:14px"><div style="font-size:11px;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">1 KG MALİYETİ</div><div><span style="font-size:26px;font-weight:800;color:#38bdf8" id="rtResKgTL">—</span><span style="font-size:13px;color:#64748b;margin-left:6px">TL/kg</span></div><div style="margin-top:4px"><span style="font-size:13px;font-weight:700;color:#60a5fa" id="rtResKgUSD">—</span><span style="font-size:11px;color:#64748b;margin-left:4px">USD/kg</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px"><div style="font-size:10px;color:#64748b;text-transform:uppercase">Şarj Maliyeti</div><div style="font-size:18px;font-weight:800;color:#38bdf8;margin-top:4px" id="rtResSarj">—</div><div style="font-size:11px;color:#475569;margin-top:2px">TL/şarj</div></div><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px"><div style="font-size:10px;color:#64748b;text-transform:uppercase">Satış Fiyatı</div><div style="font-size:18px;font-weight:800;color:#4ade80;margin-top:4px" id="rtResSatis">—</div><div style="font-size:11px;color:#475569;margin-top:2px">TL/kg</div></div></div><div style="height:1px;background:#334155;margin:12px 0"></div><div style="font-size:11px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:8px">Bileşim Analizi</div><div id="rtBilesim"></div><div style="height:1px;background:#334155;margin:12px 0"></div><div style="font-size:11px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:8px">Kayıtlı Reçeteler</div><div id="rtKayitlilar"><div style="color:#475569;font-size:12px">Kayıtlı reçete yok.</div></div></div></div><div class="card"><div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📝 Notlar</div></div><div style="padding:14px;font-size:12px;color:#64748b;line-height:1.9"><div>m2 Agirlik = Kalinlik x Ozgul Agirlik (kg/m2)</div><div>m2 Maliyet = kg Maliyet x m2 Agirlik</div><div>Liste = Satis x 1.15 (yuvarlama marji)</div><div>Fiyatlar KDV harictir.</div><div style="margin-top:8px;padding:8px;background:#0f172a;border-radius:6px">DSI: 4.00 USD/kg | Ozel: 3.50 USD/kg</div></div></div></div></div></div>
+    <div class="section" id="sec-recete"><div style="display:grid;grid-template-columns:1fr 400px;gap:20px"><div><div class="card" style="margin-bottom:16px"><div style="padding:14px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📋 Reçete Bilgileri</div><div style="display:flex;gap:8px"><button class="btn btn-success" style="padding:6px 14px;font-size:12px" onclick="rtHesapla()">⚡ Hesapla</button><button class="btn btn-primary" style="padding:6px 14px;font-size:12px" onclick="rtKaydet()">💾 Kaydet</button><button class="eye-btn" style="padding:6px 12px;font-size:12px" onclick="goster('recete')">👁️ Görüntüle</button><button class="btn btn-secondary" style="padding:6px 14px;font-size:12px" onclick="rtYeni()">+ Yeni</button></div></div><div style="padding:16px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px"><div><label class="label">Reçete Adı</label><input type="text" id="rtAdi" placeholder="örn: PVC Tünel 1.5mm"></div><div><label class="label">Ürün Tipi</label><select id="rtTip" onchange="rtTipiDegistir()"><option value="pvc">PVC Geomembran</option><option value="hdpe">HDPE Geomembran</option><option value="gpp">Geotekstil PP</option><option value="gpet">Geotekstil PET</option><option value="geocell">Geocell</option><option value="stb">Su Tutucu Bant</option><option value="diger">Diğer</option></select></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px"><div><label class="label">Şarj (KG)</label><input type="number" id="rtSarj" value="150" oninput="rtHesapla()"></div><div><label class="label">Özgül Ağırlık</label><input type="number" id="rtOzgul" value="1.30" step="0.01" oninput="rtHesapla()"></div><div><label class="label">Kar Oranı (%)</label><input type="number" id="rtKar" value="30" oninput="rtHesapla()"></div></div><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#64748b">💱 DÖVİZ:</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">USD</span><input type="number" id="rtKurUSD" value="32.50" step="0.01" oninput="rtHesapla()" style="width:80px;padding:5px 8px;font-size:12px;text-align:right"></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">EUR</span><input type="number" id="rtKurEUR" value="35.20" step="0.01" oninput="rtHesapla()" style="width:80px;padding:5px 8px;font-size:12px;text-align:right"></div></div></div></div><div class="card" style="margin-bottom:16px"><div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">🧪 Hammadde Bileşenleri</div><div id="rtOzet" style="font-size:12px;color:#64748b">—</div></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b;white-space:nowrap">No</th><th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Hammadde</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">KG</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">Birim Fiyat(TL)</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">TL Toplam</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">USD</th><th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b">%</th><th style="background:#0f172a;padding:8px 6px;width:34px"></th></tr></thead><tbody id="rtTbody"></tbody><tfoot><tr style="background:#0f172a55"><td colspan="2" style="padding:8px 10px;font-size:12px;font-weight:700;color:#64748b">TOPLAM</td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#38bdf8;text-align:right" id="rtFtKg">—</td><td></td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#facc15;text-align:right" id="rtFtTL">—</td><td style="padding:8px 10px;font-size:12px;font-weight:800;color:#60a5fa;text-align:right" id="rtFtUSD">—</td><td style="padding:8px 10px;font-size:11px;color:#64748b;text-align:right">100%</td><td></td></tr></tfoot></table></div><div style="padding:10px 14px"><button onclick="rtSatirEkle()" style="width:100%;padding:8px;background:#ffffff08;border:1px dashed #334155;color:#64748b;border-radius:7px;cursor:pointer;font-size:13px">+ Hammadde Satırı Ekle</button></div></div><div class="card"><div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📊 Kalınlığa Göre m² Maliyet Tablosu</div></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="background:#0f172a55;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Kalınlık</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">kg/m2</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Liste TL</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet $</th><th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış $</th></tr></thead><tbody id="rtKalinlikTbody"></tbody></table></div></div></div><div><div class="card" style="margin-bottom:16px"><div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">⚡ Hesaplama Sonuçları</div></div><div style="padding:16px"><div style="background:linear-gradient(135deg,#1d4ed820,#7c3aed20);border:1px solid #3b82f640;border-radius:9px;padding:14px;margin-bottom:14px"><div style="font-size:11px;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">1 KG MALİYETİ</div><div><span style="font-size:26px;font-weight:800;color:#38bdf8" id="rtResKgTL">—</span><span style="font-size:13px;color:#64748b;margin-left:6px">TL/kg</span></div><div style="margin-top:4px"><span style="font-size:13px;font-weight:700;color:#60a5fa" id="rtResKgUSD">—</span><span style="font-size:11px;color:#64748b;margin-left:4px">USD/kg</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px"><div style="font-size:10px;color:#64748b;text-transform:uppercase">Şarj Maliyeti</div><div style="font-size:18px;font-weight:800;color:#38bdf8;margin-top:4px" id="rtResSarj">—</div><div style="font-size:11px;color:#475569;margin-top:2px">TL/şarj</div></div><div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px"><div style="font-size:10px;color:#64748b;text-transform:uppercase">Satış Fiyatı</div><div style="font-size:18px;font-weight:800;color:#4ade80;margin-top:4px" id="rtResSatis">—</div><div style="font-size:11px;color:#475569;margin-top:2px">TL/kg</div></div></div><div style="height:1px;background:#334155;margin:12px 0"></div><div style="font-size:11px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:8px">Bileşim Analizi</div><div id="rtBilesim"></div><div style="height:1px;background:#334155;margin:12px 0"></div><div style="font-size:11px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:8px">Kayıtlı Reçeteler</div><div id="rtKayitlilar"><div style="color:#475569;font-size:12px">Kayıtlı reçete yok.</div></div></div></div><div class="card"><div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📝 Notlar</div></div><div style="padding:14px;font-size:12px;color:#64748b;line-height:1.9"><div>m2 Agirlik = Kalinlik x Ozgul Agirlik (kg/m2)</div><div>m2 Maliyet = kg Maliyet x m2 Agirlik</div><div>Liste = Satis x 1.15 (yuvarlama marji)</div><div>Fiyatlar KDV harictir.</div><div style="margin-top:8px;padding:8px;background:#0f172a;border-radius:6px">DSI: 4.00 USD/kg | Ozel: 3.50 USD/kg</div></div></div></div></div></div>
     <div class="section" id="sec-reports">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" id="reportCards"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
@@ -518,6 +568,126 @@ function rtYukle(id){var r=rtReceteler.find(function(x){return x.id===id;});if(!
 function rtSil(id){if(!confirm("Recete silinsin mi?"))return;rtReceteler=rtReceteler.filter(function(x){return x.id!==id;});localStorage.setItem("geoser_rt",JSON.stringify(rtReceteler));rtRenderKayitlilar();}
 function rtYeni(){var el=document.getElementById("rtAdi");if(el)el.value="";el=document.getElementById("rtTip");if(el)el.value="pvc";rtTipiDegistir();}
 function rtRenderKayitlilar(){var el=document.getElementById("rtKayitlilar");if(!el)return;if(!rtReceteler.length){el.innerHTML="<div style='color:#475569;font-size:12px'>Kayitli recete yok.</div>";return;}el.innerHTML=rtReceteler.map(function(r){return "<div style='background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer' onclick='rtYukle("+r.id+")' ><div><div style='font-size:13px;font-weight:600;color:#f1f5f9'>"+r.ad+"</div><div style='font-size:11px;color:#64748b;margin-top:2px'>"+r.tarih+" - %"+r.kar+" Kar</div></div><button onclick='event.stopPropagation();rtSil("+r.id+")' style='background:#ef444420;border:none;color:#f87171;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px'>Sil</button></div>";}).join("");}
+
+
+function goster(tip){
+  var firma = (APP.settings&&APP.settings.companyName)||'GEOSER A.S.';
+  var user = APP.currentUser ? APP.currentUser.name : '?';
+  var now = new Date().toLocaleString('tr-TR');
+  var title='', meta='', html='';
+  var sc={Bekliyor:'pb-warn',Onaylandi:'pb-blue',Uretimde:'pb-purple',Hazir:'pb-ok','Sevk Edildi':'pb-ok',Iptal:'pb-err',Tamamlandi:'pb-ok',Basladi:'pb-purple',Planlandi:'pb-blue','Teslim Edildi':'pb-ok',Yolda:'pb-purple',Yuklendi:'pb-blue',Hazirlaniyor:'pb-warn',Gecti:'pb-ok',Basarisiz:'pb-err',Kosullu:'pb-warn'};
+  function bd(s,cls){return '<span class="pb-badge '+(sc[s]||cls||'pb-blue')+'">'+s+'</span>';}
+
+  if(tip==='urun'){
+    title='Urün Stokları Raporu';
+    var kritik=APP.products.filter(function(p){return p.stock<=p.minStock;}).length;
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.products.length+' ürün | Kritik Stok: '+kritik;
+    html='<table><thead><tr><th>Kod</th><th>Ürün Adı</th><th>Kategori</th><th>Stok</th><th>Min Stok</th><th>Birim</th><th>Durum</th></tr></thead><tbody>'+
+      APP.products.map(function(p){
+        var stokCls=p.stock<=p.minStock?'pb-err':'pb-ok';
+        return '<tr><td style="color:#3b82f6;font-weight:700">'+p.code+'</td><td><strong>'+p.name+'</strong></td><td>'+p.category+'</td>'+
+          '<td><span class="pb-badge '+stokCls+'">'+p.stock+' '+p.unit+'</span></td><td>'+p.minStock+'</td><td>'+p.unit+'</td>'+
+          '<td>'+bd(p.status)+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='hammadde'){
+    title='Hammadde Stokları Raporu';
+    var kritik=APP.rawMaterials.filter(function(r){return r.stock<=r.minStock;}).length;
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.rawMaterials.length+' hammadde | Kritik: '+kritik;
+    html='<table><thead><tr><th>Kod</th><th>Ad</th><th>Tedarikçi</th><th>Stok</th><th>Min Stok</th><th>Birim</th><th>Durum</th></tr></thead><tbody>'+
+      APP.rawMaterials.map(function(r){
+        var stokCls=r.stock<=r.minStock?'pb-err':'pb-ok';
+        return '<tr><td style="color:#3b82f6;font-weight:700">'+r.code+'</td><td><strong>'+r.name+'</strong></td><td>'+(r.supplier||'-')+'</td>'+
+          '<td><span class="pb-badge '+stokCls+'">'+r.stock+' '+r.unit+'</span></td><td>'+r.minStock+'</td><td>'+r.unit+'</td>'+
+          '<td>'+bd(r.status)+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='siparis'){
+    title='Sipariş Listesi Raporu';
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.orders.length+' sipariş';
+    html='<table><thead><tr><th>Sipariş No</th><th>Müşteri</th><th>Ürün</th><th>Miktar</th><th>Sipariş Tarihi</th><th>Teslim Tarihi</th><th>Durum</th><th>Öncelik</th></tr></thead><tbody>'+
+      APP.orders.map(function(o){
+        var pCls=o.priority==='Acil'?'pb-err':o.priority==='Yüksek'?'pb-warn':'pb-blue';
+        return '<tr><td style="color:#3b82f6;font-weight:700">#'+o.id+'</td><td><strong>'+o.customer+'</strong></td><td>'+o.product+'</td>'+
+          '<td><strong>'+o.qty+'</strong></td><td>'+o.date+'</td><td>'+o.delivery+'</td>'+
+          '<td>'+bd(o.status)+'</td><td><span class="pb-badge '+pCls+'">'+o.priority+'</span></td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='uretim'){
+    title='Üretim Emirleri Raporu';
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.production.length+' emir';
+    html='<table><thead><tr><th>Emir No</th><th>Ürün</th><th>Sipariş</th><th>Planlanan</th><th>Gerçekleşen</th><th>İlerleme</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th></tr></thead><tbody>'+
+      APP.production.map(function(p){
+        return '<tr><td style="color:#3b82f6;font-weight:700">#'+p.id+'</td><td><strong>'+p.product+'</strong></td>'+
+          '<td>'+(p.orderId?'#'+p.orderId:'-')+'</td><td>'+p.planned+'</td><td>'+p.actual+'</td>'+
+          '<td><div style="background:#e2e8f0;border-radius:4px;height:8px;width:80px;display:inline-block;vertical-align:middle;overflow:hidden"><div style="height:100%;border-radius:4px;background:#3b82f6;width:'+p.progress+'%"></div></div> '+p.progress+'%</td>'+
+          '<td>'+p.start+'</td><td>'+p.end+'</td><td>'+bd(p.status)+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='kalite'){
+    title='Kalite Kontrol Kayıtları Raporu';
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.quality.length+' kayıt';
+    html='<table><thead><tr><th>KK No</th><th>Ürün</th><th>Üretim Emri</th><th>Kontrol Tipi</th><th>Kontrol Eden</th><th>Tarih</th><th>Sonuç</th><th>Notlar</th></tr></thead><tbody>'+
+      APP.quality.map(function(q){
+        return '<tr><td style="color:#3b82f6;font-weight:700">#'+q.id+'</td><td><strong>'+q.product+'</strong></td>'+
+          '<td>'+(q.productionId?'#'+q.productionId:'-')+'</td><td>'+q.type+'</td>'+
+          '<td>'+(q.inspector||'-')+'</td><td>'+q.date+'</td>'+
+          '<td>'+bd(q.result)+'</td><td style="font-size:12px;color:#64748b">'+(q.notes||'-')+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='sevkiyat'){
+    title='Sevkiyat Listesi Raporu';
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Toplam: '+APP.shipments.length+' sevkiyat';
+    html='<table><thead><tr><th>Sevkiyat No</th><th>Müşteri</th><th>Sipariş</th><th>Ürün</th><th>Miktar</th><th>Taşıyıcı</th><th>Araç Plaka</th><th>Tarih</th><th>Durum</th></tr></thead><tbody>'+
+      APP.shipments.map(function(s){
+        return '<tr><td style="color:#3b82f6;font-weight:700">#'+s.id+'</td><td><strong>'+s.customer+'</strong></td>'+
+          '<td>'+(s.orderId?'#'+s.orderId:'-')+'</td><td>'+s.product+'</td><td>'+s.qty+'</td>'+
+          '<td>'+(s.carrier||'-')+'</td><td>'+(s.plate||'-')+'</td><td>'+s.date+'</td>'+
+          '<td>'+bd(s.status)+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  else if(tip==='recete'){
+    title='Reçete & Maliyet Raporu';
+    var recAd=(document.getElementById('rtAdi')||{}).value||'—';
+    var tipEl=(document.getElementById('rtTip')||{});
+    var tipTxt=tipEl.options&&tipEl.selectedIndex>=0?tipEl.options[tipEl.selectedIndex].text:'';
+    var kar=(document.getElementById('rtKar')||{}).value||'0';
+    var kgMal=(document.getElementById('rtResKgTL')||{}).textContent||'—';
+    var kgSat=(document.getElementById('rtResSatis')||{}).textContent||'—';
+    var sarjTL=(document.getElementById('rtResSarj')||{}).textContent||'—';
+    var kurUSD=(document.getElementById('rtKurUSD')||{}).value||'32.5';
+    var kurEUR=(document.getElementById('rtKurEUR')||{}).value||'35.2';
+    meta=firma+' | '+now+' | Kullanici: '+user+' | Reçete: '+recAd+' | Tip: '+tipTxt;
+    var satirlar='';
+    document.querySelectorAll('#rtTbody tr').forEach(function(tr){
+      var ad=(tr.querySelector('input[type=text]')||{}).value||'';
+      var kg=(tr.querySelector('.rtKg')||{}).value||'0';
+      var fp=(tr.querySelector('.rtFp')||{}).value||'0';
+      var tl=(tr.querySelector('.rtTL')||{}).textContent||'—';
+      var pct=(tr.querySelector('.rtPct')||{}).textContent||'—';
+      if(ad) satirlar+='<tr><td><strong>'+ad+'</strong></td><td style="text-align:right">'+kg+' kg</td>'+
+        '<td style="text-align:right">'+fp+' ₺</td><td style="text-align:right;font-weight:700">'+tl+'</td>'+
+        '<td style="text-align:right"><span class="pb-badge pb-blue">'+pct+'</span></td></tr>';
+    });
+    var kalTbody=document.getElementById('rtKalinlikTbody');
+    var kalRows=kalTbody?kalTbody.innerHTML.replace(/style="[^"]*color:[^"]*"/g,''):'';
+    html='<div class="pb-kpi-row">'+
+      '<div class="pb-kpi"><div class="pb-kpi-label">1 KG MALİYETİ</div><div class="pb-kpi-val">'+kgMal+'</div></div>'+
+      '<div class="pb-kpi"><div class="pb-kpi-label">SATIŞ FİYATI (%'+kar+' Kar)</div><div class="pb-kpi-val" style="color:#166534">'+kgSat+'</div></div>'+
+      '<div class="pb-kpi"><div class="pb-kpi-label">ŞARJ MALİYETİ</div><div class="pb-kpi-val" style="color:#92400e">'+sarjTL+'</div></div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:#64748b;margin-bottom:8px">💱 USD Kuru: '+kurUSD+' ₺ | EUR Kuru: '+kurEUR+' ₺ | Kar Oranı: %'+kar+'</div>'+
+      '<h3 style="font-size:14px;font-weight:700;color:#475569;margin:0 0 10px">🧪 Hammadde Bileşenleri</h3>'+
+      '<table><thead><tr><th>Hammadde</th><th style="text-align:right">Miktar</th><th style="text-align:right">Birim Fiyat</th><th style="text-align:right">TL Toplam</th><th style="text-align:right">Oran</th></tr></thead><tbody>'+satirlar+'</tbody></table>'+
+      '<h3 style="font-size:14px;font-weight:700;color:#475569;margin:20px 0 10px">📊 Kalınlığa Göre m² Maliyetler</h3>'+
+      '<table><thead><tr><th>Kalınlık</th><th>kg/m²</th><th>Maliyet TL</th><th>Satış TL</th><th>Liste TL</th><th>Maliyet $</th><th>Satış $</th></tr></thead><tbody>'+kalRows+'</tbody></table>';
+  }
+
+  document.getElementById('pbTitle').textContent=title;
+  document.getElementById('pbMeta').textContent=meta;
+  document.getElementById('pbContent').innerHTML=html;
+  document.getElementById('printModal').classList.add('open');
+}
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
