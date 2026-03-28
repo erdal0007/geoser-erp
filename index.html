@@ -594,7 +594,7 @@ function _injectEyeBtns(secId,editFnName,detayTip){
 var _origRP2=renderProducts;
 renderProducts=function(){_origRP2();_injectEyeBtns("sec-products","editProduct","urun");};
 var _origRR2=renderRaw;
-renderRaw=function(){_origRR2();_injectEyeBtns("sec-raw","editRaw","hammadde");};
+renderRaw=function(){_origRR2();_injectEyeBtns("sec-rawmaterials","editRaw","hammadde");};
 var _origRO2=renderOrders;
 renderOrders=function(){_origRO2();_injectEyeBtns("sec-orders","editOrder","siparis");};
 var _origRProd2=renderProduction;
@@ -605,7 +605,7 @@ var _origRS2=renderShipment;
 renderShipment=function(){_origRS2();_injectEyeBtns("sec-shipment","editShipment","sevkiyat");};
 
 
-var VIEWER_ALLOWED=["products","raw"];
+var VIEWER_ALLOWED=["dashboard","products","rawmaterials"];
 var FULL_ROLES=["super_admin","admin","engineer","factory_manager","production_manager"];
 function isViewer(){return APP.currentUser&&FULL_ROLES.indexOf(APP.currentUser.role)<0;}
 function applyRoleRestrictions(){
