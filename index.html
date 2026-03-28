@@ -56,6 +56,8 @@
   .progress-bar { height:8px; background:#1e293b; border-radius:4px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:4px; transition:width .5s; }
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"><\/script>
 </head>
 <body>
 <div id="loginPage" class="login-bg">
@@ -338,6 +340,13 @@
   </div>
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('userModal')">İptal</button><button class="btn btn-primary" onclick="saveUser()">💾 Kaydet</button></div>
 </div></div><script>
+
+const _fbApp = firebase.initializeApp({
+  apiKey:"AIzaSyDukPJZqoRstmdwbW7MSTX4JPn_q-ps0rI",
+  authDomain:"geoser-erp.firebaseapp.com",
+  projectId:"geoser-erp"
+});
+const _db = firebase.firestore();
 const USERS=[{id:1,name:'Erdal Güçin',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status:'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre Mühendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'Gürsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
 const ROLE_LABELS={super_admin:'Süper Admin',admin:'Admin',engineer:'Mühendis',factory_manager:'Fabrika Müdürü',production_manager:'Üretim Müdürü'};
 const APP={currentUser:null,products:[],rawMaterials:[],recipes:[],orders:[],production:[],quality:[],shipments:[],logs:[],settings:{companyName:'GEOSER A.Ş.',address:'İstanbul, Türkiye',phone:'+90 212 000 0000',email:'info@geoser.net',currency:'₺',taxRate:18},nextId:{product:100,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10}};
@@ -382,7 +391,41 @@ function showSection(id,el){
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function initApp(){loadData();if(APP.products.length===0)seedData();renderDashboard();populateSelects();}
+function initApp(){
+  loadData();
+  renderDashboard();
+  populateSelects();
+  // localStorage'i temizle - eski örnek veriler silinsin
+  localStorage.removeItem('geoser_products');
+  localStorage.removeItem('geoser_rawMaterials');
+  // Firebase'den ürünleri yükle
+  _db.collection('urunler').get().then(function(snap){
+    if(!snap.empty){
+      APP.products=[];
+      snap.forEach(function(doc){
+        var d=doc.data();
+        APP.products.push({
+          id:doc.id,
+          code:d.kod||d.code||('GEO-'+(APP.products.length+1)),
+          name:d.ad||d.name||'',
+          category:d.kategori||d.category||'Geomembran',
+          unit:d.birim||d.unit||'m²',
+          stock:Number(d.stokMiktari||d.stok||d.stock||0),
+          minStock:Number(d.minStok||d.minStock||0),
+          status:d.durum||d.status||'Aktif',
+          desc:d.aciklama||''
+        });
+      });
+      saveAll();
+      renderDashboard();
+      renderProducts();
+      populateSelects();
+      addLog('Sistem','Yüklendi',APP.products.length+' ürün Firebase\'den yüklendi');
+    }
+  }).catch(function(e){
+    console.error('Firebase hatası:',e);
+  });
+}
 function seedData(){
   APP.products=[{id:101,code:'PRD-001',name:'Plastik Boru 20mm',category:'Boru',unit:'Mt',stock:850,minStock:200,status:'Aktif',desc:''},{id:102,code:'PRD-002',name:'Plastik Boru 32mm',category:'Boru',unit:'Mt',stock:620,minStock:200,status:'Aktif',desc:''},{id:103,code:'PRD-003',name:'Plastik Fitting 90°',category:'Fitting',unit:'Adet',stock:1240,minStock:500,status:'Aktif',desc:''},{id:104,code:'PRD-004',name:'Plastik Fitting T-Tip',category:'Fitting',unit:'Adet',stock:875,minStock:300,status:'Aktif',desc:''},{id:105,code:'PRD-005',name:'Vana 1/2"',category:'Vana',unit:'Adet',stock:320,minStock:100,status:'Aktif',desc:''},{id:106,code:'PRD-006',name:'Vana 3/4"',category:'Vana',unit:'Adet',stock:88,minStock:100,status:'Aktif',desc:''},{id:107,code:'PRD-007',name:'Bağlantı Parçası',category:'Aksesuar',unit:'Adet',stock:2100,minStock:400,status:'Aktif',desc:''},{id:108,code:'PRD-008',name:'Flanş DN50',category:'Flanş',unit:'Adet',stock:45,minStock:50,status:'Aktif',desc:''}];
   APP.rawMaterials=[{id:101,code:'HM-001',name:'Polipropilen (PP-R)',supplier:'PetroKim A.Ş.',unit:'Kg',stock:8500,minStock:2000,cost:28.50,status:'Aktif'},{id:102,code:'HM-002',name:'HDPE Granül',supplier:'PetroKim A.Ş.',unit:'Kg',stock:4200,minStock:1500,cost:32.00,status:'Aktif'},{id:103,code:'HM-003',name:'Pirinç Ham Madde',supplier:'MetalTek Ltd.',unit:'Kg',stock:650,minStock:200,cost:185.00,status:'Aktif'},{id:104,code:'HM-004',name:'EPDM Conta',supplier:'ElastomerCo.',unit:'Adet',stock:3800,minStock:1000,cost:4.50,status:'Aktif'},{id:105,code:'HM-005',name:'Karbon Siyah',supplier:'Kimya A.Ş.',unit:'Kg',stock:320,minStock:500,cost:18.00,status:'Aktif'},{id:106,code:'HM-006',name:'Stabilizatör',supplier:'Kimya A.Ş.',unit:'Kg',stock:180,minStock:200,cost:45.00,status:'Aktif'}];
