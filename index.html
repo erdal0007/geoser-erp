@@ -87,6 +87,7 @@
   .print-box{box-shadow:none!important;max-height:none!important;overflow:visible!important;padding:0!important}
   .pb-actions,.sidebar,.topbar{display:none!important}
 }
+.viewer-hidden{display:none!important}.role-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;margin-left:6px}.role-full{background:#065f4620;color:#34d399;border:1px solid #065f4640}.role-viewer{background:#92400e20;color:#fbbf24;border:1px solid #92400e40}
 </style>
 <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -602,6 +603,51 @@ var _origRQ2=renderQuality;
 renderQuality=function(){_origRQ2();_injectEyeBtns("sec-quality","editQuality","kalite");};
 var _origRS2=renderShipment;
 renderShipment=function(){_origRS2();_injectEyeBtns("sec-shipment","editShipment","sevkiyat");};
+
+
+var VIEWER_ALLOWED=["products","raw"];
+var FULL_ROLES=["super_admin","admin","engineer","factory_manager","production_manager"];
+function isViewer(){return APP.currentUser&&FULL_ROLES.indexOf(APP.currentUser.role)<0;}
+function applyRoleRestrictions(){
+  if(!APP.currentUser)return;
+  var viewer=isViewer();
+  // Menü kısıtı
+  document.querySelectorAll(".nav-item[onclick]").forEach(function(item){
+    var oc=item.getAttribute("onclick")||"";
+    var idx1=oc.indexOf("showSection('");
+    if(idx1<0)return;
+    var sec=oc.slice(idx1+13);
+    sec=sec.slice(0,sec.indexOf("'"));
+    if(viewer&&VIEWER_ALLOWED.indexOf(sec)<0){item.classList.add("viewer-hidden");}else{item.classList.remove("viewer-hidden");}
+  });
+  // Yonetim nav bolumu gizle
+  if(viewer){document.querySelectorAll(".nav-section").forEach(function(ns){if(ns.textContent.indexOf("YONETIM")>=0||ns.textContent.indexOf("YÖNETİM")>=0){ns.classList.add("viewer-hidden");}});}
+  // Rol badge ekle
+  var tu=document.querySelector(".user-info,.topbar-user");
+  if(tu&&!tu.querySelector(".role-badge")){
+    var b=document.createElement("span");
+    b.className="role-badge "+(viewer?"role-viewer":"role-full");
+    b.textContent=viewer?"Goruntuleyici":APP.currentUser.role;
+    tu.appendChild(b);
+  }
+  // Yeni/Edit/Sil butonlarini gizle viewer icin
+  if(viewer){
+    document.querySelectorAll("button[onclick]").forEach(function(btn){
+      var oc=btn.getAttribute("onclick")||"";
+      if(oc.indexOf("openModal")>=0||oc.indexOf("edit")>=0||oc.indexOf("delete")>=0||oc.indexOf("Delete")>=0){
+        btn.classList.add("viewer-hidden");
+      }
+    });
+    // Goruntuele butonu kalsin, eye-btn gizlenmesin
+    document.querySelectorAll("button.eye-btn,button[onclick*=goster]").forEach(function(btn){btn.classList.remove("viewer-hidden");});
+  }
+}
+var _oss=showSection;
+showSection=function(id,el){
+  if(isViewer()&&VIEWER_ALLOWED.indexOf(id)<0){alert("Bu bolume erisim yetkiniz bulunmamaktadir.");return;}
+  _oss(id,el);
+  setTimeout(applyRoleRestrictions,150);
+};
 
 function renderRecete(){rtTipiDegistir();rtRenderKayitlilar();}
 var RT_PRESET={pvc:[{ad:"PVC S.65 K70",kg:75,fiyat:1.50},{ad:"DOTP Plastifiyan",kg:35,fiyat:1.85},{ad:"CZ1170 Stabilizator",kg:3,fiyat:2.50},{ad:"K125 Kalsiyum-Cinko",kg:2,fiyat:3.60},{ad:"Titan TiO2",kg:2,fiyat:4.20},{ad:"Boya",kg:0.25,fiyat:10.0},{ad:"Kalsit",kg:25,fiyat:0.10},{ad:"Soya Yagi ESBO260",kg:3,fiyat:2.90},{ad:"Iscilik Giderleri",kg:0,fiyat:2.0},{ad:"Elektrik",kg:0,fiyat:2.0},{ad:"Masura Ambalaj",kg:0,fiyat:3.50},{ad:"Palet",kg:0,fiyat:0.25}],hdpe:[{ad:"HDPE Hammadde 464",kg:150,fiyat:1.15},{ad:"Antioksidan",kg:6,fiyat:3.00},{ad:"Boya Karbon Siyah",kg:6,fiyat:3.00},{ad:"Iscilik Giderleri",kg:0,fiyat:50.0},{ad:"Elektrik",kg:0,fiyat:20.0},{ad:"Masura Ambalaj",kg:0,fiyat:20.0},{ad:"Palet",kg:0,fiyat:50.0}],gpp:[{ad:"PP Hammadde",kg:100,fiyat:1.80},{ad:"Renk Masterbatch",kg:3,fiyat:5.00},{ad:"Antioksidan",kg:2,fiyat:8.00},{ad:"Iscilik",kg:0,fiyat:50.0},{ad:"Elektrik",kg:0,fiyat:20.0}],gpet:[{ad:"PET Elyaf Hammadde",kg:100,fiyat:2.20},{ad:"Binder",kg:5,fiyat:4.00},{ad:"Iscilik",kg:0,fiyat:50.0}],geocell:[{ad:"HDPE Hammadde",kg:100,fiyat:1.20},{ad:"Karbon Siyah",kg:3,fiyat:3.00},{ad:"Iscilik",kg:0,fiyat:50.0}],stb:[{ad:"PVC Hammadde",kg:60,fiyat:1.50},{ad:"Plastifiyan DOTP",kg:30,fiyat:1.85},{ad:"Stabilizator",kg:3,fiyat:3.00},{ad:"Dolgu",kg:10,fiyat:0.20},{ad:"Iscilik",kg:0,fiyat:2.0}],diger:[{ad:"Hammadde 1",kg:100,fiyat:2.00}]};
