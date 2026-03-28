@@ -60,6 +60,7 @@
 </head>
 <body>
 <div id="ytPlayer" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"></div>
+<div id="musicToast" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;padding:14px 22px;border-radius:50px;font-size:14px;font-weight:600;z-index:9999;align-items:center;gap:12px;box-shadow:0 4px 24px #0008;cursor:pointer" onclick="startMusic();this.style.display='none'" ><span style="font-size:20px">🎵</span><span>Müzik için dokunun</span><span style="opacity:.7;font-size:12px">▶</span></div>
 <div id="loginPage" class="login-bg">
   <div class="login-card">
     <div style="text-align:center;margin-bottom:32px">
@@ -367,14 +368,18 @@ function doLogin(){
   document.getElementById('sidebarRole').textContent=ROLE_LABELS[u.role]||u.role;
   document.getElementById('topUserBadge').textContent='👤 '+u.name;
   if(['super_admin','admin'].includes(u.role))document.getElementById('adminNav').style.display='block';
-  addLog('Sistem','Giriş','Kullanıcı giriş yaptı');startClock();initApp();setTimeout(startMusic,1500);
+  addLog('Sistem','Giriş','Kullanıcı giriş yaptı');startClock();initApp();var _isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);if(_isMobile){initMobileMusic();}else{setTimeout(startMusic,1500);}
 }
 
 var _ytPlayer=null;var _ytReady=false;
-function onYouTubeIframeAPIReady(){_ytPlayer=new YT.Player("ytPlayer",{height:"1",width:"1",videoId:"QndED8Hi5KA",playerVars:{autoplay:0,loop:1,playlist:"QndED8Hi5KA",controls:0,disablekb:1,fs:0,iv_load_policy:3,modestbranding:1},events:{onReady:function(e){_ytReady=true;},onStateChange:function(e){if(e.data===YT.PlayerState.ENDED){e.target.playVideo();}}}});}
-function startMusic(){if(_ytReady&&_ytPlayer){_ytPlayer.setVolume(60);_ytPlayer.playVideo();updateMusicBtn(true);}}
+function onYouTubeIframeAPIReady(){_ytPlayer=new YT.Player("ytPlayer",{height:"1",width:"1",videoId:"QndED8Hi5KA",playerVars:{autoplay:0,loop:1,playlist:"QndED8Hi5KA",controls:0,disablekb:1,fs:0,iv_load_policy:3,modestbranding:1},events:{onReady:function(e){_ytReady=true;var isMob=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);if(!isMob){e.target.setVolume(60);}},onStateChange:function(e){if(e.data===YT.PlayerState.ENDED){e.target.playVideo();}}}});}
+var _musicStarted=false;
+function startMusic(){if(_ytReady&&_ytPlayer){_ytPlayer.setVolume(60);_ytPlayer.playVideo();updateMusicBtn(true);_musicStarted=true;hideMusicToast();}else{setTimeout(startMusic,500);}}
 function stopMusic(){if(_ytPlayer){_ytPlayer.pauseVideo();updateMusicBtn(false);}}
 function toggleMusic(){if(!_ytPlayer)return;var s=_ytPlayer.getPlayerState();if(s===1){stopMusic();}else{startMusic();}}
+function initMobileMusic(){var isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);if(isMobile){showMusicToast();}}
+function showMusicToast(){var t=document.getElementById("musicToast");if(t){t.style.display="flex";}}
+function hideMusicToast(){var t=document.getElementById("musicToast");if(t){t.style.display="none";}}
 function updateMusicBtn(playing){var btn=document.getElementById("musicBtn");if(!btn)return;btn.innerHTML=playing?"🔊 Müzik":"🔇 Müzik";btn.style.background=playing?"linear-gradient(135deg,#059669,#10b981)":"#334155";}
 function doLogout(){APP.currentUser=null;location.reload();}
 function startClock(){const el=document.getElementById('clockEl');const t=()=>{el.textContent=new Date().toLocaleString('tr-TR');};t();setInterval(t,1000);}
