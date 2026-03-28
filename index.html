@@ -91,6 +91,7 @@
       <div class="nav-item" onclick="showSection('quality',this)">✅ Kalite Kontrol</div>
       <div class="nav-item" onclick="showSection('shipment',this)">🚚 Sevkiyat</div>
       <div class="nav-item" onclick="showSection('reports',this)">📈 Raporlar</div>
+      <div class="nav-item" onclick="showSection('recete',this)">⚗️ Reçete & Maliyet</div>
       <div id="adminNav" style="display:none">
         <div style="padding:16px 16px 8px;font-size:10px;color:#475569;font-weight:600;letter-spacing:1px;margin-top:8px">YÖNETİM</div>
         <div class="nav-item" onclick="showSection('users',this)">👥 Kullanıcılar</div>
@@ -198,6 +199,150 @@
       </div>
       <div class="card" style="padding:0;overflow:hidden">
         <table><thead><tr><th>No</th><th>Müşteri</th><th>Sipariş</th><th>Ürün</th><th>Miktar</th><th>Taşıyıcı</th><th>Plaka</th><th>Tarih</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="shipTbl"></tbody></table>
+      </div>
+    </div>
+    
+    <div class="section" id="sec-recete">
+      <div style="display:grid;grid-template-columns:1fr 400px;gap:20px">
+        <!-- SOL: Giriş -->
+        <div>
+          <!-- Reçete Bilgileri -->
+          <div class="card" style="margin-bottom:16px">
+            <div style="padding:14px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:14px;font-weight:700;color:#f1f5f9">📋 Reçete Bilgileri</div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-success" style="padding:6px 14px;font-size:12px" onclick="rtHesapla()">⚡ Hesapla</button>
+                <button class="btn btn-primary" style="padding:6px 14px;font-size:12px" onclick="rtKaydet()">💾 Kaydet</button>
+                <button class="btn btn-secondary" style="padding:6px 14px;font-size:12px" onclick="rtYeni()">+ Yeni</button>
+              </div>
+            </div>
+            <div style="padding:16px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+                <div><label class="label">Reçete Adı *</label><input type="text" id="rtAdi" placeholder="örn: PVC Tünel 1.5mm"></div>
+                <div><label class="label">Ürün Tipi</label>
+                  <select id="rtTip" onchange="rtTipiDegistir()">
+                    <option value="geomembran_pvc">PVC Geomembran</option>
+                    <option value="geomembran_hdpe">HDPE Geomembran</option>
+                    <option value="geotekstil_pp">Geotekstil PP</option>
+                    <option value="geotekstil_pet">Geotekstil Polyester</option>
+                    <option value="geocell">Geocell</option>
+                    <option value="su_tutucu_bant">Su Tutucu Bant</option>
+                    <option value="diger">Diğer</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+                <div><label class="label">Şarj (KG)</label><input type="number" id="rtSarj" value="150" oninput="rtHesapla()"></div>
+                <div><label class="label">Özgül Ağırlık</label><input type="number" id="rtOzgul" value="1.30" step="0.01" oninput="rtHesapla()"></div>
+                <div><label class="label">Kar Oranı (%)</label><input type="number" id="rtKar" value="30" oninput="rtHesapla()"></div>
+              </div>
+              <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+                <span style="font-size:11px;font-weight:700;color:#64748b">💱 DÖVİZ:</span>
+                <div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">USD</span><input type="number" id="rtKurUSD" value="32.50" step="0.01" oninput="rtHesapla()" style="width:85px;padding:5px 8px;font-size:12px;text-align:right"></div>
+                <div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#64748b;font-weight:700">EUR</span><input type="number" id="rtKurEUR" value="35.20" step="0.01" oninput="rtHesapla()" style="width:85px;padding:5px 8px;font-size:12px;text-align:right"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Hammadde Tablosu -->
+          <div class="card" style="margin-bottom:16px">
+            <div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:14px;font-weight:700;color:#f1f5f9">🧪 Hammadde Bileşenleri</div>
+              <div id="rtSarjOzet" style="font-size:12px;color:#64748b">—</div>
+            </div>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse">
+                <thead><tr>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b;width:32px">No</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Hammadde</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b;width:90px">KG</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b;width:105px">Birim Fiyat (TL)</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b;width:100px">TL Toplam</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b;width:85px">USD</th>
+                  <th style="background:#0f172a;padding:8px 10px;text-align:right;font-size:11px;color:#64748b;width:50px">%</th>
+                  <th style="background:#0f172a;padding:8px 6px;width:34px"></th>
+                </tr></thead>
+                <tbody id="rtHammaddeTbody"></tbody>
+                <tfoot><tr style="background:#0f172a55">
+                  <td colspan="2" style="padding:8px 10px;font-size:12px;font-weight:700;color:#64748b">TOPLAM</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:800;color:#38bdf8;text-align:right" id="rtFtKg">—</td>
+                  <td></td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:800;color:#facc15;text-align:right" id="rtFtTL">—</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:800;color:#60a5fa;text-align:right" id="rtFtUSD">—</td>
+                  <td style="padding:8px 10px;font-size:11px;color:#64748b;text-align:right">100%</td>
+                  <td></td>
+                </tr></tfoot>
+              </table>
+            </div>
+            <div style="padding:10px 14px">
+              <button onclick="rtSatirEkle()" style="width:100%;padding:8px;background:#ffffff08;border:1px dashed #334155;color:#64748b;border-radius:7px;cursor:pointer;font-size:13px;transition:all .2s" onmouseover="this.style.borderColor='#3b82f6';this.style.color='#3b82f6'" onmouseout="this.style.borderColor='#334155';this.style.color='#64748b'">+ Hammadde Satırı Ekle</button>
+            </div>
+          </div>
+          <!-- Kalınlık Tablosu -->
+          <div class="card">
+            <div style="padding:12px 18px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:14px;font-weight:700;color:#f1f5f9">📊 Kalınlığa Göre m² Maliyet</div>
+              <div>
+                <span style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#92400e20;color:#fbbf24;border:1px solid #92400e40;margin-right:4px">Maliyet</span>
+                <span style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#065f4620;color:#34d399;border:1px solid #065f4640">Satış</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse" id="rtKalinlikTable">
+                <thead><tr>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:left;font-size:11px;color:#64748b">Kalınlık</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">kg/m²</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet TL</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış TL</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Liste TL</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Maliyet $</th>
+                  <th style="background:#0f172a55;padding:8px 10px;text-align:center;font-size:11px;color:#64748b">Satış $</th>
+                </tr></thead>
+                <tbody id="rtKalinlikTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- SAĞ: Sonuçlar -->
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">⚡ Sonuçlar</div></div>
+            <div style="padding:16px">
+              <div style="background:linear-gradient(135deg,#1d4ed820,#7c3aed20);border:1px solid #3b82f640;border-radius:9px;padding:14px;margin-bottom:14px">
+                <div style="font-size:11px;color:#94a3b8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">1 KG MALİYETİ</div>
+                <div><span style="font-size:26px;font-weight:800;color:#38bdf8" id="rtResKgTL">—</span><span style="font-size:13px;color:#64748b;margin-left:6px">TL/kg</span></div>
+                <div style="margin-top:4px"><span style="font-size:13px;font-weight:700;color:#60a5fa" id="rtResKgUSD">—</span><span style="font-size:11px;color:#64748b;margin-left:4px">USD/kg</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+                <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px">
+                  <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px">Şarj Maliyeti</div>
+                  <div style="font-size:18px;font-weight:800;color:#38bdf8;margin-top:4px" id="rtResSarjTL">—</div>
+                  <div style="font-size:11px;color:#475569;margin-top:2px">TL / şarj</div>
+                </div>
+                <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px">
+                  <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px">Satış (Kar Dahil)</div>
+                  <div style="font-size:18px;font-weight:800;color:#4ade80;margin-top:4px" id="rtResKgSatis">—</div>
+                  <div style="font-size:11px;color:#475569;margin-top:2px">TL/kg</div>
+                </div>
+              </div>
+              <div style="height:1px;background:#334155;margin:14px 0"></div>
+              <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;font-weight:700">Bileşim Analizi</div>
+              <div id="rtBilesim"></div>
+              <div style="height:1px;background:#334155;margin:14px 0"></div>
+              <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;font-weight:700">💾 Kayıtlı Reçeteler</div>
+              <div id="rtKayitlilar"><div style="color:#475569;font-size:12px">Henüz kayıtlı reçete yok.</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="padding:12px 18px;border-bottom:1px solid #334155"><div style="font-size:14px;font-weight:700;color:#f1f5f9">📝 Notlar</div></div>
+            <div style="padding:14px;font-size:12px;color:#64748b;line-height:1.9">
+              <div>• m² Ağırlık = Kalınlık × Özgül Ağırlık (kg/m²)</div>
+              <div>• m² Maliyet = kg Maliyet × m² Ağırlık</div>
+              <div>• Liste = Satış × 1.15</div>
+              <div>• Fiyatlar KDV hariçtir</div>
+              <div style="margin-top:8px;padding:8px;background:#0f172a;border-radius:6px;color:#94a3b8">DSİ: 4.00$/kg | Özel: 3.50$/kg</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="section" id="sec-reports">
@@ -371,14 +516,14 @@ function showSection(id,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
   if(el)el.classList.add('active');
-  const titles={dashboard:'Dashboard',products:'Ürün Stokları',rawmaterials:'Hammadde Stokları',recipes:'Reçeteler / BOM',orders:'Siparişler',production:'Üretim Emirleri',quality:'Kalite Kontrol',shipment:'Sevkiyat',reports:'Raporlar',users:'Kullanıcılar',settings:'Ayarlar',logs:'Sistem Logları'};
+  const titles={recete:'Reçete & Maliyet Hesaplama',dashboard:'Dashboard',products:'Ürün Stokları',rawmaterials:'Hammadde Stokları',recipes:'Reçeteler / BOM',orders:'Siparişler',production:'Üretim Emirleri',quality:'Kalite Kontrol',shipment:'Sevkiyat',reports:'Raporlar',users:'Kullanıcılar',settings:'Ayarlar',logs:'Sistem Logları'};
   document.getElementById('pageTitle').textContent=titles[id]||id;
   const counts={products:APP.products.length,rawmaterials:APP.rawMaterials.length,orders:APP.orders.length,production:APP.production.length,quality:APP.quality.length,shipment:APP.shipments.length};
   document.getElementById('pageBadge').textContent=counts[id]!==undefined?counts[id]+' kayıt':'';
   if(id==='dashboard')renderDashboard();if(id==='products')renderProducts();if(id==='rawmaterials')renderRaw();
   if(id==='recipes')renderRecipes();if(id==='orders')renderOrders();if(id==='production')renderProduction();
   if(id==='quality')renderQuality();if(id==='shipment')renderShipment();if(id==='reports')renderReports();
-  if(id==='users')renderUsers();if(id==='settings')renderSettings();if(id==='logs')renderLogs();
+  if(id==='users')renderUsers();if(id==='settings')renderSettings();if(id==='logs')renderLogs();if(id==='recete')renderRecete();
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -519,6 +664,183 @@ function saveSettingsCo(){APP.settings.companyName=document.getElementById('sCom
 function saveSettingsSys(){APP.settings.currency=document.getElementById('sCurr').value;APP.settings.taxRate=+document.getElementById('sTax').value;saveSettings();addLog('Ayarlar','Güncellendi','Sistem parametreleri');alert('Kaydedildi!');}
 function renderLogs(){const q=document.getElementById('logSearch')?.value.toLowerCase()||'';const rows=APP.logs.filter(l=>l.module.toLowerCase().includes(q)||l.action.toLowerCase().includes(q)||l.user.toLowerCase().includes(q)||l.detail.toLowerCase().includes(q));document.getElementById('logsTbl').innerHTML=rows.length===0?'<tr><td colspan="5" style="text-align:center;color:#64748b;padding:30px">Log bulunamadı</td></tr>':rows.map(l=>`<tr><td style="font-size:12px;color:#64748b;white-space:nowrap">${l.time}</td><td>${l.user}</td><td><span class="badge badge-blue" style="font-size:10px">${l.module}</span></td><td style="font-weight:500">${l.action}</td><td style="font-size:12px;color:#94a3b8">${l.detail}</td></tr>`).join('');}
 function filterLogs(){renderLogs();}
+
+
+// ===== REÇETE & MALİYET MODÜLİ =====
+const RT_PRESET = {
+  geomembran_pvc:[{ad:'PVC S.65 K70',kg:75,fiyat:1.50},{ad:'DOTP (Plastifiyan)',kg:35,fiyat:1.85},{ad:'CZ1170 Stabilizatör',kg:3,fiyat:2.50},{ad:'K125 Kalsiyum-Çinko',kg:2,fiyat:3.60},{ad:'Titan (TiO2)',kg:2,fiyat:4.20},{ad:'Boya',kg:0.25,fiyat:10.0},{ad:'Kalsit',kg:25,fiyat:0.10},{ad:'Soya Yağı (ESBO260)',kg:3,fiyat:2.90},{ad:'İşçilik Giderleri',kg:0,fiyat:2.0},{ad:'Elektrik',kg:0,fiyat:2.0},{ad:'Masura,Ambalaj,Bant',kg:0,fiyat:3.50},{ad:'Palet',kg:0,fiyat:0.25}],
+  geomembran_hdpe:[{ad:'HDPE Hammadde 464',kg:150,fiyat:1.15},{ad:'Antioksidan',kg:6,fiyat:3.00},{ad:'Boya (Karbon Siyah)',kg:6,fiyat:3.00},{ad:'İşçilik Giderleri',kg:0,fiyat:50.0},{ad:'Elektrik',kg:0,fiyat:20.0},{ad:'Görünmeyen Giderler',kg:0,fiyat:20.0},{ad:'Masura,Ambalaj,Bant',kg:0,fiyat:20.0},{ad:'Palet',kg:0,fiyat:50.0}],
+  geotekstil_pp:[{ad:'PP Hammadde',kg:100,fiyat:1.80},{ad:'Renk Masterbatch',kg:3,fiyat:5.00},{ad:'Antioksidan',kg:2,fiyat:8.00},{ad:'İşçilik Giderleri',kg:0,fiyat:50.0},{ad:'Elektrik',kg:0,fiyat:20.0},{ad:'Masura,Ambalaj',kg:0,fiyat:15.0}],
+  geotekstil_pet:[{ad:'PET Elyaf Hammadde',kg:100,fiyat:2.20},{ad:'Binder',kg:5,fiyat:4.00},{ad:'İşçilik Giderleri',kg:0,fiyat:50.0},{ad:'Elektrik',kg:0,fiyat:20.0}],
+  geocell:[{ad:'HDPE Hammadde',kg:100,fiyat:1.20},{ad:'Karbon Siyah',kg:3,fiyat:3.00},{ad:'Antioksidan',kg:1,fiyat:8.00},{ad:'İşçilik Giderleri',kg:0,fiyat:50.0},{ad:'Elektrik',kg:0,fiyat:25.0}],
+  su_tutucu_bant:[{ad:'PVC Hammadde',kg:60,fiyat:1.50},{ad:'Plastifiyan (DOTP)',kg:30,fiyat:1.85},{ad:'Stabilizatör',kg:3,fiyat:3.00},{ad:'Dolgu Maddesi',kg:10,fiyat:0.20},{ad:'İşçilik Giderleri',kg:0,fiyat:2.0}],
+  diger:[{ad:'Hammadde 1',kg:100,fiyat:2.00}]
+};
+const RT_OZGUL = {geomembran_pvc:1.30,geomembran_hdpe:0.95,geotekstil_pp:0.91,geotekstil_pet:1.38,geocell:0.95,su_tutucu_bant:1.30,diger:1.0};
+const RT_SARJ  = {geomembran_pvc:150,geomembran_hdpe:162,geotekstil_pp:105,geotekstil_pet:110,geocell:100,su_tutucu_bant:100,diger:100};
+const RT_KALINLIKLAR = [0.5,0.75,1.0,1.2,1.5,1.8,2.0,2.5,3.0,3.5,4.0];
+let rtReceteler = JSON.parse(localStorage.getItem('geoser_rt_receteler')||'[]');
+let rtSatirId = 0;
+
+function renderRecete(){rtTipiDegistir();rtRenderKayitlilar();}
+
+function rtFmt(n,d=2){return Number(n).toFixed(d).replace(/B(?=(d{3})+(?!d))/g,',');}
+
+function rtTipiDegistir(){
+  const tip=document.getElementById('rtTip').value;
+  document.getElementById('rtOzgul').value=RT_OZGUL[tip]||1.30;
+  document.getElementById('rtSarj').value=RT_SARJ[tip]||150;
+  const tbody=document.getElementById('rtHammaddeTbody');
+  tbody.innerHTML='';
+  (RT_PRESET[tip]||[]).forEach(h=>rtSatirEkleVeri(h.ad,h.kg,h.fiyat));
+  rtHesapla();
+}
+
+function rtSatirEkle(){rtSatirEkleVeri('',0,0);rtHesapla();}
+
+function rtSatirEkleVeri(ad,kg,fiyat){
+  const tbody=document.getElementById('rtHammaddeTbody');
+  const id=++rtSatirId;
+  const no=tbody.children.length+1;
+  const tr=document.createElement('tr');
+  tr.id='rtrow-'+id;
+  tr.innerHTML=`<td style="padding:5px 8px;font-size:11px;color:#475569;text-align:center">${no}</td>
+    <td style="padding:3px 5px"><input type="text" value="${ad}" placeholder="Hammadde adı" oninput="rtHesapla()" style="background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:6px;padding:5px 8px;font-size:12px;width:100%;outline:none"></td>
+    <td style="padding:3px 5px"><input type="number" value="${kg||''}" min="0" step="0.1" placeholder="0" oninput="rtHesapla()" class="rt-kg" style="background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:6px;padding:5px 8px;font-size:12px;width:100%;outline:none;text-align:right"></td>
+    <td style="padding:3px 5px"><input type="number" value="${fiyat||''}" min="0" step="0.01" placeholder="0.00" oninput="rtHesapla()" class="rt-fiyat" style="background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:6px;padding:5px 8px;font-size:12px;width:100%;outline:none;text-align:right"></td>
+    <td style="padding:5px 8px;font-size:12px;color:#facc15;text-align:right;font-weight:600" class="rt-tl">—</td>
+    <td style="padding:5px 8px;font-size:11px;color:#60a5fa;text-align:right" class="rt-usd">—</td>
+    <td style="padding:5px 8px;font-size:11px;color:#475569;text-align:right" class="rt-pct">—</td>
+    <td style="padding:5px 4px;text-align:center"><button onclick="document.getElementById('rtrow-${id}').remove();rtHesapla();" style="background:#ef444420;border:none;color:#f87171;padding:3px 7px;border-radius:5px;cursor:pointer;font-size:12px">×</button></td>`;
+  tbody.appendChild(tr);
+}
+
+function rtHesapla(){
+  const kurUSD=parseFloat(document.getElementById('rtKurUSD').value)||32.5;
+  const kurEUR=parseFloat(document.getElementById('rtKurEUR').value)||35.2;
+  const ozgul=parseFloat(document.getElementById('rtOzgul').value)||1.30;
+  const kar=parseFloat(document.getElementById('rtKar').value)||30;
+  let totKg=0,totTL=0,adlar=[];
+  document.querySelectorAll('#rtHammaddeTbody tr').forEach(tr=>{
+    const kg=parseFloat(tr.querySelector('.rt-kg')?.value)||0;
+    const fp=parseFloat(tr.querySelector('.rt-fiyat')?.value)||0;
+    const tl=kg*fp;
+    totKg+=kg; totTL+=tl;
+    adlar.push({ad:tr.querySelector('input[type=text]')?.value||'?',tl});
+    tr.querySelector('.rt-tl').textContent='₺'+rtFmt(tl);
+    tr.querySelector('.rt-usd').textContent=',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
+</script>
+</body>
+</html>
++rtFmt(tl/kurUSD,3);
+  });
+  document.querySelectorAll('#rtHammaddeTbody tr').forEach((tr,i)=>{
+    const tl=parseFloat(tr.querySelector('.rt-tl')?.textContent.replace(/[₺,]/g,'')||0)||0;
+    tr.querySelector('.rt-pct').textContent=totTL>0?(tl/totTL*100).toFixed(1)+'%':'0%';
+  });
+  document.getElementById('rtFtKg').textContent=rtFmt(totKg,2)+' kg';
+  document.getElementById('rtFtTL').textContent='₺'+rtFmt(totTL);
+  document.getElementById('rtFtUSD').textContent=',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
+</script>
+</body>
+</html>
++rtFmt(totTL/kurUSD,2);
+  document.getElementById('rtSarjOzet').textContent='Şarj: '+rtFmt(totKg,1)+' kg | kg: ₺'+rtFmt(totKg>0?totTL/totKg:0);
+  const kgM=totKg>0?totTL/totKg:0;
+  const kgS=kgM*(1+kar/100);
+  const kgL=kgS*1.15;
+  document.getElementById('rtResKgTL').textContent='₺'+rtFmt(kgM);
+  document.getElementById('rtResKgUSD').textContent=',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
+</script>
+</body>
+</html>
++rtFmt(kgM/kurUSD,3);
+  document.getElementById('rtResSarjTL').textContent='₺'+rtFmt(totTL);
+  document.getElementById('rtResKgSatis').textContent='₺'+rtFmt(kgS);
+  const sorted=adlar.sort((a,b)=>b.tl-a.tl).slice(0,5);
+  document.getElementById('rtBilesim').innerHTML=sorted.map(a=>{
+    const pct=totTL>0?a.tl/totTL*100:0;
+    return `<div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:#94a3b8">${a.ad}</span><span style="color:#facc15">${pct.toFixed(1)}%</span></div><div style="background:#0f172a;border-radius:4px;height:5px"><div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:4px"></div></div></div>`;
+  }).join('');
+  const tbody=document.getElementById('rtKalinlikTbody');
+  tbody.innerHTML='';
+  RT_KALINLIKLAR.forEach(k=>{
+    const m2A=k*ozgul;
+    const m2M=kgM*m2A,m2S=kgS*m2A,m2L=kgL*m2A;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="padding:7px 10px;font-size:12px;font-weight:700;color:#f1f5f9;border-bottom:1px solid #1e293b">${k} mm</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#94a3b8;border-bottom:1px solid #1e293b">${rtFmt(m2A,3)}</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#facc15;font-weight:700;border-bottom:1px solid #1e293b">₺${rtFmt(m2M)}</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#4ade80;font-weight:700;border-bottom:1px solid #1e293b">₺${rtFmt(m2S)}</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#fb923c;font-weight:700;border-bottom:1px solid #1e293b">₺${rtFmt(m2L)}</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#60a5fa;border-bottom:1px solid #1e293b">${rtFmt(m2M/kurUSD,3)}</td>
+      <td style="padding:7px 10px;font-size:12px;text-align:center;color:#34d399;border-bottom:1px solid #1e293b">${rtFmt(m2S/kurUSD,3)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function rtKaydet(){
+  const ad=document.getElementById('rtAdi').value.trim();
+  if(!ad){alert('Reçete adı giriniz!');return;}
+  const satirlar=[...document.querySelectorAll('#rtHammaddeTbody tr')].map(tr=>({
+    ad:tr.querySelector('input[type=text]')?.value||'',
+    kg:parseFloat(tr.querySelector('.rt-kg')?.value)||0,
+    fiyat:parseFloat(tr.querySelector('.rt-fiyat')?.value)||0
+  }));
+  const r={id:Date.now(),ad,tip:document.getElementById('rtTip').value,
+    sarj:document.getElementById('rtSarj').value,ozgul:document.getElementById('rtOzgul').value,
+    kar:document.getElementById('rtKar').value,kurUSD:document.getElementById('rtKurUSD').value,
+    kurEUR:document.getElementById('rtKurEUR').value,satirlar,tarih:new Date().toLocaleDateString('tr-TR')};
+  const idx=rtReceteler.findIndex(x=>x.ad===ad);
+  if(idx>=0)rtReceteler[idx]=r;else rtReceteler.push(r);
+  localStorage.setItem('geoser_rt_receteler',JSON.stringify(rtReceteler));
+  rtRenderKayitlilar();
+  alert('✅ Kaydedildi: '+ad);
+}
+
+function rtYukle(id){
+  const r=rtReceteler.find(x=>x.id===id);if(!r)return;
+  document.getElementById('rtAdi').value=r.ad;
+  document.getElementById('rtTip').value=r.tip||'geomembran_pvc';
+  document.getElementById('rtSarj').value=r.sarj;
+  document.getElementById('rtOzgul').value=r.ozgul;
+  document.getElementById('rtKar').value=r.kar;
+  document.getElementById('rtKurUSD').value=r.kurUSD;
+  document.getElementById('rtKurEUR').value=r.kurEUR;
+  const tbody=document.getElementById('rtHammaddeTbody');
+  tbody.innerHTML='';
+  r.satirlar.forEach(s=>rtSatirEkleVeri(s.ad,s.kg,s.fiyat));
+  rtHesapla();
+}
+
+function rtSil(id){
+  if(!confirm('Reçete silinsin mi?'))return;
+  rtReceteler=rtReceteler.filter(x=>x.id!==id);
+  localStorage.setItem('geoser_rt_receteler',JSON.stringify(rtReceteler));
+  rtRenderKayitlilar();
+}
+
+function rtYeni(){
+  document.getElementById('rtAdi').value='';
+  document.getElementById('rtTip').value='geomembran_pvc';
+  rtTipiDegistir();
+}
+
+function rtRenderKayitlilar(){
+  const el=document.getElementById('rtKayitlilar');
+  if(!el)return;
+  if(!rtReceteler.length){el.innerHTML='<div style="color:#475569;font-size:12px">Henüz kayıtlı reçete yok.</div>';return;}
+  el.innerHTML=rtReceteler.map(r=>`<div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="rtYukle(${r.id})">
+    <div><div style="font-size:13px;font-weight:600;color:#f1f5f9">${r.ad}</div>
+    <div style="font-size:11px;color:#64748b;margin-top:2px">${r.tarih} · %${r.kar} Kar</div></div>
+    <button onclick="event.stopPropagation();rtSil(${r.id})" style="background:#ef444420;border:none;color:#f87171;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px">Sil</button>
+  </div>`).join('');
+}
+// ===== REÇETE MODÜLİ SONU =====
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));});
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('loginEmail').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});});
 </script>
