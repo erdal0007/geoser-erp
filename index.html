@@ -383,6 +383,14 @@ function showSection(id,el){
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function initApp(){
+  // Eski örnek verileri temizle
+  ['products','rawMaterials','recipes','orders','production','quality','shipments'].forEach(function(k){
+    var d = JSON.parse(localStorage.getItem('geoser_'+k)||'[]');
+    // Eğer demo data varsa (Plastik Boru veya Polipropilen) sil
+    if(Array.isArray(d) && d.length>0 && d[0] && (String(d[0].name||'').includes('Plastik')||String(d[0].name||'').includes('Polipropilen'))){
+      localStorage.removeItem('geoser_'+k);
+    }
+  });
   loadData();
   renderDashboard();
   populateSelects();
