@@ -120,8 +120,8 @@
       <p style="color:#64748b;font-size:13px;margin:6px 0 0">Kurumsal Kaynak Planlama Sistemi</p>
     </div>
     <div id="loginAlert"></div>
-    <div class="form-group"><label class="label">E-posta</label><input type="email" id="loginEmail" placeholder="ornek@geoser.net" value="erdal@geoser.net"></div>
-    <div class="form-group"><label class="label">Şifre</label><input type="password" id="loginPass" placeholder="••••••••" value="Geoser2026!"></div>
+    <div class="form-group"><label class="label">E-posta</label><input type="email" id="loginEmail" placeholder="ornek@geoser.net"></div>
+    <div class="form-group"><label class="label">Şifre</label><input type="password" id="loginPass" placeholder="••••••••"></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="doLogin()">🔐 Giriş Yap</button>
     <p style="text-align:center;color:#475569;font-size:12px;margin-top:20px">© 2026 GEOSER A.Ş. — Tüm hakları saklıdır.</p>
   </div>
@@ -394,8 +394,8 @@
     <div class="form-group"><label class="label">Durum</label><select id="uStatus"><option>Aktif</option><option>Pasif</option></select></div>
   </div>
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" onclick="closeModal('userModal')">İptal</button><button class="btn btn-primary" onclick="saveUser()">💾 Kaydet</button></div>
-</div></div><script>
-const USERS=[{id:1,name:'Erdal Güçin',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status:'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre Mühendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'Gürsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
+</div></div><script
+const USERS=[{id:1,name:'Erdal Güçin',email:'erdal@geoser.net',pass:'Geoser2026!',role:'super_admin',status'Aktif',lastLogin:''},{id:2,name:'Cengizhan Admin',email:'cengizhan@geoser.net',pass:'Geoser2026!',role:'admin',status:'Aktif',lastLogin:''},{id:3,name:'Emre Mühendis',email:'emre@geoser.net',pass:'Geoser2026!',role:'engineer',status:'Aktif',lastLogin:''},{id:4,name:'Gürsel Fabrika',email:'gursel@geoser.net',pass:'Geoser2026!',role:'factory_manager',status:'Aktif',lastLogin:''},{id:5,name:'Murat Prod',email:'murat@geoser.net',pass:'Geoser2026!',role:'production_manager',status:'Aktif',lastLogin:''}];
 const ROLE_LABELS={super_admin:'Süper Admin',admin:'Admin',engineer:'Mühendis',factory_manager:'Fabrika Müdürü',production_manager:'Üretim Müdürü'};
 const APP={currentUser:null,products:[],rawMaterials:[],recipes:[],orders:[],production:[],quality:[],shipments:[],logs:[],settings:{companyName:'GEOSER A.Ş.',address:'İstanbul, Türkiye',phone:'+90 212 000 0000',email:'info@geoser.net',currency:'₺',taxRate:18},nextId:{product:100,raw:100,recipe:100,order:1000,production:5000,quality:9000,shipment:7000,user:10}};
 const LS=k=>{try{return JSON.parse(localStorage.getItem('geoser_'+k)||'null');}catch(e){return null;}};
