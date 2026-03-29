@@ -425,7 +425,7 @@ function doLogin(){
   document.getElementById('navCRM').style.display='block';
   document.getElementById('navMyStats').style.display='block';
   var _isMkt=['dis_ticaret','ic_pazar'].includes(u.role);
-  if(_isMkt){var _pSecs=['products','rawmaterials','receteler','orders','production','quality','sevkiyat','reports','recete'];document.querySelectorAll('.nav-item').forEach(function(nel){var oc=nel.getAttribute('onclick')||'';var m=oc.match(/showSection\('([^']+)'/);if(m&&_pSecs.indexOf(m[1])>=0){nel.style.display='none';}});}
+  if(_isMkt){var _pSecs=['products','rawmaterials','receteler','recipes','orders','production','quality','sevkiyat','shipment','reports','recete','users','settings','logs'];document.querySelectorAll('.nav-item').forEach(function(nel){var oc=nel.getAttribute('onclick')||'';var m=oc.match(/showSection\('([^']+)'/);if(m&&_pSecs.indexOf(m[1])>=0){nel.style.display='none';}});}
   addLog('Sistem','Giriş','Kullanıcı giriş yaptı');startClock();initApp();
   if(_isMkt){setTimeout(function(){showSection('crm',document.getElementById('navCRM'));renderCustomers();},200);}var _isMobile=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);if(_isMobile){initMobileMusic();}else{setTimeout(startMusic,1500);}
 }
