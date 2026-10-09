@@ -196,7 +196,7 @@ function showLogin(msg){
  <label class="chk"><input id="l_rem" type="checkbox" checked> Bu cihazda oturumu açık tut</label>
  <div class="lerr" id="lerr">${msg||''}</div>
  <button class="btn pri" type="submit" id="lbtn">Giriş yap</button>
- <div class="actions" style="justify-content:space-between"><button class="btn sm" type="button" onclick="sifremiUnuttum()">Şifremi unuttum</button><button class="btn sm" type="button" onclick="ilkKurulum()">İlk kurulum (yönetici hesabı)</button></div></form>`;
+ <div class="actions" style="justify-content:space-between"><button class="btn sm" type="button" onclick="sifremiUnuttum()">Şifremi unuttum</button><button class="btn sm" type="button" onclick="ilkKurulum()" style="border:0;background:none;color:var(--muted);font-size:11px;text-decoration:underline">Yönetici hesabı oluştur (yalnızca ilk kurulum)</button></div></form>`;
  d.hidden=false;
  document.getElementById('lform').onsubmit=async e=>{ e.preventDefault(); const em=document.getElementById('l_email').value.trim().toLowerCase(); const pw=document.getElementById('l_pw').value; const btn=document.getElementById('lbtn'); btn.disabled=true; btn.textContent='Giriş yapılıyor…';
   try{ await auth.setPersistence(document.getElementById('l_rem').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION); await auth.signInWithEmailAndPassword(em,pw); }
