@@ -95,6 +95,13 @@ h2{font-size:16px;font-weight:600}
 .blogo{width:64px;height:64px;border-radius:50%;background:#fff;display:block;margin-bottom:8px}
 .brand.row{display:flex;align-items:center;gap:12px}.brand.row .blogo{margin:0;width:52px;height:52px}
 .lbox .blogo{width:110px;height:110px;margin:0 auto 10px}
+.qsbtn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 10px;color:var(--rail-muted);cursor:pointer;margin:4px 0 6px;font-size:12px}.qsbtn kbd{margin-left:auto;font:10px var(--font-mono);border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:1px 5px}.qsbtn:hover{color:#fff}
+.qsr{margin-top:8px;max-height:50vh;overflow:auto}.qi{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer}.qi:hover{background:var(--surface-2)}.qi span{color:var(--muted);font-size:12px;white-space:nowrap}
+.aichat{display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow:auto;padding:4px}.msg{padding:10px 14px;border-radius:12px;max-width:85%;line-height:1.5;white-space:normal}.msg.user{align-self:flex-end;background:var(--accent);color:var(--accent-fg);border-bottom-right-radius:4px}.msg.assistant{align-self:flex-start;background:var(--surface-2);border-bottom-left-radius:4px}
+.tile,.card,.pcard{transition:transform .15s,box-shadow .15s}.tile:hover,.pcard:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(11,42,31,.10)}
+.btn{transition:background .12s,transform .08s}.btn:active{transform:scale(.98)}
+.tile .val{letter-spacing:-.01em}
+@media (prefers-reduced-motion:reduce){.tile,.card,.pcard,.btn{transition:none}}
 .thumb{width:44px;height:34px;object-fit:cover;border-radius:5px;background:var(--surface-2);display:block}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{border:0;background:var(--surface);padding:6px 12px;cursor:pointer}
@@ -214,6 +221,32 @@ en:{
 'Firma bilgileri, varsayılanlar ve veri yedeği':'Company details, defaults and data backup','Firma':'Company','Firma adı':'Company name','Varsayılan KDV (PDV) %':'Default VAT (PDV) %','Veri yedeği':'Data backup','Veriler Firestore bulutunda saklanır ve tüm cihazlarda eşitlenir. Ek güvence olarak düzenli JSON yedeği alıp saklayın; geri yüklemek için aşağıya yapıştırın.':'Data is stored in the Firestore cloud and synced across devices. As extra protection, take regular JSON backups; paste below to restore.','Yedeği kopyala (JSON)':'Copy backup (JSON)','Yedeği göster':'Show backup','Geri yüklemek için yedek JSON\'u buraya yapıştırın':'Paste backup JSON here to restore','Yedeği geri yükle':'Restore backup','Örnek verileri temizle':'Clear sample data','Tüm verileri sil':'Delete all data','Ayarlar kaydedildi':'Settings saved','Yedek panoya kopyalandı':'Backup copied to clipboard','Pano kullanılamadı; yedek aşağıda gösterildi':'Clipboard unavailable; backup shown below','Geçerli bir yedek JSON değil':'Not a valid backup JSON','Geri yükleme':'Restore','Mevcut veriler yedekle değiştirilecek. Devam edilsin mi?':'Current data will be replaced by the backup. Continue?','Evet, yükle':'Yes, restore','Yedek yüklendi':'Backup restored','Örnek cariler, ürünler, belgeler, araçlar ve depolar silinecek; firma ayarları korunur.':'Sample accounts, products, documents, vehicles and warehouses will be deleted; company settings are kept.','Temizle':'Clear','Temiz başlangıç hazır':'Clean start ready','Her şey silinecek ve uygulama örnek verilerle yeniden açılacak.':'Everything will be deleted and the app reopens with sample data.',
 'Kullanıcılar & giriş':'Users & sign-in','Rol':'Role','Şifremi değiştir':'Change my password','Sıfırlama e-postası':'Reset email','Erişimi kaldır':'Remove access','Giriş Firebase Authentication ile yapılır; şifreler Google altyapısında saklanır, bu dosyada veya tarayıcıda tutulmaz. Veriler Firestore\'da (bulut) durur ve tüm cihazlarda anında eşitlenir; internet kesilirse çevrimdışı önbellekten çalışır, bağlantı gelince gönderir.':'Sign-in uses Firebase Authentication; passwords are stored by Google, never in this file or the browser. Data lives in Firestore (cloud) and syncs instantly across devices; offline it works from cache and sends when back online.','Kullanıcıyı düzenle':'Edit user','Yeni kullanıcı':'New user','Ad Soyad':'Full name','Geçici şifre (en az 10 karakter; kullanıcı ilk girişte değiştirsin)':'Temporary password (min. 10 characters; user should change at first sign-in)','E-posta gerekli':'Email required','Kullanıcı güncellendi':'User updated','Şifre en az 10 karakter olmalı':'Password must be at least 10 characters','Kullanıcı oluşturuldu:':'User created:','Bu e-posta zaten kayıtlı (Firebase). Erişim için yöneticiye kullanıcı kaydı ekletin.':'This email already exists (Firebase). Ask the administrator to add a user record.','Mevcut şifre':'Current password','Yeni şifre (en az 10 karakter)':'New password (min. 10 characters)','Yeni şifre (tekrar)':'New password (repeat)','Şifreler eşleşmiyor':'Passwords do not match','Şifre değiştirildi':'Password changed','Mevcut şifre hatalı':'Current password is wrong','Sıfırlama e-postası gönderildi:':'Reset email sent:','kullanıcısının CRM erişimi kaldırılacak (giriş yapsa bile veri göremez).':'will lose CRM access (cannot see data even if signed in).','Hata:':'Error:',
 'Dil':'Language',
+'Yapay Zeka':'AI Assistant',
+'Yapay Zeka Asistanı':'AI Assistant',
+'CRM verilerine göre soru sor, analiz ve özet al':'Ask questions, get analysis and summaries from your CRM data',
+'Sohbeti temizle':'Clear chat',
+'Sorunu yaz…':'Type your question…',
+'Sor':'Ask',
+'Düşünüyor…':'Thinking…',
+'AI e-posta':'AI email',
+'AI e-posta metni':'AI email text',
+'Yazılıyor…':'Writing…',
+'Kopyala':'Copy',
+'Kopyalandı':'Copied',
+'Hızlı ara':'Quick search',
+'Ara: cari, ürün, belge, plaka…':'Search: account, product, document, plate…',
+'Esc kapatır · Ctrl+K açar':'Esc closes · Ctrl+K opens',
+'Sonuç yok':'No results',
+'Tedarikçiler':'Suppliers',
+'Müşteriler':'Customers',
+'Bu ay toplam satış ve tahsilat ne kadar?':'Total sales and collections this month?',
+'Vadesi geçmiş alacakları müşteri bazında listele':'List overdue receivables by customer',
+'Hangi ürünlerde stok kritik, ne sipariş etmeliyim?':'Which products are low on stock, what should I order?',
+'En çok satan 5 ürün ve müşteri?':'Top 5 products and customers?',
+'Önümüzdeki 60 günde hangi sigorta, muayene ve kira kontratları bitiyor?':'Which insurance, inspections and leases expire in the next 60 days?',
+'Nakit akışı özeti ve riskler':'Cash-flow summary and risks',
+'Örnek: "Putevi Srbije’nin bakiyesi ve son hareketleri", "Ekim ayı kâr tahmini", "Bu teklif için e-posta metni yaz". Asistan yalnızca CRM’deki verileri görür; veri değiştirmez.':'Examples: "Balance and recent activity of Putevi Srbije", "October profit estimate", "Write an email for this quote". The assistant only sees CRM data; it never changes it.',
+'Veriler yalnızca cevap üretmek için gönderilir, modelin eğitiminde kullanılmaz. Sunucu tarafında Firebase oturumu doğrulanır.':'Data is sent only to produce the answer and is not used for model training. Your Firebase session is verified server-side.',
 'Teklif & Proforma':'Quotes & Proforma',
 'Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür':'Prepare customer quotations, convert to proforma and sales',
 '+ Yeni teklif':'+ New quote',
@@ -308,6 +341,32 @@ sr:{
 'Firma bilgileri, varsayılanlar ve veri yedeği':'Podaci o firmi, podrazumevane vrednosti i rezervna kopija','Firma':'Firma','Firma adı':'Naziv firme','Varsayılan KDV (PDV) %':'Podrazumevani PDV %','Veri yedeği':'Rezervna kopija','Veriler Firestore bulutunda saklanır ve tüm cihazlarda eşitlenir. Ek güvence olarak düzenli JSON yedeği alıp saklayın; geri yüklemek için aşağıya yapıştırın.':'Podaci se čuvaju u Firestore oblaku i sinhronizuju na svim uređajima. Kao dodatnu zaštitu redovno pravite JSON kopiju; za vraćanje nalepite ispod.','Yedeği kopyala (JSON)':'Kopiraj kopiju (JSON)','Yedeği göster':'Prikaži kopiju','Geri yüklemek için yedek JSON\'u buraya yapıştırın':'Nalepite JSON kopiju ovde za vraćanje','Yedeği geri yükle':'Vrati kopiju','Örnek verileri temizle':'Obriši probne podatke','Tüm verileri sil':'Obriši sve podatke','Ayarlar kaydedildi':'Podešavanja sačuvana','Yedek panoya kopyalandı':'Kopija je kopirana','Pano kullanılamadı; yedek aşağıda gösterildi':'Klipbord nedostupan; kopija je prikazana ispod','Geçerli bir yedek JSON değil':'Nije ispravna JSON kopija','Geri yükleme':'Vraćanje','Mevcut veriler yedekle değiştirilecek. Devam edilsin mi?':'Trenutni podaci biće zamenjeni kopijom. Nastaviti?','Evet, yükle':'Da, vrati','Yedek yüklendi':'Kopija vraćena','Örnek cariler, ürünler, belgeler, araçlar ve depolar silinecek; firma ayarları korunur.':'Probni partneri, proizvodi, dokumenti, vozila i magacini biće obrisani; podešavanja firme ostaju.','Temizle':'Obriši','Temiz başlangıç hazır':'Čist početak spreman','Her şey silinecek ve uygulama örnek verilerle yeniden açılacak.':'Sve će biti obrisano i aplikacija se otvara sa probnim podacima.',
 'Kullanıcılar & giriş':'Korisnici i prijava','Rol':'Uloga','Şifremi değiştir':'Promeni lozinku','Sıfırlama e-postası':'E-pošta za reset','Erişimi kaldır':'Ukloni pristup','Giriş Firebase Authentication ile yapılır; şifreler Google altyapısında saklanır, bu dosyada veya tarayıcıda tutulmaz. Veriler Firestore\'da (bulut) durur ve tüm cihazlarda anında eşitlenir; internet kesilirse çevrimdışı önbellekten çalışır, bağlantı gelince gönderir.':'Prijava preko Firebase Authentication; lozinke čuva Google, nikad ova datoteka ili pregledač. Podaci su u Firestore oblaku i sinhronizuju se odmah; bez interneta radi iz keša i šalje kad se veza vrati.','Kullanıcıyı düzenle':'Izmeni korisnika','Yeni kullanıcı':'Novi korisnik','Ad Soyad':'Ime i prezime','Geçici şifre (en az 10 karakter; kullanıcı ilk girişte değiştirsin)':'Privremena lozinka (min. 10 znakova; promeniti pri prvoj prijavi)','E-posta gerekli':'E-pošta je obavezna','Kullanıcı güncellendi':'Korisnik ažuriran','Şifre en az 10 karakter olmalı':'Lozinka mora imati bar 10 znakova','Kullanıcı oluşturuldu:':'Korisnik kreiran:','Bu e-posta zaten kayıtlı (Firebase). Erişim için yöneticiye kullanıcı kaydı ekletin.':'Ova e-pošta već postoji (Firebase). Administrator treba da doda korisnički zapis.','Mevcut şifre':'Trenutna lozinka','Yeni şifre (en az 10 karakter)':'Nova lozinka (min. 10 znakova)','Yeni şifre (tekrar)':'Nova lozinka (ponovo)','Şifreler eşleşmiyor':'Lozinke se ne poklapaju','Şifre değiştirildi':'Lozinka promenjena','Mevcut şifre hatalı':'Trenutna lozinka je pogrešna','Sıfırlama e-postası gönderildi:':'E-pošta za reset poslata:','kullanıcısının CRM erişimi kaldırılacak (giriş yapsa bile veri göremez).':'gubi pristup CRM-u (ne vidi podatke ni kad se prijavi).','Hata:':'Greška:',
 'Dil':'Jezik',
+'Yapay Zeka':'AI asistent',
+'Yapay Zeka Asistanı':'AI asistent',
+'CRM verilerine göre soru sor, analiz ve özet al':'Postavljajte pitanja, dobijte analize i preglede iz CRM podataka',
+'Sohbeti temizle':'Obriši razgovor',
+'Sorunu yaz…':'Upišite pitanje…',
+'Sor':'Pitaj',
+'Düşünüyor…':'Razmišlja…',
+'AI e-posta':'AI e-pošta',
+'AI e-posta metni':'AI tekst e-pošte',
+'Yazılıyor…':'Piše…',
+'Kopyala':'Kopiraj',
+'Kopyalandı':'Kopirano',
+'Hızlı ara':'Brza pretraga',
+'Ara: cari, ürün, belge, plaka…':'Pretraga: partner, proizvod, dokument, tablice…',
+'Esc kapatır · Ctrl+K açar':'Esc zatvara · Ctrl+K otvara',
+'Sonuç yok':'Nema rezultata',
+'Tedarikçiler':'Dobavljači',
+'Müşteriler':'Kupci',
+'Bu ay toplam satış ve tahsilat ne kadar?':'Ukupna prodaja i naplata ovog meseca?',
+'Vadesi geçmiş alacakları müşteri bazında listele':'Prikaži dospela potraživanja po kupcu',
+'Hangi ürünlerde stok kritik, ne sipariş etmeliyim?':'Koji proizvodi su na kritičnim zalihama, šta naručiti?',
+'En çok satan 5 ürün ve müşteri?':'Top 5 proizvoda i kupaca?',
+'Önümüzdeki 60 günde hangi sigorta, muayene ve kira kontratları bitiyor?':'Koja osiguranja, registracije i ugovori ističu u narednih 60 dana?',
+'Nakit akışı özeti ve riskler':'Pregled novčanog toka i rizici',
+'Örnek: "Putevi Srbije’nin bakiyesi ve son hareketleri", "Ekim ayı kâr tahmini", "Bu teklif için e-posta metni yaz". Asistan yalnızca CRM’deki verileri görür; veri değiştirmez.':'Primeri: "Saldo i poslednje promene Putevi Srbije", "Procena dobiti za oktobar", "Napiši e-poštu za ovu ponudu". Asistent vidi samo CRM podatke; ne menja ih.',
+'Veriler yalnızca cevap üretmek için gönderilir, modelin eğitiminde kullanılmaz. Sunucu tarafında Firebase oturumu doğrulanır.':'Podaci se šalju samo radi odgovora i ne koriste se za obuku modela. Firebase sesija se proverava na serveru.',
 'Teklif & Proforma':'Ponude i profakture',
 'Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür':'Pripremi ponudu kupcu, pretvori u profakturu i prodaju',
 '+ Yeni teklif':'+ Nova ponuda',
@@ -515,11 +574,13 @@ const ICON={
  arac:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-5h9l2 5M3 13v5h2M16 13h5v5h-2M5 18h11"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
  depo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-6 9 6v11H3z"/><path d="M8 21v-7h8v7M8 17h8"/></svg>',
  rapor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M6 16V9M11 16V4M16 16v-6"/></svg>',
+ tedarikci:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>',
+ ai:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.6L12 15l-1.8-4.4L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8zM5 16l.6 1.4 1.4.6-1.4.6L5 20l-.6-1.4L3 18l1.4-.6z"/></svg>',
  teklif:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h2"/></svg>',
  ayar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.3 2h-4l-.4 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.5h4l.4-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>'
 };
 const NAV=[
- {g:'Genel'},{id:'ozet',t:'Özet',i:'ozet'},{id:'cari',t:'Cariler',i:'cari'},
+ {g:'Genel'},{id:'ozet',t:'Özet',i:'ozet'},{id:'musteri',t:'Müşteriler',i:'cari'},{id:'tedarikci',t:'Tedarikçiler',i:'tedarikci'},{id:'ai',t:'Yapay Zeka',i:'ai'},
  {g:'Ticaret'},{id:'satis',t:'Satış / Giden Mal',i:'satis'},{id:'alis',t:'Alış / Gelen Mal',i:'alis'},{id:'kasa',t:'Kasa & Tahsilat',i:'kasa'},{id:'teklif',t:'Teklif & Proforma',i:'teklif'},
  {g:'Ürün'},{id:'stok',t:'Stok',i:'stok'},{id:'fiyat',t:'Fiyat Listesi',i:'fiyat'},
  {g:'Varlıklar'},{id:'arac',t:'Araçlar',i:'arac'},{id:'depo',t:'Depo & Kira',i:'depo'},
@@ -698,7 +759,7 @@ let VIEW='ozet', PARAM=null;
 function toast(m){ const t=$('#toast'); t.textContent=tr(m); t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
 function go(v,p){ VIEW=v; PARAM=p||null; render(); window.scrollTo(0,0); }
 function renderNav(){
- $('#nav').innerHTML=NAV.map(n=>n.g?`<div class="grp">${n.g}</div>`:`<button class="${VIEW===n.id?'on':''}" onclick="go('${n.id}')">${ICON[n.i]}<span>${n.t}</span></button>`).join('');
+ $('#nav').innerHTML=`<button class="qsbtn" onclick="aramaAc()"><span>🔍</span><span>Hızlı ara</span><kbd>Ctrl K</kbd></button>`+NAV.map(n=>n.g?`<div class="grp">${n.g}</div>`:`<button class="${VIEW===n.id||(VIEW==='cari'&&((n.id==='musteri'&&cariFiltre.tip==='musteri')||(n.id==='tedarikci'&&cariFiltre.tip==='tedarikci')))?'on':''}" onclick="go('${n.id}')">${ICON[n.i]}<span>${n.t}</span></button>`).join('');
 }
 function page(title,sub,actions,body){
  return `<div class="topbar"><div><h1>${title}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div><div class="actions">${actions||''}</div></div>${body}`;
@@ -766,7 +827,7 @@ let cariFiltre={q:'',tip:''};
 function vCari(){
  if(PARAM) return vCariDetay(PARAM);
  const rows=DB.cari.filter(c=>(!cariFiltre.tip||c.tip===cariFiltre.tip)&&(!cariFiltre.q||(c.ad+' '+c.sehir+' '+(c.pib||'')).toLowerCase().includes(cariFiltre.q.toLowerCase()))).sort((a,b)=>a.ad.localeCompare(b.ad,'tr'));
- return page('Cariler','Müşteriler ve tedarikçiler, güncel bakiyeleriyle',`<button class="btn pri" onclick="editCari()">+ Yeni cari</button>`,`
+ return page(cariFiltre.tip==='musteri'?'Müşteriler':cariFiltre.tip==='tedarikci'?'Tedarikçiler':'Cariler','Müşteriler ve tedarikçiler, güncel bakiyeleriyle',`<button class="btn pri" onclick="editCari()">+ Yeni cari</button>`,`
  <div class="card"><header><div class="search"><input id="cq" placeholder="Ara: ad, şehir, PIB" value="${esc(cariFiltre.q)}" oninput="cariFiltre.q=this.value;render();document.getElementById('cq').focus();document.getElementById('cq').setSelectionRange(99,99)" style="width:240px">${sel('ctip',[{v:'',t:'Tümü'},{v:'musteri',t:'Müşteriler'},{v:'tedarikci',t:'Tedarikçiler'}],cariFiltre.tip,`onchange="cariFiltre.tip=this.value;render()" style="width:150px"`)}</div><span class="note">${rows.length} kayıt</span></header>
  ${tbl([{h:'Ad',f:c=>`<b>${esc(c.ad)}</b>`},{h:'Tür',f:c=>c.tip==='musteri'?'<span class="pill acc">Müşteri</span>':'<span class="pill">Tedarikçi</span>'},{h:'Şehir',f:c=>esc(c.sehir)+(c.ulke?', '+esc(c.ulke):'')},{h:'PIB / VKN',f:c=>esc(c.pib||'—')},{h:'Vade',r:1,f:c=>(c.vade||0)+' gün'},{h:'Bakiye',r:1,f:c=>pillBakiye(cariBakiye(c.id))}],rows,{onRow:c=>`go('cari','${c.id}')`})}</div>`);
 }
@@ -776,7 +837,7 @@ function vCariDetay(id){
  const odemeler=DB.kasa.filter(k=>k.cariId===id);
  let bak=0;
  const ekstre=[...belgeler.map(b=>({t:b.tarih,a:(c.tip==='musteri'?'Satış ':'Alış ')+b.no,borc:belgeToplam(b),alacak:0})),...odemeler.map(k=>({t:k.tarih,a:(k.tip==='tahsilat'?'Tahsilat':'Ödeme')+' · '+(k.hesap==='banka'?'Banka':'Kasa')+(k.aciklama?' · '+k.aciklama:''),borc:0,alacak:+k.tutar}))].sort((a,b)=>a.t.localeCompare(b.t)).map(r=>{ bak+=r.borc-r.alacak; return {...r,bak}; });
- return page(esc(c.ad),`${c.tip==='musteri'?'Müşteri':'Tedarikçi'} · ${esc(c.sehir||'')} ${esc(c.ulke||'')}`,`<button class="btn" onclick="go('cari')">← Liste</button><button class="btn" onclick="editCari('${id}')">Düzenle</button>${c.tip==='musteri'?`<button class="btn pri" onclick="editSatis(null,'${id}')">+ Satış</button><button class="btn" onclick="editKasa('tahsilat','${id}')">+ Tahsilat</button>`:`<button class="btn pri" onclick="editAlis(null,'${id}')">+ Alış</button><button class="btn" onclick="editKasa('odeme','${id}')">+ Ödeme</button>`}<button class="btn danger" onclick="delCari('${id}')">Sil</button>`,`
+ return page(esc(c.ad),`${c.tip==='musteri'?'Müşteri':'Tedarikçi'} · ${esc(c.sehir||'')} ${esc(c.ulke||'')}`,`<button class="btn" onclick="go(cariFiltre.tip==='tedarikci'?'tedarikci':'musteri')">← Liste</button><button class="btn" onclick="editCari('${id}')">Düzenle</button>${c.tip==='musteri'?`<button class="btn pri" onclick="editSatis(null,'${id}')">+ Satış</button><button class="btn" onclick="editKasa('tahsilat','${id}')">+ Tahsilat</button>`:`<button class="btn pri" onclick="editAlis(null,'${id}')">+ Alış</button><button class="btn" onclick="editKasa('odeme','${id}')">+ Ödeme</button>`}<button class="btn danger" onclick="delCari('${id}')">Sil</button>`,`
  <div class="tiles"><div class="tile ${cariBakiye(id)>0?'bad':'good'}"><div class="lbl">Bakiye</div><div class="val num">${fmt(cariBakiye(id))}</div></div><div class="tile"><div class="lbl">Toplam ${c.tip==='musteri'?'satış':'alış'}</div><div class="val num">${fmt(belgeler.reduce((a,b)=>a+belgeToplam(b),0))}</div></div><div class="tile"><div class="lbl">Toplam ${c.tip==='musteri'?'tahsilat':'ödeme'}</div><div class="val num">${fmt(odemeler.reduce((a,k)=>a+ +k.tutar,0))}</div></div></div>
  <div class="grid2"><div class="card"><header><h2>Bilgiler</h2></header><div class="body"><dl class="kv"><dt>Adres</dt><dd>${esc(c.adres||'—')}</dd><dt>Telefon</dt><dd>${esc(c.tel||'—')}</dd><dt>E-posta</dt><dd>${esc(c.email||'—')}</dd><dt>PIB / VKN</dt><dd>${esc(c.pib||'—')}</dd><dt>Vade</dt><dd>${c.vade||0} gün</dd><dt>Notlar</dt><dd>${esc(c.notlar||'—')}</dd></dl></div></div>
  <div class="card"><header><h2>Cari ekstre</h2></header>${tbl([{h:'Tarih',f:r=>dstr(r.t)},{h:'Açıklama',f:r=>esc(r.a),wrap:1},{h:'Borç',r:1,f:r=>r.borc?fmt(r.borc):''},{h:'Alacak',r:1,f:r=>r.alacak?fmt(r.alacak):''},{h:'Bakiye',r:1,f:r=>fmt(r.bak)}],ekstre)}</div></div>`);
@@ -997,7 +1058,7 @@ function vTeklif(){
  return page('Teklif & Proforma','Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür',`<button class="btn pri" onclick="editTeklif(null,'teklif')">+ Yeni teklif</button><button class="btn" onclick="editTeklif(null,'proforma')">+ Doğrudan proforma</button>`,`
  <div class="tiles"><div class="tile warn"><div class="lbl">Açık teklifler</div><div class="val num">${acik.length}</div><div class="cap">${fmtCur(acik.reduce((a,t)=>a+tkTop(t),0),'EUR',acik)}</div></div><div class="tile good"><div class="lbl">Kabul edilen</div><div class="val num">${kabul.length}</div></div><div class="tile"><div class="lbl">Bu ay düzenlenen</div><div class="val num">${DB.teklif.filter(t=>ym(t.tarih)===bu).length}</div></div><div class="tile"><div class="lbl">Proformalar</div><div class="val num">${DB.teklif.filter(t=>t.tip==='proforma').length}</div></div></div>
  <div class="card"><header><div class="search">${sel('tf',[{v:'',t:'Tümü'},{v:'teklif',t:'Teklifler'},{v:'proforma',t:'Proformalar'},{v:'taslak',t:'Taslak'},{v:'gonderildi',t:'Gönderildi'},{v:'kabul',t:'Kabul'},{v:'red',t:'Red'}],tkFiltre,`onchange="tkFiltre=this.value;render()" style="width:180px"`)}</div><span class="note">${list.length} belge</span></header>
- ${tbl([{h:'No',f:t=>`<b>${esc(t.no)}</b><br><span class="pill ${t.tip==='proforma'?'acc':''}">${t.tip==='proforma'?'Proforma':'Teklif'}</span>`},{h:'Tarih',f:t=>dstr(t.tarih)},{h:'Müşteri',f:t=>esc(cariAd(t.cariId)),wrap:1},{h:'Kalem',f:t=>t.kalemler.map(k=>`${esc(k.ad||urunById(k.urunId)?.ad||'?')} × ${fmtQ(k.miktar)} ${esc(k.birim||'')}`).join('<br>'),wrap:1},{h:'Toplam',r:1,f:t=>`<b>${fmt(tkTop(t),t.para)}</b><br><span class="note">${fmt(tkNet(t),t.para)} + ${t.kdv||0}%</span>`},{h:'Geçerlilik',f:t=>dstr(addDays(t.tarih,+t.gecerlilik||0))},{h:'Durum',f:t=>`<span class="pill ${DURUM[t.durum]?.c||''}">${DURUM[t.durum]?.t||t.durum}</span>${t.satisId?`<br><span class="note">→ ${esc(DB.satis.find(s=>s.id===t.satisId)?.no||'')}</span>`:''}${t.proformaId?`<br><span class="note">→ ${esc(DB.teklif.find(s=>s.id===t.proformaId)?.no||'')}</span>`:''}`},{h:'',f:t=>`<div class="actions"><button class="btn sm pri" onclick="event.stopPropagation();yazdirTeklif('${t.id}')">Yazdır / PDF</button><button class="btn sm" onclick="event.stopPropagation();editTeklif('${t.id}')">Düzenle</button>${t.tip==='teklif'&&!t.proformaId?`<button class="btn sm" onclick="event.stopPropagation();proformayaDonustur('${t.id}')">Proformaya dönüştür</button>`:''}${t.durum!=='satis'?`<button class="btn sm" onclick="event.stopPropagation();satisaDonustur('${t.id}')">Satışa dönüştür</button>`:''}<button class="btn sm" onclick="event.stopPropagation();durumMenu('${t.id}')">Durum</button><button class="btn sm danger" onclick="event.stopPropagation();delTeklif('${t.id}')">Sil</button></div>`}],list,{empty:'Henüz teklif yok. "+ Yeni teklif" ile başlayın.'})}</div>`);
+ ${tbl([{h:'No',f:t=>`<b>${esc(t.no)}</b><br><span class="pill ${t.tip==='proforma'?'acc':''}">${t.tip==='proforma'?'Proforma':'Teklif'}</span>`},{h:'Tarih',f:t=>dstr(t.tarih)},{h:'Müşteri',f:t=>esc(cariAd(t.cariId)),wrap:1},{h:'Kalem',f:t=>t.kalemler.map(k=>`${esc(k.ad||urunById(k.urunId)?.ad||'?')} × ${fmtQ(k.miktar)} ${esc(k.birim||'')}`).join('<br>'),wrap:1},{h:'Toplam',r:1,f:t=>`<b>${fmt(tkTop(t),t.para)}</b><br><span class="note">${fmt(tkNet(t),t.para)} + ${t.kdv||0}%</span>`},{h:'Geçerlilik',f:t=>dstr(addDays(t.tarih,+t.gecerlilik||0))},{h:'Durum',f:t=>`<span class="pill ${DURUM[t.durum]?.c||''}">${DURUM[t.durum]?.t||t.durum}</span>${t.satisId?`<br><span class="note">→ ${esc(DB.satis.find(s=>s.id===t.satisId)?.no||'')}</span>`:''}${t.proformaId?`<br><span class="note">→ ${esc(DB.teklif.find(s=>s.id===t.proformaId)?.no||'')}</span>`:''}`},{h:'',f:t=>`<div class="actions"><button class="btn sm pri" onclick="event.stopPropagation();yazdirTeklif('${t.id}')">Yazdır / PDF</button><button class="btn sm" onclick="event.stopPropagation();aiTeklifEposta('${t.id}')">AI e-posta</button><button class="btn sm" onclick="event.stopPropagation();editTeklif('${t.id}')">Düzenle</button>${t.tip==='teklif'&&!t.proformaId?`<button class="btn sm" onclick="event.stopPropagation();proformayaDonustur('${t.id}')">Proformaya dönüştür</button>`:''}${t.durum!=='satis'?`<button class="btn sm" onclick="event.stopPropagation();satisaDonustur('${t.id}')">Satışa dönüştür</button>`:''}<button class="btn sm" onclick="event.stopPropagation();durumMenu('${t.id}')">Durum</button><button class="btn sm danger" onclick="event.stopPropagation();delTeklif('${t.id}')">Sil</button></div>`}],list,{empty:'Henüz teklif yok. "+ Yeni teklif" ile başlayın.'})}</div>`);
 }
 function fmtCur(v,cur,arr){ const paralar=[...new Set((arr||[]).map(t=>t.para))]; return paralar.length===1?fmt(v,paralar[0]):(paralar.length?paralar.map(p=>fmt((arr||[]).filter(t=>t.para===p).reduce((a,t)=>a+tkTop(t),0),p)).join(' · '):fmt(0,cur)); }
 function tkLineRows(kalemler){
@@ -1072,8 +1133,72 @@ function vFirmaEk(){
 function editBanka(id){ const b=id?DB.ayar.bankalar.find(x=>x.id===id):{para:'RSD'}; modal(id?'Hesabı düzenle':'Banka hesabı',fld('Banka adı',inp('banka',b.banka),0,1)+fld('Para birimi',sel('para',['RSD','EUR','USD','TRY'].map(x=>({v:x,t:x})),b.para))+fld('Hesap no (yerel)',inp('hesap',b.hesap))+fld('IBAN',inp('iban',b.iban))+fld('SWIFT / BIC',inp('swift',b.swift)),d=>{ if(!req(d,['banka'])) return false; if(id) Object.assign(b,d); else DB.ayar.bankalar.push({id:uid(),...d}); toast('Hesap kaydedildi'); }); }
 function resimAyar(inp_,alan){ const f=inp_.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{ const im=new Image(); im.onload=()=>{ const c=document.createElement('canvas'); const s=Math.min(1,600/im.width,300/im.height); c.width=im.width*s; c.height=im.height*s; c.getContext('2d').drawImage(im,0,0,c.width,c.height); DB.ayar[alan]=c.toDataURL('image/png'); save(); render(); toast('Görsel kaydedildi'); }; im.src=e.target.result; }; r.readAsDataURL(f); }
 
+/* ===================== YAPAY ZEKA ASİSTANI ===================== */
+let AI_HIST=[], AI_BUSY=false;
+function aiBaglam(){
+ const t=today();
+ const lim=(arr,n)=>arr.slice().sort((a,b)=>(b.tarih||'').localeCompare(a.tarih||'')).slice(0,n);
+ return {
+  tarih:t, firma:DB.ayar.firma, paraBirimi:DB.ayar.paraBirimi, dil:LANG,
+  ozet:{acikAlacak:acikAlacak(),tedarikciBorcu:acikBorc(),banka:kasaBakiye('banka'),kasa:kasaBakiye('kasa'),stokDegeri:n2(stokDeger()),vadesiGecenBelge:vadesiGecen().map(s=>({no:s.no,cari:cariAd(s.cariId),tutar:belgeToplam(s),vade:s.vade}))},
+  cariler:DB.cari.map(c=>({ad:c.ad,tip:c.tip,sehir:c.sehir,ulke:c.ulke,vadeGun:c.vade,bakiye:cariBakiye(c.id)})),
+  urunler:DB.urun.map(u=>({kod:u.kod,ad:u.ad,grup:u.kategori,birim:u.birim,maliyet:u.alisFiyat,listeFiyati:u.satisFiyat,stok:stokMiktar(u.id),minStok:u.minStok})),
+  satislar:lim(DB.satis,60).map(s=>({no:s.no,tarih:s.tarih,cari:cariAd(s.cariId),kalem:s.kalemler.map(k=>`${k.urunId==='_hizmet'?k.ad:(urunById(k.urunId)?.ad||'?')} ${k.miktar}×${k.fiyat}`).join('; '),toplam:belgeToplam(s),vade:s.vade})),
+  alislar:lim(DB.alis,40).map(s=>({no:s.no,tarih:s.tarih,cari:cariAd(s.cariId),toplam:belgeToplam(s),vade:s.vade})),
+  kasa:lim(DB.kasa,60).map(k=>({tarih:k.tarih,tip:k.tip,cari:k.cariId?cariAd(k.cariId):k.kategori,tutar:k.tutar,hesap:k.hesap,aciklama:k.aciklama})),
+  teklifler:(DB.teklif||[]).map(x=>({no:x.no,tip:x.tip,tarih:x.tarih,cari:cariAd(x.cariId),toplam:tkTop(x),para:x.para,durum:x.durum})),
+  araclar:DB.arac.map(a=>({plaka:a.plaka,arac:`${a.marka} ${a.model}`,km:a.km,sigortaBitis:a.sigortaBitis,muayeneBitis:a.muayeneBitis})),
+  depolar:DB.depo.map(d=>({ad:d.ad,m2:d.m2,aylikKira:d.aylikKira,kontratBitis:d.kontratBitis})),
+  kiralar:DB.kira.map(k=>({depo:DB.depo.find(d=>d.id===k.depoId)?.ad,donem:k.donem,tutar:k.tutar,odendi:k.odendi}))
+ };
+}
+async function aiSor(messages,system,maxTokens){
+ const tok=await FBU.getIdToken();
+ const r=await fetch('/.netlify/functions/ai',{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer '+tok},body:JSON.stringify({system,messages,max_tokens:maxTokens||1500})});
+ const d=await r.json().catch(()=>({error:'Sunucu yanıtı okunamadı'}));
+ if(!r.ok) throw new Error(d.error||('HTTP '+r.status));
+ return d.text;
+}
+const AI_SYS=()=>`Sen DunaSava d.o.o. (Beograd, geosentetik distribütörü) için çalışan bir CRM asistanısın. Aşağıda şirketin CRM verisi JSON olarak verilmiştir. Soruları bu veriye dayanarak, kısa ve net cevapla; hesap yaparken rakamları göster; emin olmadığın şeyi uydurma. Para birimi varsayılan ${DB.ayar.paraBirimi}. Kullanıcının yazdığı dilde cevap ver (Türkçe, İngilizce veya Sırpça). Tarih bugün: ${today()}.\n\nCRM VERİSİ:\n${JSON.stringify(aiBaglam())}`;
+function vAI(){
+ const oneri=['Bu ay toplam satış ve tahsilat ne kadar?','Vadesi geçmiş alacakları müşteri bazında listele','Hangi ürünlerde stok kritik, ne sipariş etmeliyim?','En çok satan 5 ürün ve müşteri?','Önümüzdeki 60 günde hangi sigorta, muayene ve kira kontratları bitiyor?','Nakit akışı özeti ve riskler'];
+ return page('Yapay Zeka Asistanı','CRM verilerine göre soru sor, analiz ve özet al',`<button class="btn" onclick="AI_HIST=[];render()">Sohbeti temizle</button>`,`
+ <div class="card"><div class="body"><div class="search" style="margin-bottom:10px">${oneri.map(o=>`<button class="btn sm" onclick="aiGonder(${JSON.stringify(o).replace(/"/g,'&quot;')})">${esc(o)}</button>`).join('')}</div>
+ <div id="aichat" class="aichat">${AI_HIST.length?AI_HIST.map(m=>`<div class="msg ${m.role}">${m.role==='user'?esc(m.content):aiMd(m.content)}</div>`).join(''):'<div class="note">Örnek: "Putevi Srbije’nin bakiyesi ve son hareketleri", "Ekim ayı kâr tahmini", "Bu teklif için e-posta metni yaz". Asistan yalnızca CRM’deki verileri görür; veri değiştirmez.</div>'}${AI_BUSY?'<div class="msg assistant note">Düşünüyor…</div>':''}</div>
+ <form onsubmit="aiGonder(document.getElementById('aiq').value);return false" class="search" style="margin-top:10px"><input id="aiq" placeholder="Sorunu yaz…" style="flex:1" autocomplete="off" ${AI_BUSY?'disabled':''}><button class="btn pri" type="submit" ${AI_BUSY?'disabled':''}>Sor</button></form>
+ <div class="note" style="margin-top:8px">Veriler yalnızca cevap üretmek için gönderilir, modelin eğitiminde kullanılmaz. Sunucu tarafında Firebase oturumu doğrulanır.</div></div></div>`);
+}
+function aiMd(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^### (.*)$/gm,'<b>$1</b>').replace(/^## (.*)$/gm,'<b>$1</b>').replace(/^- (.*)$/gm,'• $1').replace(/\n/g,'<br>'); }
+async function aiGonder(q){ q=(q||'').trim(); if(!q||AI_BUSY) return; AI_HIST.push({role:'user',content:q}); AI_BUSY=true; render(); const box=document.getElementById('aichat'); if(box) box.scrollTop=box.scrollHeight;
+ try{ const a=await aiSor(AI_HIST.map(m=>({role:m.role,content:m.content})),AI_SYS(),1500); AI_HIST.push({role:'assistant',content:a}); }
+ catch(e){ AI_HIST.push({role:'assistant',content:'⚠ '+e.message+(/ANTHROPIC_API_KEY/.test(e.message)?'\n\nKurulum: Netlify → dunasavacrm → Environment variables → ANTHROPIC_API_KEY ekleyin.':'')}); }
+ AI_BUSY=false; render(); const b2=document.getElementById('aichat'); if(b2) b2.scrollTop=b2.scrollHeight; }
+/* Teklif için e-posta metni */
+async function aiTeklifEposta(id){
+ const t=DB.teklif.find(x=>x.id===id); if(!t) return;
+ const c=cariById(t.cariId)||{}; const dil={sr:'Sırpça (Latin)',en:'İngilizce',tr:'Türkçe'}[t.dil]||'İngilizce';
+ modal('AI e-posta metni','<div class="full" id="aiEp"><div class="note">Yazılıyor…</div></div>',()=>{},'Kapat');
+ try{
+  const txt=await aiSor([{role:'user',content:`Aşağıdaki ${t.tip==='proforma'?'proforma':'fiyat teklifi'} için müşteriye gönderilecek kısa, profesyonel ve sıcak bir e-posta yaz (${dil}). Konu satırı da ver. Belgeyi ekte gönderdiğimizi, geçerlilik süresini, teslim ve ödeme koşullarını belirt; soru için iletişime davet et. İmza: ${t.imzalayan||DB.ayar.imzalayan}, ${DB.ayar.firma}, ${DB.ayar.tel||''}, ${DB.ayar.email||''}.\n\nBelge: ${JSON.stringify({no:t.no,tarih:t.tarih,musteri:c.ad,kalemler:t.kalemler.map(k=>({ad:k.ad,miktar:k.miktar,birim:k.birim,fiyat:k.fiyat,indirim:k.indirim})),para:t.para,kdv:t.kdv,toplam:tkTop(t),gecerlilikGun:t.gecerlilik,teslimYeri:t.teslimYeri,teslimSuresi:t.teslimSuresi,odeme:t.odemeKosulu})}`}],'Sen geosentetik ürünleri satan DunaSava d.o.o. için satış yazışmaları hazırlayan bir asistansın. Yalnızca e-posta metnini ver, açıklama ekleme.',900);
+  const el=document.getElementById('aiEp'); if(el) el.innerHTML=`<textarea id="aiEpTxt" style="min-height:260px;font-family:var(--font-body)">${esc(txt)}</textarea><div class="actions" style="margin-top:8px"><button type="button" class="btn pri" onclick="navigator.clipboard.writeText(document.getElementById('aiEpTxt').value).then(()=>toast('Kopyalandı')).catch(()=>toast('Kopyalanamadı'))">Kopyala</button></div>`;
+ }catch(e){ const el=document.getElementById('aiEp'); if(el) el.innerHTML=`<div class="lerr">${esc(e.message)}</div>`; }
+}
+/* ===================== HIZLI ARAMA (Ctrl+K) ===================== */
+function hizliArama(q){
+ q=(q||'').trim().toLowerCase(); if(!q) return [];
+ const r=[];
+ DB.cari.forEach(c=>{ if((c.ad+' '+(c.sehir||'')+' '+(c.pib||'')).toLowerCase().includes(q)) r.push({t:c.ad,s:(c.tip==='musteri'?'Müşteri':'Tedarikçi')+' · '+fmt(cariBakiye(c.id)),go:()=>go('cari',c.id)}); });
+ DB.urun.forEach(u=>{ if((u.kod+' '+u.ad).toLowerCase().includes(q)) r.push({t:u.kod+' · '+u.ad,s:'Ürün · stok '+fmtQ(stokMiktar(u.id))+' '+u.birim,go:()=>{go('fiyat'); setTimeout(()=>editUrun(u.id),50);} }); });
+ [...DB.satis.map(s=>({...s,_t:'Satış',_v:'satis'})),...DB.alis.map(s=>({...s,_t:'Alış',_v:'alis'}))].forEach(s=>{ if((s.no+' '+cariAd(s.cariId)).toLowerCase().includes(q)) r.push({t:s.no+' · '+cariAd(s.cariId),s:s._t+' · '+fmt(belgeToplam(s))+' · '+dstr(s.tarih),go:()=>go(s._v)}); });
+ (DB.teklif||[]).forEach(t=>{ if((t.no+' '+cariAd(t.cariId)).toLowerCase().includes(q)) r.push({t:t.no+' · '+cariAd(t.cariId),s:(t.tip==='proforma'?'Proforma':'Teklif')+' · '+fmt(tkTop(t),t.para),go:()=>go('teklif')}); });
+ DB.arac.forEach(a=>{ if((a.plaka+' '+a.marka+' '+a.model).toLowerCase().includes(q)) r.push({t:a.plaka,s:'Araç · '+a.marka+' '+a.model,go:()=>go('arac')}); });
+ return r.slice(0,12);
+}
+function aramaAc(){ if(document.getElementById('qs')) return; const d=document.createElement('div'); d.className='modal-bg'; d.id='qs'; d.innerHTML=`<div class="modal" style="max-width:560px"><div class="body"><input id="qsi" placeholder="Ara: cari, ürün, belge, plaka…" autocomplete="off"><div id="qsr" class="qsr"></div><div class="note" style="margin-top:8px">Esc kapatır · Ctrl+K açar</div></div></div>`; document.body.appendChild(d); translateDOM(d); const i=document.getElementById('qsi'); i.focus(); d.addEventListener('click',e=>{ if(e.target===d) d.remove(); }); i.addEventListener('keydown',e=>{ if(e.key==='Escape') d.remove(); if(e.key==='Enter'){ const f=document.querySelector('#qsr .qi'); if(f) f.click(); } }); i.addEventListener('input',()=>{ const res=hizliArama(i.value); document.getElementById('qsr').innerHTML=res.map((x,k)=>`<div class="qi" data-k="${k}"><b>${esc(x.t)}</b><span>${esc(x.s)}</span></div>`).join('')||(i.value?`<div class="note">Sonuç yok</div>`:''); document.querySelectorAll('#qsr .qi').forEach((el,k)=>el.onclick=()=>{ d.remove(); res[k].go(); }); translateDOM(document.getElementById('qsr')); }); }
+document.addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); if(ME) aramaAc(); } if(e.key==='Escape'){ document.getElementById('qs')?.remove(); } });
+
 /* ===================== RENDER ===================== */
-const VIEWS={ozet:vOzet,cari:vCari,satis:()=>vBelge('satis'),alis:()=>vBelge('alis'),kasa:vKasa,stok:vStok,fiyat:vFiyat,arac:vArac,depo:vDepo,rapor:vRapor,ayar:vAyar,teklif:vTeklif};
+const VIEWS={ozet:vOzet,cari:vCari,satis:()=>vBelge('satis'),alis:()=>vBelge('alis'),kasa:vKasa,stok:vStok,fiyat:vFiyat,arac:vArac,depo:vDepo,rapor:vRapor,ayar:vAyar,teklif:vTeklif,ai:vAI,musteri:()=>{cariFiltre.tip='musteri';return vCari();},tedarikci:()=>{cariFiltre.tip='tedarikci';return vCari();}};
 function render(){ if(!ME||!DB) return; renderNav(); $('#main').innerHTML=(VIEWS[VIEW]||vOzet)(); const ls=$('#langslot'); if(ls) ls.innerHTML=langSwitcher(); const ui=$('#uinfo'); if(ui) ui.innerHTML=`<div><b>${esc(ME.ad||ME.email)}</b><span id="syncdot" class="syncdot"></span>${ME.rol==='admin'?'Yönetici':'Kullanıcı'} · bulut</div><button onclick="logout()">Çıkış</button>`; translateDOM(document.querySelector('.app')); }
 try{ const h=location.hash.replace('#',''); if(VIEWS[h]) VIEW=h; }catch(e){}
 /* oturum: auth.onAuthStateChanged yönetir */
