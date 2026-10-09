@@ -163,7 +163,7 @@ textarea{min-height:60px;resize:vertical}
 @media (prefers-reduced-motion:reduce){ .toast{transition:none} }
 </style>
 
-<div class="app">
+<div class="app" hidden>
   <aside class="rail">
     <div class="brand"><b>DUNA<span>SAVA</span></b><small>CRM · DunaSava d.o.o. · Beograd</small></div>
     <nav class="nav" id="nav"></nav>
@@ -172,6 +172,7 @@ textarea{min-height:60px;resize:vertical}
   <main class="main" id="main"></main>
 </div>
 <div class="toast" id="toast"></div>
+<div id="boot" class="login"><div class="note" style="color:var(--rail-muted)">Yükleniyor…</div></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -186,6 +187,7 @@ fdb.enablePersistence({synchronizeTabs:true}).catch(()=>{});
 let USERS=[], ME=null, FBU=null, UNSUBS=[];
 const isAdmin=()=>ME&&ME.rol==='admin';
 function showLogin(msg){
+ document.getElementById('boot')?.remove();
  document.querySelector('.app').hidden=true;
  let d=document.getElementById('login'); if(!d){ d=document.createElement('div'); d.id='login'; d.className='login'; document.body.appendChild(d); }
  d.innerHTML=`<form class="lbox" id="lform"><div class="brand"><b>DUNA<span>SAVA</span></b><small>CRM · DunaSava d.o.o. · Beograd</small></div>
@@ -213,6 +215,7 @@ auth.onAuthStateChanged(async u=>{
   if(!doc.exists&&OWNERS.includes(email)){ await fdb.collection('crm_users').doc(u.uid).set({email,ad:email==='erdal@dunasava.com'?'Erdal Güçin':email,rol:'admin',olusturma:firebase.firestore.FieldValue.serverTimestamp()}); doc=await fdb.collection('crm_users').doc(u.uid).get(); }
   if(!doc.exists){ await auth.signOut(); showLogin('Bu hesabın CRM erişim yetkisi yok. Yöneticiye başvurun.'); return; }
   ME={uid:u.uid,...doc.data()};
+  document.getElementById('boot')?.remove();
   document.getElementById('login')?.setAttribute('hidden','');
   document.querySelector('.app').hidden=false;
   document.getElementById('main').innerHTML='<div class="empty">Veriler yükleniyor…</div>';
