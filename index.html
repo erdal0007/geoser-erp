@@ -1032,21 +1032,21 @@ function teklifHTML(t){
  const f=v=>new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v)+' '+t.para;
  const tq=t.kalemler.reduce((s,k)=>s+ +k.miktar,0), birimler=[...new Set(t.kalemler.map(k=>k.birim))];
  const title=t.tip==='proforma'?L.proforma:L.teklif;
- const logo=`<img src="${a.logo||LOGO}" style="max-height:190px;max-width:300px">`;const _unused=`<div class="tlogo"><div class="wave"></div><b>DUNASAVA DOO</b><small>GEOSYNTHETICS</small></div>`;
+ const logo=`<img src="${a.logo||LOGO}" style="max-height:150px;max-width:260px">`;const _unused=`<div class="tlogo"><div class="wave"></div><b>DUNASAVA DOO</b><small>GEOSYNTHETICS</small></div>`;
  const rows=t.kalemler.map((k,i)=>`<tr><td class="c">${i+1}</td><td>${esc(k.ad||urunById(k.urunId)?.ad||'')}${k.indirim?` <small>(${L.disc} ${k.indirim}%)</small>`:''}</td><td class="c">${fmtQ(k.miktar)} ${esc(k.birim||'')}</td><td class="c">${f(k.fiyat)}</td><td class="r">${f(tkAra(k))}</td></tr>`).join('');
  return `<!doctype html><html lang="${t.dil}"><head><meta charset="utf-8"><title>${esc(title)} ${esc(t.no)}</title><style>
- @page{size:A4;margin:14mm 12mm}*{box-sizing:border-box}body{font-family:"DejaVu Sans","Segoe UI",Arial,sans-serif;color:#1a1a1a;font-size:12.5px;margin:0;background:#fff}
- .pg{max-width:800px;margin:0 auto;padding:18px 20px 0}.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+ @page{size:A4;margin:9mm 10mm}*{box-sizing:border-box}body{font-family:"DejaVu Sans","Segoe UI",Arial,sans-serif;color:#1a1a1a;font-size:12px;margin:0;background:#fff}
+ .pg{max-width:800px;margin:0 auto;padding:10px 16px 0}.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
  .tlogo{width:190px;height:190px;border:3px solid #1e3a6e;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#1e3a6e;text-align:center}.tlogo b{font-size:19px;letter-spacing:.5px}.tlogo small{font-size:12px;letter-spacing:2px;margin-top:4px;border-top:2px solid #1e3a6e;padding-top:4px}.tlogo .wave{width:110px;height:34px;border-radius:50% 50% 0 0;border-top:5px solid #5aa0d8;border-bottom:5px solid #1e3a6e;margin-bottom:10px;opacity:.9}
- .meta{flex:1;max-width:360px}.meta h1{font-size:34px;color:#1a3366;margin:34px 0 20px;letter-spacing:.5px;font-weight:800}.meta table{border-collapse:collapse}.meta td{padding:6px 10px 6px 0;font-weight:700;width:120px}.meta td+td{font-weight:400}
- .boxes{display:flex;gap:30px;margin-top:10px}.box{flex:1;border:1px solid #cfd6e0}.box h3{margin:0;background:#1e3a6e;color:#fff;font-size:12px;letter-spacing:1px;padding:10px 12px}.box div{padding:14px 12px;min-height:150px;line-height:1.6}
- .intro{margin:28px 0 12px}
- table.it{width:100%;border-collapse:collapse}.it th{background:#1e3a6e;color:#fff;text-align:left;padding:12px 10px;font-size:12px;letter-spacing:.5px}.it td{padding:14px 10px;border:1px solid #d7dde6;vertical-align:middle}.it td.c{text-align:center}.it td.r{text-align:right}.it tfoot td{background:#f5f6f8;font-weight:700;border-color:#d7dde6}
- .foot{display:flex;justify-content:space-between;gap:30px;margin-top:70px;align-items:flex-start}.terms{flex:1}.terms table td{padding:6px 10px 6px 0}.terms td:first-child{font-weight:700;width:150px}.terms td:nth-child(2){width:14px}
- .bank{width:300px;border:1px solid #cfd6e0;border-top:7px solid #1e3a6e;position:relative}.bank table{width:100%;border-collapse:collapse}.bank td{padding:8px 10px;font-size:12px;border-bottom:1px solid #e3e7ed}.bank td+td{font-weight:700;font-size:15px;text-align:right}.bank td:first-child{color:#555}
- .sig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:60px}.sig .note{font-size:11px;color:#333;margin-top:18px}.kase{max-height:150px;max-width:300px}
- .bot{background:#1e3a6e;color:#fff;display:flex;justify-content:space-between;padding:16px 36px;margin-top:40px;font-size:13px}
- @media print{.noprint{display:none}}
+ .meta{flex:1;max-width:360px}.meta h1{font-size:30px;color:#1a3366;margin:18px 0 12px;letter-spacing:.5px;font-weight:800}.meta table{border-collapse:collapse}.meta td{padding:4px 10px 4px 0;font-weight:700;width:120px}.meta td+td{font-weight:400}
+ .boxes{display:flex;gap:24px;margin-top:8px}.box{flex:1;border:1px solid #cfd6e0}.box h3{margin:0;background:#1e3a6e;color:#fff;font-size:12px;letter-spacing:1px;padding:8px 12px}.box div{padding:10px 12px;min-height:110px;line-height:1.55}
+ .intro{margin:16px 0 8px}
+ table.it{width:100%;border-collapse:collapse}.it th{background:#1e3a6e;color:#fff;text-align:left;padding:9px 10px;font-size:12px;letter-spacing:.5px}.it td{padding:9px 10px;border:1px solid #d7dde6;vertical-align:middle}.it td.c{text-align:center}.it td.r{text-align:right}.it tfoot td{background:#f5f6f8;font-weight:700;border-color:#d7dde6}
+ .foot{display:flex;justify-content:space-between;gap:30px;margin-top:28px;align-items:flex-start}.terms{flex:1}.terms table td{padding:4px 10px 4px 0}.terms td:first-child{font-weight:700;width:150px}.terms td:nth-child(2){width:14px}
+ .bank{width:300px;border:1px solid #cfd6e0;border-top:7px solid #1e3a6e;position:relative}.bank table{width:100%;border-collapse:collapse}.bank td{padding:6px 10px;font-size:12px;border-bottom:1px solid #e3e7ed}.bank td+td{font-weight:700;font-size:15px;text-align:right}.bank td:first-child{color:#555}
+ .sig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px}.sig .note{font-size:10.5px;color:#333;margin-top:12px}.kase{max-height:120px;max-width:260px}
+ .bot{background:#1e3a6e;color:#fff;display:flex;justify-content:space-between;padding:12px 32px;margin-top:22px;font-size:12.5px}
+ @media print{.noprint{display:none}html,body{height:auto}.pg{padding-top:0}.bot{position:fixed;bottom:0;left:0;right:0;margin:0}body{padding-bottom:50px}}
  </style></head><body><div class="pg">
  <div class="hd">${logo}<div class="meta"><h1>${esc(title)}</h1><table><tr><td>${L.no}</td><td>${esc(t.no)}</td></tr><tr><td>${L.date}</td><td>${dstr(t.tarih)}</td></tr><tr><td>${L.valid}</td><td>${t.gecerlilik} ${L.days}</td></tr></table></div></div>
  <div class="boxes"><div class="box"><h3>${L.buyer}</h3><div><b>${esc(c.ad||'')}</b><br><br>${esc(c.adres||'')}${c.adres?'<br>':''}${esc([c.sehir,c.ulke].filter(Boolean).join(', '))}${c.pib?`<br><br>${L.pib}: ${esc(c.pib)}`:''}</div></div><div class="box"><h3>${L.seller}</h3><div><b>${esc(a.firma||'DUNASAVA DOO')}</b><br><br>${esc(a.adres||'')}<br><br>${L.pib}: ${esc(a.pib||'')}<br>${L.mat}: ${esc(a.maticni||'')}</div></div></div>
