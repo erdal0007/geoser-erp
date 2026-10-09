@@ -417,6 +417,8 @@ function stokMiktar(uid_){
  DB.stokHareket.forEach(h=>{ if(h.urunId===uid_) q+= +h.miktar; });
  return n2(q);
 }
+function hareketVar(uid_){ return DB.alis.some(a=>a.kalemler.some(k=>k.urunId===uid_))||DB.satis.some(a=>a.kalemler.some(k=>k.urunId===uid_))||DB.stokHareket.some(h=>h.urunId===uid_); }
+const dusukStok=u=>(+u.minStok||0)>0&&hareketVar(u.id)&&stokMiktar(u.id)<(+u.minStok||0);
 function stokDeger(){ return DB.urun.reduce((a,u)=>a+stokMiktar(u.id)*(+u.alisFiyat||0),0); }
 function kasaBakiye(hesap){
  return n2(DB.kasa.filter(k=>!hesap||k.hesap===hesap).reduce((a,k)=>a+(k.tip==='tahsilat'?+k.tutar:-k.tutar),0));
@@ -466,7 +468,7 @@ function vOzet(){
  const satisAy=DB.satis.filter(s=>ym(s.tarih)===bu).reduce((a,s)=>a+belgeToplam(s),0);
  const tahAy=DB.kasa.filter(k=>k.tip==='tahsilat'&&ym(k.tarih)===bu).reduce((a,k)=>a+ +k.tutar,0);
  const gecen=vadesiGecen(); const gecenT=gecen.reduce((a,s)=>a+belgeToplam(s),0);
- const dusuk=DB.urun.filter(u=>stokMiktar(u.id)<(+u.minStok||0));
+ const dusuk=DB.urun.filter(dusukStok);
  const kiraAcik=DB.kira.filter(k=>!k.odendi);
  const uyari=[];
  DB.arac.forEach(a=>{ if(a.sigortaBitis&&a.sigortaBitis<addDays(t,30)) uyari.push(`${a.plaka}: sigorta ${a.sigortaBitis<t?'bitmiş':'yakında bitiyor'} (${dstr(a.sigortaBitis)})`); if(a.muayeneBitis&&a.muayeneBitis<addDays(t,30)) uyari.push(`${a.plaka}: muayene ${a.muayeneBitis<t?'geçmiş':'yakında'} (${dstr(a.muayeneBitis)})`); });
@@ -593,7 +595,7 @@ function vStok(){
  DB.stokHareket.forEach(h=>hareket.push({t:h.tarih,tip:h.miktar>=0?'Düzeltme +':'Düzeltme −',ref:'Sayım',kim:h.aciklama,u:urunById(h.urunId)?.ad,q:+h.miktar,id:h.id}));
  hareket.sort((a,b)=>b.t.localeCompare(a.t));
  return page('Stok','Depo bazında ürün miktarları ve hareketler',`<button class="btn pri" onclick="editUrun()">+ Yeni ürün</button><button class="btn" onclick="editSayim()">Sayım / düzeltme</button>`,`
- <div class="tiles"><div class="tile"><div class="lbl">Stok değeri (maliyet)</div><div class="val num">${fmt(stokDeger())}</div></div><div class="tile"><div class="lbl">Satış değeri</div><div class="val num">${fmt(DB.urun.reduce((a,u)=>a+stokMiktar(u.id)*(+u.satisFiyat||0),0))}</div></div><div class="tile ${DB.urun.some(u=>stokMiktar(u.id)<u.minStok)?'warn':''}"><div class="lbl">Düşük stok</div><div class="val num">${DB.urun.filter(u=>stokMiktar(u.id)<u.minStok).length}</div><div class="cap">min. seviyenin altında</div></div></div>
+ <div class="tiles"><div class="tile"><div class="lbl">Stok değeri (maliyet)</div><div class="val num">${fmt(stokDeger())}</div></div><div class="tile"><div class="lbl">Satış değeri</div><div class="val num">${fmt(DB.urun.reduce((a,u)=>a+stokMiktar(u.id)*(+u.satisFiyat||0),0))}</div></div><div class="tile ${DB.urun.some(dusukStok)?'warn':''}"><div class="lbl">Düşük stok</div><div class="val num">${DB.urun.filter(dusukStok).length}</div><div class="cap">hareket görmüş ürünlerde, min. seviyenin altında</div></div></div>
  <div class="card"><header><div class="search"><input id="sq" placeholder="Ara: kod, ad, kategori" value="${esc(stokQ)}" oninput="stokQ=this.value;render();document.getElementById('sq').focus();document.getElementById('sq').setSelectionRange(99,99)" style="width:240px"></div></header>
  ${tbl([{h:'',f:u=>urunImg(u,'thumb')},{h:'Kod',f:u=>`<b>${esc(u.kod)}</b>`},{h:'Ürün',f:u=>esc(u.ad),wrap:1},{h:'Kategori',f:u=>esc(u.kategori||'')},{h:'Depo',f:u=>esc(DB.depo.find(d=>d.id===u.depoId)?.ad||'—')},{h:'Mevcut',r:1,f:u=>{const q=stokMiktar(u.id);return `<b style="color:${q<u.minStok?'var(--bad)':'inherit'}">${fmtQ(q)}</b> ${u.birim}`}},{h:'Min',r:1,f:u=>fmtQ(u.minStok)},{h:'Maliyet',r:1,f:u=>fmt(u.alisFiyat)},{h:'Stok değeri',r:1,f:u=>fmt(stokMiktar(u.id)*u.alisFiyat)},{h:'',f:u=>`<button class="btn sm" onclick="editUrun('${u.id}')">Düzenle</button> <button class="btn sm danger" onclick="delUrun('${u.id}')">Sil</button>`}],rows)}</div>
  <div class="card"><header><h2>Stok hareketleri</h2></header>${tbl([{h:'Tarih',f:h=>dstr(h.t)},{h:'Tür',f:h=>h.q>=0?`<span class="pill good">${h.tip}</span>`:`<span class="pill warn">${h.tip}</span>`},{h:'Ref',f:h=>esc(h.ref)},{h:'Ürün',f:h=>esc(h.u||'?'),wrap:1},{h:'Cari / açıklama',f:h=>esc(h.kim||''),wrap:1},{h:'Miktar',r:1,f:h=>(h.q>=0?'+':'')+fmtQ(h.q)},{h:'',f:h=>h.id?`<button class="btn sm danger" onclick="DB.stokHareket=DB.stokHareket.filter(x=>x.id!=='${h.id}');save();render()">Sil</button>`:''}],hareket.slice(0,60))}</div>`);
