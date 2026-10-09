@@ -87,6 +87,11 @@ h2{font-size:16px;font-weight:600}
 .uinfo b{display:block;color:var(--rail-fg);font-weight:500;font-size:13px}
 .uinfo button{background:none;border:1px solid rgba(255,255,255,.2);color:var(--rail-fg);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px}
 @media (max-width:860px){.uinfo{display:none}}
+.langsw{display:inline-flex;gap:2px;border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:2px}
+.langsw button{border:0;background:none;color:var(--rail-muted);font-size:11px;padding:2px 7px;border-radius:4px;cursor:pointer;font-weight:600}
+.langsw button.on{background:rgba(255,255,255,.14);color:#fff}
+.lbox .langsw{border-color:var(--line);align-self:flex-end}.lbox .langsw button{color:var(--muted)}.lbox .langsw button.on{background:var(--accent-soft);color:var(--accent)}
+.brand .langsw{margin-top:8px}
 .thumb{width:44px;height:34px;object-fit:cover;border-radius:5px;background:var(--surface-2);display:block}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{border:0;background:var(--surface);padding:6px 12px;cursor:pointer}
@@ -165,18 +170,266 @@ textarea{min-height:60px;resize:vertical}
 
 <div class="app" hidden>
   <aside class="rail">
-    <div class="brand"><b>DUNA<span>SAVA</span></b><small>CRM · DunaSava d.o.o. · Beograd</small></div>
+    <div class="brand"><b>DUNA<span>SAVA</span></b><small>CRM · DunaSava d.o.o. · Beograd</small><span id="langslot"></span></div>
     <nav class="nav" id="nav"></nav>
     <div class="uinfo" id="uinfo"></div>
   </aside>
   <main class="main" id="main"></main>
 </div>
 <div class="toast" id="toast"></div>
-<div id="boot" class="login"><div class="note" style="color:var(--rail-muted)">Yükleniyor…</div></div>
+<div id="boot" class="login"><div class="note" style="color:var(--rail-muted)">…</div></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+/* ===================== ÇOK DİLLİ ARAYÜZ (TR / EN / SR) ===================== */
+const LANGS={tr:'Türkçe',en:'English',sr:'Srpski'};
+let LANG=(()=>{ try{ return localStorage.getItem('dunasava_lang')||'tr'; }catch(e){ return 'tr'; } })();
+function setLang(l){ LANG=LANGS[l]?l:'tr'; try{ localStorage.setItem('dunasava_lang',LANG); }catch(e){} document.documentElement.lang=LANG; if(typeof ME!=='undefined'&&ME&&typeof render==='function') render(); else if(typeof showLogin==='function'&&document.getElementById('login')) showLogin(); }
+const AYLAR_L={tr:['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],sr:['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Avg','Sep','Okt','Nov','Dec']};
+/* Sözlük: anahtar = Türkçe metin */
+const I18N={
+en:{
+'Özet':'Overview','Cariler':'Accounts','Satış / Giden Mal':'Sales / Outgoing','Alış / Gelen Mal':'Purchases / Incoming','Kasa & Tahsilat':'Cash & Collections','Stok':'Stock','Fiyat Listesi':'Price List','Araçlar':'Vehicles','Depo & Kira':'Warehouses & Rent','Raporlar':'Reports','Ayarlar & Yedek':'Settings & Backup',
+'Genel':'General','Ticaret':'Trade','Ürün':'Product','Varlıklar':'Assets','Yönetim':'Admin',
+'Yönetici':'Administrator','Kullanıcı':'User','bulut':'cloud','Çıkış':'Sign out','Giriş yap':'Sign in','Giriş yapılıyor…':'Signing in…','Şifremi unuttum':'Forgot password','E-posta':'Email','Şifre':'Password','Bu cihazda oturumu açık tut':'Keep me signed in on this device','Yükleniyor…':'Loading…','Veriler yükleniyor…':'Loading data…','Oturum kapatıldı.':'Signed out.',
+'E-posta veya şifre hatalı.':'Incorrect email or password.','Çok fazla deneme; bir süre bekleyin veya şifre sıfırlayın.':'Too many attempts; wait a while or reset your password.','İnternet bağlantısı yok.':'No internet connection.','Önce e-posta adresinizi yazın.':'Enter your email address first.','Şifre sıfırlama bağlantısı e-postanıza gönderildi.':'A password reset link was sent to your email.','Bu hesabın CRM erişim yetkisi yok. Yöneticiye başvurun.':'This account has no CRM access. Contact the administrator.',
+'+ Satış':'+ Sale','+ Tahsilat':'+ Collection','+ Alış':'+ Purchase','+ Ödeme':'+ Payment','+ Gider':'+ Expense','+ Tedarikçi ödemesi':'+ Supplier payment','+ Yeni cari':'+ New account','+ Yeni ürün':'+ New product','+ Ürün':'+ Product','+ Araç':'+ Vehicle','+ Araç gideri':'+ Vehicle expense','+ Depo':'+ Warehouse','+ Kira dönemi':'+ Rent period','+ Kullanıcı':'+ User','+ Kalem ekle':'+ Add line',
+'Uygulama örnek verilerle açıldı. Gerçek kayıtlara başlamak için':'The app opened with sample data. To start with real records use','Ayarlar & Yedek → Örnek verileri temizle':'Settings & Backup → Clear sample data','seçeneğini kullanın.':'.',
+'Açık alacak':'Open receivables','Tedarikçi borcu':'Supplier payables','ödenecek':'to pay','Kasa + Banka':'Cash + Bank','Stok değeri (maliyet)':'Stock value (cost)','Bu ay satış':'Sales this month','Aylık depo kirası':'Monthly warehouse rent','Uyarılar':'Alerts','Bekleyen uyarı yok.':'No pending alerts.','Son 6 ay · satış ve tahsilat':'Last 6 months · sales and collections','satış':'sales','tahsilat':'collections','Son hareketler':'Recent activity','Tarih':'Date','Tür':'Type','Ref':'Ref','Cari / açıklama':'Account / description','Tutar':'Amount','Satış':'Sale','Alış':'Purchase','Tahsilat':'Collection','Ödeme':'Payment','Gider':'Expense','Banka':'Bank','Kasa':'Cash',
+'Müşteriler ve tedarikçiler, güncel bakiyeleriyle':'Customers and suppliers with current balances','Ara: ad, şehir, PIB':'Search: name, city, PIB','Tümü':'All','Müşteriler':'Customers','Tedarikçiler':'Suppliers','kayıt':'records','Ad':'Name','Müşteri':'Customer','Tedarikçi':'Supplier','Şehir':'City','PIB / VKN':'PIB / Tax ID','Vade':'Terms','Bakiye':'Balance','gün':'days','alacaklı':'credit','← Liste':'← List','Düzenle':'Edit','Sil':'Delete','Toplam satış':'Total sales','Toplam alış':'Total purchases','Toplam tahsilat':'Total collections','Toplam ödeme':'Total payments','Bilgiler':'Details','Telefon':'Phone','Notlar':'Notes','Cari ekstre':'Account statement','Açıklama':'Description','Borç':'Debit','Alacak':'Credit',
+'Cariyi düzenle':'Edit account','Yeni cari':'New account','Ad / Firma':'Name / Company','Ülke':'Country','Vade (gün)':'Payment terms (days)','Cari kaydedildi':'Account saved','Bu cari ve ona bağlı belge/ödeme kayıtlarının <b>tamamı</b> silinecek. Devam edilsin mi?':'This account and <b>all</b> of its documents/payments will be deleted. Continue?','Silme onayı':'Confirm deletion','Evet, sil':'Yes, delete','Silindi':'Deleted','Vazgeç':'Cancel','Kaydet':'Save','Kapat':'Close',
+'Müşteriye kesilen satış belgeleri; stoktan düşer, cariye borç yazar':'Sales documents issued to customers; reduce stock and debit the account','Tedarikçiden gelen mal; stoğa girer, tedarikçiye borç yazar':'Goods received from suppliers; add to stock and credit the supplier','+ Yeni satış':'+ New sale','+ Yeni alış':'+ New purchase','Bu ay':'This month','Vadesi geçen':'Overdue','açık bakiyeli belge':'documents with open balance','belge':'documents','No':'No.','Kalem':'Lines','Ara toplam':'Subtotal','KDV':'VAT','Toplam':'Total','Belge no':'Document no.','Vade tarihi':'Due date','KDV (PDV) %':'VAT (PDV) %','Not':'Note','Birim fiyat':'Unit price','Miktar':'Quantity','Genel toplam':'Grand total','— ürün seç —':'— select product —','Hizmet / diğer (serbest)':'Service / other (free text)','Yeni satış · giden mal':'New sale · outgoing goods','Satışı düzenle':'Edit sale','Yeni alış · gelen mal':'New purchase · incoming goods','Alışı düzenle':'Edit purchase','En az bir kalem girin':'Enter at least one line','Satış kaydedildi':'Sale saved','Alış kaydedildi':'Purchase saved','Belge silinecek; stok ve cari bakiye yeniden hesaplanır.':'The document will be deleted; stock and balances are recalculated.','Zorunlu alan boş:':'Required field empty:','— seç —':'— select —',
+'Müşteri tahsilatları, tedarikçi ödemeleri ve giderler':'Customer collections, supplier payments and expenses','Nakit kasa':'Petty cash','Bu ay tahsilat':'Collections this month','Bu ay gider':'Expenses this month','Tüm hareketler':'All transactions','Tahsilatlar':'Collections','Tedarikçi ödemeleri':'Supplier payments','Giderler':'Expenses','Cari / kategori':'Account / category','Hesap':'Account','Gider kategorileri':'Expense categories','Kategori':'Category','Gider yok':'No expenses','Kayıt yok':'No records','Tedarikçi ödemesi':'Supplier payment','Yeni':'New','Düzenle:':'Edit:','Depo kirası':'Warehouse rent','Araç':'Vehicle','Personel':'Staff','Vergi & harç':'Taxes & fees','Nakliye':'Transport','Ofis':'Office','Banka masrafı':'Bank charges','Diğer':'Other','kaydedildi':'saved','Kasa hareketi silinecek.':'The cash transaction will be deleted.',
+'Depo bazında ürün miktarları ve hareketler':'Product quantities and movements by warehouse','Sayım / düzeltme':'Count / adjustment','Satış değeri':'Sales value','Düşük stok':'Low stock','hareket görmüş ürünlerde, min. seviyenin altında':'moved products below minimum level','Ara: kod, ad, kategori':'Search: code, name, category','Kod':'Code','Depo':'Warehouse','Mevcut':'On hand','Min':'Min','Maliyet':'Cost','Stok değeri':'Stock value','Stok hareketleri':'Stock movements','Giriş':'In','Çıkış':'Out','Düzeltme +':'Adjustment +','Düzeltme −':'Adjustment −','Sayım':'Count','Ürünü düzenle':'Edit product','Yeni ürün':'New product','Ürün adı':'Product name','Ürün grubu (yazarak yeni grup da ekleyebilirsiniz)':'Product group (type to add a new group)','Birim':'Unit','Teknik özet (fiyat listesinde görünür)':'Technical summary (shown in price list)','Alış / maliyet fiyatı':'Purchase / cost price','Satış liste fiyatı':'Sales list price','KDV %':'VAT %','Min. stok':'Min. stock','Fotoğraf adresi (URL)':'Photo address (URL)','Boş bırakılırsa ürün grubunun fotoğrafı (geoser.com.tr) kullanılır':'If empty, the product group photo (geoser.com.tr) is used','Veya fotoğraf yükle':'Or upload a photo','Yüklü fotoğraf kullanılıyor':'Uploaded photo in use','Ürün kaydedildi':'Product saved','Ürün silinecek. Belgelerde geçen kalemler "?" olarak görünür.':'The product will be deleted. Lines in documents will show "?".','Stok sayımı / düzeltme':'Stock count / adjustment','Miktar (+ giriş / − çıkış)':'Quantity (+ in / − out)','Sayım farkı':'Count difference','Düzeltme kaydedildi':'Adjustment saved',
+'fiyatlar':'prices','KDV hariç':'excl. VAT','geçerli':'valid from','Toplu fiyat güncelle':'Bulk price update','Listeyi kopyala':'Copy list','Görselli':'Cards','Tablo':'Table','Tüm kategoriler':'All categories','ürün':'products','kalem':'items','Liste fiyatı':'List price','Marj':'Margin','KDV dahil':'incl. VAT','stok':'stock','Marj = (liste fiyatı − maliyet) / liste fiyatı. Kırmızı: %15 altı, sarı: %25 altı.':'Margin = (list price − cost) / list price. Red: below 15%, yellow: below 25%.','Tüm ürünler':'All products','Alan':'Field','Değişim % (örn. 5 veya -3)':'Change % (e.g. 5 or -3)','Yüzde girin':'Enter a percentage','Uygula':'Apply','ürün güncellendi':'products updated','Fiyat listesi panoya kopyalandı (Excel\'e yapıştırabilirsiniz)':'Price list copied to clipboard (paste into Excel)','Kopyalanamadı':'Could not copy',
+'Araç filosu, sigorta/muayene takibi ve araç giderleri':'Fleet, insurance/inspection tracking and vehicle expenses','Araç sayısı':'Vehicles','Bu ay araç gideri':'Vehicle expenses this month','Toplam araç gideri':'Total vehicle expenses','Filo':'Fleet','Plaka':'Plate','Tip':'Type','Sorumlu':'Responsible','Km':'Km','Sigorta':'Insurance','Muayene':'Inspection','Toplam gider':'Total expenses','Araç giderleri':'Vehicle expenses','Aracı düzenle':'Edit vehicle','Yeni araç':'New vehicle','Marka':'Make','Model':'Model','Yıl':'Year','Sigorta bitiş':'Insurance expiry','Muayene bitiş':'Inspection expiry','Araç kaydedildi':'Vehicle saved','Araç ve giderleri silinecek.':'The vehicle and its expenses will be deleted.','Araç giderini düzenle':'Edit vehicle expense','Araç gideri':'Vehicle expense','Yakıt':'Fuel','Servis':'Service','Lastik':'Tyres','Otoyol / geçiş':'Toll','Ceza':'Fine','Kasaya gider olarak da işle (nakit kasa)':'Also record as a cash expense (petty cash)','Gider kaydedildi':'Expense saved','Panelvan':'Van','Kamyonet':'Pickup','Kamyon':'Truck','Tır':'Semi-trailer','Binek':'Car',
+'Depolar, kira sözleşmeleri ve aylık kira ödemeleri':'Warehouses, lease contracts and monthly rent payments','Toplam alan':'Total area','Aylık kira toplamı':'Total monthly rent','Ödenmemiş kira':'Unpaid rent','Bu yıl ödenen kira':'Rent paid this year','Depolar':'Warehouses','Adres':'Address','Aylık kira':'Monthly rent','Mülk sahibi':'Landlord','Kontrat bitiş':'Contract end','Kira ödemeleri':'Rent payments','Ödendi işaretlendiğinde kasaya "Depo kirası" gideri olarak işlenir':'When marked paid, a "Warehouse rent" expense is recorded in cash','Dönem':'Period','Durum':'Status','Ödendi':'Paid','Ödenmedi':'Unpaid','Ödendi işaretle':'Mark paid','Depoyu düzenle':'Edit warehouse','Yeni depo':'New warehouse','Depo adı':'Warehouse name','Alan (m²)':'Area (m²)','Para birimi':'Currency','Depo kaydedildi':'Warehouse saved','Depo ve kira kayıtları silinecek.':'The warehouse and its rent records will be deleted.','Kira dönemini düzenle':'Edit rent period','Kira dönemi ekle':'Add rent period','Dönem (YYYY-AA)':'Period (YYYY-MM)','Ödeme tarihi':'Payment date','Kira kaydedildi':'Rent saved','Kira ödemesi':'Rent payment','Kira ödendi olarak işlendi':'Rent recorded as paid','depo':'warehouses','ödenmemiş dönem':'unpaid periods',
+'Yıllık gelir-gider, müşteri ve ürün performansı, alacak yaşlandırma':'Annual income/expenses, customer and product performance, receivables ageing','CSV dışa aktar':'Export CSV','satış (KDV hariç)':'sales (excl. VAT)','Satılan mal maliyeti':'Cost of goods sold','Brüt kâr':'Gross profit','marj':'margin','Net (yaklaşık)':'Net (approx.)','brüt kâr − giderler':'gross profit − expenses','Aylık özet':'Monthly summary','Ay':'Month','Nakit net':'Net cash','TOPLAM':'TOTAL','Müşteri sıralaması':'Customer ranking','Pay':'Share','Ürün satışları':'Product sales','Alacak yaşlandırma (bugün itibarıyla)':'Receivables ageing (as of today)','Vadesi gelmemiş':'Not yet due','1–30 gün':'1–30 days','31–60 gün':'31–60 days','60+ gün':'60+ days','Açık alacak yok':'No open receivables','Yaşlandırma, belgelerin vade tarihine göre; kısmi tahsilatlar bakiye sütununda düşülmüştür.':'Ageing by document due date; partial collections are deducted in the balance column.','CSV panoya kopyalandı — Excel\'e yapıştırın':'CSV copied to clipboard — paste into Excel',
+'Firma bilgileri, varsayılanlar ve veri yedeği':'Company details, defaults and data backup','Firma':'Company','Firma adı':'Company name','Varsayılan KDV (PDV) %':'Default VAT (PDV) %','Veri yedeği':'Data backup','Veriler Firestore bulutunda saklanır ve tüm cihazlarda eşitlenir. Ek güvence olarak düzenli JSON yedeği alıp saklayın; geri yüklemek için aşağıya yapıştırın.':'Data is stored in the Firestore cloud and synced across devices. As extra protection, take regular JSON backups; paste below to restore.','Yedeği kopyala (JSON)':'Copy backup (JSON)','Yedeği göster':'Show backup','Geri yüklemek için yedek JSON\'u buraya yapıştırın':'Paste backup JSON here to restore','Yedeği geri yükle':'Restore backup','Örnek verileri temizle':'Clear sample data','Tüm verileri sil':'Delete all data','Ayarlar kaydedildi':'Settings saved','Yedek panoya kopyalandı':'Backup copied to clipboard','Pano kullanılamadı; yedek aşağıda gösterildi':'Clipboard unavailable; backup shown below','Geçerli bir yedek JSON değil':'Not a valid backup JSON','Geri yükleme':'Restore','Mevcut veriler yedekle değiştirilecek. Devam edilsin mi?':'Current data will be replaced by the backup. Continue?','Evet, yükle':'Yes, restore','Yedek yüklendi':'Backup restored','Örnek cariler, ürünler, belgeler, araçlar ve depolar silinecek; firma ayarları korunur.':'Sample accounts, products, documents, vehicles and warehouses will be deleted; company settings are kept.','Temizle':'Clear','Temiz başlangıç hazır':'Clean start ready','Her şey silinecek ve uygulama örnek verilerle yeniden açılacak.':'Everything will be deleted and the app reopens with sample data.',
+'Kullanıcılar & giriş':'Users & sign-in','Rol':'Role','Şifremi değiştir':'Change my password','Sıfırlama e-postası':'Reset email','Erişimi kaldır':'Remove access','Giriş Firebase Authentication ile yapılır; şifreler Google altyapısında saklanır, bu dosyada veya tarayıcıda tutulmaz. Veriler Firestore\'da (bulut) durur ve tüm cihazlarda anında eşitlenir; internet kesilirse çevrimdışı önbellekten çalışır, bağlantı gelince gönderir.':'Sign-in uses Firebase Authentication; passwords are stored by Google, never in this file or the browser. Data lives in Firestore (cloud) and syncs instantly across devices; offline it works from cache and sends when back online.','Kullanıcıyı düzenle':'Edit user','Yeni kullanıcı':'New user','Ad Soyad':'Full name','Geçici şifre (en az 10 karakter; kullanıcı ilk girişte değiştirsin)':'Temporary password (min. 10 characters; user should change at first sign-in)','E-posta gerekli':'Email required','Kullanıcı güncellendi':'User updated','Şifre en az 10 karakter olmalı':'Password must be at least 10 characters','Kullanıcı oluşturuldu:':'User created:','Bu e-posta zaten kayıtlı (Firebase). Erişim için yöneticiye kullanıcı kaydı ekletin.':'This email already exists (Firebase). Ask the administrator to add a user record.','Mevcut şifre':'Current password','Yeni şifre (en az 10 karakter)':'New password (min. 10 characters)','Yeni şifre (tekrar)':'New password (repeat)','Şifreler eşleşmiyor':'Passwords do not match','Şifre değiştirildi':'Password changed','Mevcut şifre hatalı':'Current password is wrong','Sıfırlama e-postası gönderildi:':'Reset email sent:','kullanıcısının CRM erişimi kaldırılacak (giriş yapsa bile veri göremez).':'will lose CRM access (cannot see data even if signed in).','Hata:':'Error:',
+'Dil':'Language',
+'Teklif & Proforma':'Quotes & Proforma',
+'Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür':'Prepare customer quotations, convert to proforma and sales',
+'+ Yeni teklif':'+ New quote',
+'+ Doğrudan proforma':'+ Direct proforma',
+'Açık teklifler':'Open quotes',
+'Kabul edilen':'Accepted',
+'Bu ay düzenlenen':'Issued this month',
+'Proformalar':'Proformas',
+'Teklifler':'Quotes',
+'Taslak':'Draft',
+'Gönderildi':'Sent',
+'Kabul':'Accepted',
+'Red':'Rejected',
+'Satışa dönüştü':'Converted to sale',
+'Teklif':'Quote',
+'Proforma':'Proforma',
+'Geçerlilik':'Valid until',
+'Yazdır / PDF':'Print / PDF',
+'Proformaya dönüştür':'Convert to proforma',
+'Satışa dönüştür':'Convert to sale',
+'Henüz teklif yok. "+ Yeni teklif" ile başlayın.':'No quotes yet. Start with "+ New quote".',
+'Belge türü':'Document type',
+'Belge no (boşsa otomatik)':'Document no. (auto if empty)',
+'Geçerlilik (gün)':'Validity (days)',
+'Belge dili':'Document language',
+'Teslim yeri':'Place of delivery',
+'Teslim süresi':'Delivery time',
+'Menşei':'Origin',
+'Ödeme koşulu':'Payment terms',
+'Banka hesabı':'Bank account',
+'— gösterme —':'— do not show —',
+'İmzalayan':'Signed by',
+'Not (belgede görünür)':'Note (shown on document)',
+'Ürün / açıklama':'Product / description',
+'İsk. %':'Disc. %',
+'Serbest kalem':'Free-text line',
+'Belge üzerindeki açıklama':'Description on document',
+'Belge kaydedildi':'Document saved',
+'Proformayı düzenle':'Edit proforma',
+'Teklifi düzenle':'Edit quote',
+'Yeni proforma':'New proforma',
+'Yeni teklif':'New quote',
+'Durum güncelle':'Update status',
+'Durum güncellendi':'Status updated',
+'Proforma oluşturuldu:':'Proforma created:',
+'Satış tarihi':'Sale date',
+'Dönüştür':'Convert',
+'Satış oluşturuldu:':'Sale created:',
+'Belge silinecek.':'The document will be deleted.',
+'Açılır pencere engellendi; tarayıcıda izin verin':'Pop-up blocked; allow it in the browser',
+'Belge kimliği (teklif / proforma)':'Document identity (quote / proforma)',
+'Matični broj':'Registration no.',
+'Web':'Web',
+'Teklif geçerliliği (gün)':'Quote validity (days)',
+'Varsayılan teslim yeri':'Default place of delivery',
+'Varsayılan teslim süresi':'Default delivery time',
+'Varsayılan menşei':'Default origin',
+'Varsayılan ödeme koşulu':'Default payment terms',
+'Logo (PNG/JPG)':'Logo (PNG/JPG)',
+'Yüklenmezse metin logo basılır':'Text logo is printed if none uploaded',
+'Kaşe / imza (PNG)':'Stamp / signature (PNG)',
+'Kaldır':'Remove',
+'Banka hesapları':'Bank accounts',
+'+ Hesap':'+ Account',
+'Hesap no':'Account no.',
+'Banka hesabı yok':'No bank accounts',
+'Hesabı düzenle':'Edit account',
+'Banka adı':'Bank name',
+'Hesap no (yerel)':'Account no. (local)',
+'SWIFT / BIC':'SWIFT / BIC',
+'Hesap kaydedildi':'Account saved',
+'Görsel kaydedildi':'Image saved',
+'Adres':'Address'
+},
+sr:{
+'Özet':'Pregled','Cariler':'Partneri','Satış / Giden Mal':'Prodaja / Izlaz robe','Alış / Gelen Mal':'Nabavka / Ulaz robe','Kasa & Tahsilat':'Blagajna i naplata','Stok':'Zalihe','Fiyat Listesi':'Cenovnik','Araçlar':'Vozila','Depo & Kira':'Magacini i zakup','Raporlar':'Izveštaji','Ayarlar & Yedek':'Podešavanja i rezerva',
+'Genel':'Opšte','Ticaret':'Trgovina','Ürün':'Proizvod','Varlıklar':'Sredstva','Yönetim':'Uprava',
+'Yönetici':'Administrator','Kullanıcı':'Korisnik','bulut':'oblak','Çıkış':'Odjava','Giriş yap':'Prijavi se','Giriş yapılıyor…':'Prijavljivanje…','Şifremi unuttum':'Zaboravljena lozinka','E-posta':'E-pošta','Şifre':'Lozinka','Bu cihazda oturumu açık tut':'Ostani prijavljen na ovom uređaju','Yükleniyor…':'Učitavanje…','Veriler yükleniyor…':'Učitavanje podataka…','Oturum kapatıldı.':'Odjavljeni ste.',
+'E-posta veya şifre hatalı.':'Pogrešna e-pošta ili lozinka.','Çok fazla deneme; bir süre bekleyin veya şifre sıfırlayın.':'Previše pokušaja; sačekajte ili resetujte lozinku.','İnternet bağlantısı yok.':'Nema internet veze.','Önce e-posta adresinizi yazın.':'Prvo unesite e-poštu.','Şifre sıfırlama bağlantısı e-postanıza gönderildi.':'Link za reset lozinke je poslat na vašu e-poštu.','Bu hesabın CRM erişim yetkisi yok. Yöneticiye başvurun.':'Ovaj nalog nema pristup CRM-u. Obratite se administratoru.',
+'+ Satış':'+ Prodaja','+ Tahsilat':'+ Naplata','+ Alış':'+ Nabavka','+ Ödeme':'+ Plaćanje','+ Gider':'+ Trošak','+ Tedarikçi ödemesi':'+ Plaćanje dobavljaču','+ Yeni cari':'+ Novi partner','+ Yeni ürün':'+ Novi proizvod','+ Ürün':'+ Proizvod','+ Araç':'+ Vozilo','+ Araç gideri':'+ Trošak vozila','+ Depo':'+ Magacin','+ Kira dönemi':'+ Period zakupa','+ Kullanıcı':'+ Korisnik','+ Kalem ekle':'+ Dodaj stavku',
+'Uygulama örnek verilerle açıldı. Gerçek kayıtlara başlamak için':'Aplikacija je otvorena sa probnim podacima. Za početak rada sa stvarnim podacima koristite','Ayarlar & Yedek → Örnek verileri temizle':'Podešavanja i rezerva → Obriši probne podatke','seçeneğini kullanın.':'.',
+'Açık alacak':'Otvorena potraživanja','Tedarikçi borcu':'Dug dobavljačima','ödenecek':'za plaćanje','Kasa + Banka':'Blagajna + banka','Stok değeri (maliyet)':'Vrednost zaliha (nabavna)','Bu ay satış':'Prodaja ovog meseca','Aylık depo kirası':'Mesečni zakup magacina','Uyarılar':'Upozorenja','Bekleyen uyarı yok.':'Nema upozorenja.','Son 6 ay · satış ve tahsilat':'Poslednjih 6 meseci · prodaja i naplata','satış':'prodaja','tahsilat':'naplata','Son hareketler':'Poslednje promene','Tarih':'Datum','Tür':'Vrsta','Ref':'Ref','Cari / açıklama':'Partner / opis','Tutar':'Iznos','Satış':'Prodaja','Alış':'Nabavka','Tahsilat':'Naplata','Ödeme':'Plaćanje','Gider':'Trošak','Banka':'Banka','Kasa':'Blagajna',
+'Müşteriler ve tedarikçiler, güncel bakiyeleriyle':'Kupci i dobavljači sa trenutnim saldom','Ara: ad, şehir, PIB':'Pretraga: naziv, grad, PIB','Tümü':'Svi','Müşteriler':'Kupci','Tedarikçiler':'Dobavljači','kayıt':'zapisa','Ad':'Naziv','Müşteri':'Kupac','Tedarikçi':'Dobavljač','Şehir':'Grad','PIB / VKN':'PIB','Vade':'Rok','Bakiye':'Saldo','gün':'dana','alacaklı':'u korist','← Liste':'← Lista','Düzenle':'Izmeni','Sil':'Obriši','Toplam satış':'Ukupna prodaja','Toplam alış':'Ukupna nabavka','Toplam tahsilat':'Ukupna naplata','Toplam ödeme':'Ukupna plaćanja','Bilgiler':'Podaci','Telefon':'Telefon','Notlar':'Napomene','Cari ekstre':'Kartica partnera','Açıklama':'Opis','Borç':'Duguje','Alacak':'Potražuje',
+'Cariyi düzenle':'Izmeni partnera','Yeni cari':'Novi partner','Ad / Firma':'Naziv / Firma','Ülke':'Država','Vade (gün)':'Rok plaćanja (dana)','Cari kaydedildi':'Partner sačuvan','Bu cari ve ona bağlı belge/ödeme kayıtlarının <b>tamamı</b> silinecek. Devam edilsin mi?':'Partner i <b>svi</b> njegovi dokumenti/plaćanja biće obrisani. Nastaviti?','Silme onayı':'Potvrda brisanja','Evet, sil':'Da, obriši','Silindi':'Obrisano','Vazgeç':'Odustani','Kaydet':'Sačuvaj','Kapat':'Zatvori',
+'Müşteriye kesilen satış belgeleri; stoktan düşer, cariye borç yazar':'Prodajni dokumenti kupcima; umanjuju zalihe i zadužuju partnera','Tedarikçiden gelen mal; stoğa girer, tedarikçiye borç yazar':'Roba od dobavljača; ulazi u zalihe i zadužuje nas prema dobavljaču','+ Yeni satış':'+ Nova prodaja','+ Yeni alış':'+ Nova nabavka','Bu ay':'Ovog meseca','Vadesi geçen':'Dospelo','açık bakiyeli belge':'dokumenata sa otvorenim saldom','belge':'dokumenata','No':'Br.','Kalem':'Stavke','Ara toplam':'Međuzbir','KDV':'PDV','Toplam':'Ukupno','Belge no':'Broj dokumenta','Vade tarihi':'Datum dospeća','KDV (PDV) %':'PDV %','Not':'Napomena','Birim fiyat':'Jedinična cena','Miktar':'Količina','Genel toplam':'Ukupno za plaćanje','— ürün seç —':'— izaberi proizvod —','Hizmet / diğer (serbest)':'Usluga / ostalo (slobodan unos)','Yeni satış · giden mal':'Nova prodaja · izlaz robe','Satışı düzenle':'Izmeni prodaju','Yeni alış · gelen mal':'Nova nabavka · ulaz robe','Alışı düzenle':'Izmeni nabavku','En az bir kalem girin':'Unesite bar jednu stavku','Satış kaydedildi':'Prodaja sačuvana','Alış kaydedildi':'Nabavka sačuvana','Belge silinecek; stok ve cari bakiye yeniden hesaplanır.':'Dokument će biti obrisan; zalihe i saldo se ponovo računaju.','Zorunlu alan boş:':'Obavezno polje je prazno:','— seç —':'— izaberi —',
+'Müşteri tahsilatları, tedarikçi ödemeleri ve giderler':'Naplate od kupaca, plaćanja dobavljačima i troškovi','Nakit kasa':'Gotovina','Bu ay tahsilat':'Naplata ovog meseca','Bu ay gider':'Troškovi ovog meseca','Tüm hareketler':'Sve promene','Tahsilatlar':'Naplate','Tedarikçi ödemeleri':'Plaćanja dobavljačima','Giderler':'Troškovi','Cari / kategori':'Partner / kategorija','Hesap':'Račun','Gider kategorileri':'Kategorije troškova','Kategori':'Kategorija','Gider yok':'Nema troškova','Kayıt yok':'Nema zapisa','Tedarikçi ödemesi':'Plaćanje dobavljaču','Yeni':'Novo','Düzenle:':'Izmeni:','Depo kirası':'Zakup magacina','Araç':'Vozilo','Personel':'Zaposleni','Vergi & harç':'Porezi i takse','Nakliye':'Transport','Ofis':'Kancelarija','Banka masrafı':'Bankarski troškovi','Diğer':'Ostalo','kaydedildi':'sačuvano','Kasa hareketi silinecek.':'Promena u blagajni će biti obrisana.',
+'Depo bazında ürün miktarları ve hareketler':'Količine i promene po magacinu','Sayım / düzeltme':'Popis / korekcija','Satış değeri':'Prodajna vrednost','Düşük stok':'Niske zalihe','hareket görmüş ürünlerde, min. seviyenin altında':'proizvodi sa prometom ispod minimuma','Ara: kod, ad, kategori':'Pretraga: šifra, naziv, kategorija','Kod':'Šifra','Depo':'Magacin','Mevcut':'Stanje','Min':'Min','Maliyet':'Nabavna','Stok değeri':'Vrednost zaliha','Stok hareketleri':'Promene zaliha','Giriş':'Ulaz','Çıkış':'Izlaz','Düzeltme +':'Korekcija +','Düzeltme −':'Korekcija −','Sayım':'Popis','Ürünü düzenle':'Izmeni proizvod','Yeni ürün':'Novi proizvod','Ürün adı':'Naziv proizvoda','Ürün grubu (yazarak yeni grup da ekleyebilirsiniz)':'Grupa proizvoda (unesite i novu grupu)','Birim':'Jedinica','Teknik özet (fiyat listesinde görünür)':'Tehnički opis (prikazuje se u cenovniku)','Alış / maliyet fiyatı':'Nabavna cena','Satış liste fiyatı':'Prodajna cena (cenovnik)','KDV %':'PDV %','Min. stok':'Min. zalihe','Fotoğraf adresi (URL)':'Adresa fotografije (URL)','Boş bırakılırsa ürün grubunun fotoğrafı (geoser.com.tr) kullanılır':'Ako je prazno, koristi se fotografija grupe (geoser.com.tr)','Veya fotoğraf yükle':'Ili otpremi fotografiju','Yüklü fotoğraf kullanılıyor':'Koristi se otpremljena fotografija','Ürün kaydedildi':'Proizvod sačuvan','Ürün silinecek. Belgelerde geçen kalemler "?" olarak görünür.':'Proizvod će biti obrisan. Stavke u dokumentima prikazuju "?".','Stok sayımı / düzeltme':'Popis / korekcija zaliha','Miktar (+ giriş / − çıkış)':'Količina (+ ulaz / − izlaz)','Sayım farkı':'Razlika popisa','Düzeltme kaydedildi':'Korekcija sačuvana',
+'fiyatlar':'cene','KDV hariç':'bez PDV','geçerli':'važi od','Toplu fiyat güncelle':'Grupna izmena cena','Listeyi kopyala':'Kopiraj listu','Görselli':'Kartice','Tablo':'Tabela','Tüm kategoriler':'Sve kategorije','ürün':'proizvoda','kalem':'stavki','Liste fiyatı':'Cena','Marj':'Marža','KDV dahil':'sa PDV','stok':'zalihe','Marj = (liste fiyatı − maliyet) / liste fiyatı. Kırmızı: %15 altı, sarı: %25 altı.':'Marža = (cena − nabavna) / cena. Crveno: ispod 15%, žuto: ispod 25%.','Tüm ürünler':'Svi proizvodi','Alan':'Polje','Değişim % (örn. 5 veya -3)':'Promena % (npr. 5 ili -3)','Yüzde girin':'Unesite procenat','Uygula':'Primeni','ürün güncellendi':'proizvoda ažurirano','Fiyat listesi panoya kopyalandı (Excel\'e yapıştırabilirsiniz)':'Cenovnik kopiran (nalepite u Excel)','Kopyalanamadı':'Kopiranje nije uspelo',
+'Araç filosu, sigorta/muayene takibi ve araç giderleri':'Vozni park, osiguranje/registracija i troškovi vozila','Araç sayısı':'Broj vozila','Bu ay araç gideri':'Troškovi vozila ovog meseca','Toplam araç gideri':'Ukupni troškovi vozila','Filo':'Vozni park','Plaka':'Tablice','Tip':'Tip','Sorumlu':'Zadužen','Km':'Km','Sigorta':'Osiguranje','Muayene':'Registracija','Toplam gider':'Ukupni troškovi','Araç giderleri':'Troškovi vozila','Aracı düzenle':'Izmeni vozilo','Yeni araç':'Novo vozilo','Marka':'Marka','Model':'Model','Yıl':'Godina','Sigorta bitiş':'Istek osiguranja','Muayene bitiş':'Istek registracije','Araç kaydedildi':'Vozilo sačuvano','Araç ve giderleri silinecek.':'Vozilo i njegovi troškovi biće obrisani.','Araç giderini düzenle':'Izmeni trošak vozila','Araç gideri':'Trošak vozila','Yakıt':'Gorivo','Servis':'Servis','Lastik':'Gume','Otoyol / geçiş':'Putarina','Ceza':'Kazna','Kasaya gider olarak da işle (nakit kasa)':'Evidentiraj i kao trošak u blagajni (gotovina)','Gider kaydedildi':'Trošak sačuvan','Panelvan':'Kombi','Kamyonet':'Pikap','Kamyon':'Kamion','Tır':'Šleper','Binek':'Putničko',
+'Depolar, kira sözleşmeleri ve aylık kira ödemeleri':'Magacini, ugovori o zakupu i mesečne zakupnine','Toplam alan':'Ukupna površina','Aylık kira toplamı':'Ukupan mesečni zakup','Ödenmemiş kira':'Neplaćen zakup','Bu yıl ödenen kira':'Plaćeno ove godine','Depolar':'Magacini','Adres':'Adresa','Aylık kira':'Mesečni zakup','Mülk sahibi':'Zakupodavac','Kontrat bitiş':'Istek ugovora','Kira ödemeleri':'Plaćanja zakupa','Ödendi işaretlendiğinde kasaya "Depo kirası" gideri olarak işlenir':'Kada se označi kao plaćeno, knjiži se trošak "Zakup magacina"','Dönem':'Period','Durum':'Status','Ödendi':'Plaćeno','Ödenmedi':'Nije plaćeno','Ödendi işaretle':'Označi plaćeno','Depoyu düzenle':'Izmeni magacin','Yeni depo':'Novi magacin','Depo adı':'Naziv magacina','Alan (m²)':'Površina (m²)','Para birimi':'Valuta','Depo kaydedildi':'Magacin sačuvan','Depo ve kira kayıtları silinecek.':'Magacin i zapisi o zakupu biće obrisani.','Kira dönemini düzenle':'Izmeni period zakupa','Kira dönemi ekle':'Dodaj period zakupa','Dönem (YYYY-AA)':'Period (GGGG-MM)','Ödeme tarihi':'Datum plaćanja','Kira kaydedildi':'Zakup sačuvan','Kira ödemesi':'Plaćanje zakupa','Kira ödendi olarak işlendi':'Zakup evidentiran kao plaćen','depo':'magacina','ödenmemiş dönem':'neplaćenih perioda',
+'Yıllık gelir-gider, müşteri ve ürün performansı, alacak yaşlandırma':'Godišnji prihodi/rashodi, učinak kupaca i proizvoda, starost potraživanja','CSV dışa aktar':'Izvoz CSV','satış (KDV hariç)':'prodaja (bez PDV)','Satılan mal maliyeti':'Nabavna vrednost prodate robe','Brüt kâr':'Bruto dobit','marj':'marža','Net (yaklaşık)':'Neto (približno)','brüt kâr − giderler':'bruto dobit − troškovi','Aylık özet':'Mesečni pregled','Ay':'Mesec','Nakit net':'Neto gotovina','TOPLAM':'UKUPNO','Müşteri sıralaması':'Rang kupaca','Pay':'Udeo','Ürün satışları':'Prodaja po proizvodu','Alacak yaşlandırma (bugün itibarıyla)':'Starost potraživanja (na današnji dan)','Vadesi gelmemiş':'Nedospelo','1–30 gün':'1–30 dana','31–60 gün':'31–60 dana','60+ gün':'60+ dana','Açık alacak yok':'Nema otvorenih potraživanja','Yaşlandırma, belgelerin vade tarihine göre; kısmi tahsilatlar bakiye sütununda düşülmüştür.':'Starost po datumu dospeća dokumenta; delimične naplate su odbijene u koloni saldo.','CSV panoya kopyalandı — Excel\'e yapıştırın':'CSV kopiran — nalepite u Excel',
+'Firma bilgileri, varsayılanlar ve veri yedeği':'Podaci o firmi, podrazumevane vrednosti i rezervna kopija','Firma':'Firma','Firma adı':'Naziv firme','Varsayılan KDV (PDV) %':'Podrazumevani PDV %','Veri yedeği':'Rezervna kopija','Veriler Firestore bulutunda saklanır ve tüm cihazlarda eşitlenir. Ek güvence olarak düzenli JSON yedeği alıp saklayın; geri yüklemek için aşağıya yapıştırın.':'Podaci se čuvaju u Firestore oblaku i sinhronizuju na svim uređajima. Kao dodatnu zaštitu redovno pravite JSON kopiju; za vraćanje nalepite ispod.','Yedeği kopyala (JSON)':'Kopiraj kopiju (JSON)','Yedeği göster':'Prikaži kopiju','Geri yüklemek için yedek JSON\'u buraya yapıştırın':'Nalepite JSON kopiju ovde za vraćanje','Yedeği geri yükle':'Vrati kopiju','Örnek verileri temizle':'Obriši probne podatke','Tüm verileri sil':'Obriši sve podatke','Ayarlar kaydedildi':'Podešavanja sačuvana','Yedek panoya kopyalandı':'Kopija je kopirana','Pano kullanılamadı; yedek aşağıda gösterildi':'Klipbord nedostupan; kopija je prikazana ispod','Geçerli bir yedek JSON değil':'Nije ispravna JSON kopija','Geri yükleme':'Vraćanje','Mevcut veriler yedekle değiştirilecek. Devam edilsin mi?':'Trenutni podaci biće zamenjeni kopijom. Nastaviti?','Evet, yükle':'Da, vrati','Yedek yüklendi':'Kopija vraćena','Örnek cariler, ürünler, belgeler, araçlar ve depolar silinecek; firma ayarları korunur.':'Probni partneri, proizvodi, dokumenti, vozila i magacini biće obrisani; podešavanja firme ostaju.','Temizle':'Obriši','Temiz başlangıç hazır':'Čist početak spreman','Her şey silinecek ve uygulama örnek verilerle yeniden açılacak.':'Sve će biti obrisano i aplikacija se otvara sa probnim podacima.',
+'Kullanıcılar & giriş':'Korisnici i prijava','Rol':'Uloga','Şifremi değiştir':'Promeni lozinku','Sıfırlama e-postası':'E-pošta za reset','Erişimi kaldır':'Ukloni pristup','Giriş Firebase Authentication ile yapılır; şifreler Google altyapısında saklanır, bu dosyada veya tarayıcıda tutulmaz. Veriler Firestore\'da (bulut) durur ve tüm cihazlarda anında eşitlenir; internet kesilirse çevrimdışı önbellekten çalışır, bağlantı gelince gönderir.':'Prijava preko Firebase Authentication; lozinke čuva Google, nikad ova datoteka ili pregledač. Podaci su u Firestore oblaku i sinhronizuju se odmah; bez interneta radi iz keša i šalje kad se veza vrati.','Kullanıcıyı düzenle':'Izmeni korisnika','Yeni kullanıcı':'Novi korisnik','Ad Soyad':'Ime i prezime','Geçici şifre (en az 10 karakter; kullanıcı ilk girişte değiştirsin)':'Privremena lozinka (min. 10 znakova; promeniti pri prvoj prijavi)','E-posta gerekli':'E-pošta je obavezna','Kullanıcı güncellendi':'Korisnik ažuriran','Şifre en az 10 karakter olmalı':'Lozinka mora imati bar 10 znakova','Kullanıcı oluşturuldu:':'Korisnik kreiran:','Bu e-posta zaten kayıtlı (Firebase). Erişim için yöneticiye kullanıcı kaydı ekletin.':'Ova e-pošta već postoji (Firebase). Administrator treba da doda korisnički zapis.','Mevcut şifre':'Trenutna lozinka','Yeni şifre (en az 10 karakter)':'Nova lozinka (min. 10 znakova)','Yeni şifre (tekrar)':'Nova lozinka (ponovo)','Şifreler eşleşmiyor':'Lozinke se ne poklapaju','Şifre değiştirildi':'Lozinka promenjena','Mevcut şifre hatalı':'Trenutna lozinka je pogrešna','Sıfırlama e-postası gönderildi:':'E-pošta za reset poslata:','kullanıcısının CRM erişimi kaldırılacak (giriş yapsa bile veri göremez).':'gubi pristup CRM-u (ne vidi podatke ni kad se prijavi).','Hata:':'Greška:',
+'Dil':'Jezik',
+'Teklif & Proforma':'Ponude i profakture',
+'Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür':'Pripremi ponudu kupcu, pretvori u profakturu i prodaju',
+'+ Yeni teklif':'+ Nova ponuda',
+'+ Doğrudan proforma':'+ Direktna profaktura',
+'Açık teklifler':'Otvorene ponude',
+'Kabul edilen':'Prihvaćene',
+'Bu ay düzenlenen':'Izdato ovog meseca',
+'Proformalar':'Profakture',
+'Teklifler':'Ponude',
+'Taslak':'Nacrt',
+'Gönderildi':'Poslato',
+'Kabul':'Prihvaćeno',
+'Red':'Odbijeno',
+'Satışa dönüştü':'Pretvoreno u prodaju',
+'Teklif':'Ponuda',
+'Proforma':'Profaktura',
+'Geçerlilik':'Važi do',
+'Yazdır / PDF':'Štampa / PDF',
+'Proformaya dönüştür':'Pretvori u profakturu',
+'Satışa dönüştür':'Pretvori u prodaju',
+'Henüz teklif yok. "+ Yeni teklif" ile başlayın.':'Još nema ponuda. Počnite sa "+ Nova ponuda".',
+'Belge türü':'Vrsta dokumenta',
+'Belge no (boşsa otomatik)':'Broj dokumenta (automatski ako je prazno)',
+'Geçerlilik (gün)':'Važenje (dana)',
+'Belge dili':'Jezik dokumenta',
+'Teslim yeri':'Mesto isporuke',
+'Teslim süresi':'Rok isporuke',
+'Menşei':'Poreklo robe',
+'Ödeme koşulu':'Uslovi plaćanja',
+'Banka hesabı':'Bankovni račun',
+'— gösterme —':'— ne prikazuj —',
+'İmzalayan':'Potpisuje',
+'Not (belgede görünür)':'Napomena (na dokumentu)',
+'Ürün / açıklama':'Proizvod / opis',
+'İsk. %':'Popust %',
+'Serbest kalem':'Slobodna stavka',
+'Belge üzerindeki açıklama':'Opis na dokumentu',
+'Belge kaydedildi':'Dokument sačuvan',
+'Proformayı düzenle':'Izmeni profakturu',
+'Teklifi düzenle':'Izmeni ponudu',
+'Yeni proforma':'Nova profaktura',
+'Yeni teklif':'Nova ponuda',
+'Durum güncelle':'Ažuriraj status',
+'Durum güncellendi':'Status ažuriran',
+'Proforma oluşturuldu:':'Profaktura kreirana:',
+'Satış tarihi':'Datum prodaje',
+'Dönüştür':'Pretvori',
+'Satış oluşturuldu:':'Prodaja kreirana:',
+'Belge silinecek.':'Dokument će biti obrisan.',
+'Açılır pencere engellendi; tarayıcıda izin verin':'Iskačući prozor je blokiran; dozvolite ga u pregledaču',
+'Belge kimliği (teklif / proforma)':'Identitet dokumenta (ponuda / profaktura)',
+'Matični broj':'Matični broj',
+'Web':'Web',
+'Teklif geçerliliği (gün)':'Važenje ponude (dana)',
+'Varsayılan teslim yeri':'Podrazumevano mesto isporuke',
+'Varsayılan teslim süresi':'Podrazumevani rok isporuke',
+'Varsayılan menşei':'Podrazumevano poreklo',
+'Varsayılan ödeme koşulu':'Podrazumevani uslovi plaćanja',
+'Logo (PNG/JPG)':'Logo (PNG/JPG)',
+'Yüklenmezse metin logo basılır':'Bez otpremanja štampa se tekstualni logo',
+'Kaşe / imza (PNG)':'Pečat / potpis (PNG)',
+'Kaldır':'Ukloni',
+'Banka hesapları':'Bankovni računi',
+'+ Hesap':'+ Račun',
+'Hesap no':'Broj računa',
+'Banka hesabı yok':'Nema bankovnih računa',
+'Hesabı düzenle':'Izmeni račun',
+'Banka adı':'Naziv banke',
+'Hesap no (yerel)':'Broj računa (domaći)',
+'SWIFT / BIC':'SWIFT / BIC',
+'Hesap kaydedildi':'Račun sačuvan',
+'Görsel kaydedildi':'Slika sačuvana',
+'Adres':'Adresa'
+}};
+/* Dinamik kalıplar: [regex, {en, sr}] — $1,$2 yakalama grupları */
+const I18N_PAT=[
+ [/^(\d+) belge vadesi geçmiş · (.*)$/,{en:'$1 documents overdue · $2',sr:'$1 dospelih dokumenata · $2'}],
+ [/^Banka (.*) · Kasa (.*)$/,{en:'Bank $1 · Cash $2',sr:'Banka $1 · Blagajna $2'}],
+ [/^(\d+) ürün · (\d+) düşük stok$/,{en:'$1 products · $2 low stock',sr:'$1 proizvoda · $2 niske zalihe'}],
+ [/^Tahsilat (.*)$/,{en:'Collections $1',sr:'Naplata $1'}],
+ [/^(\d+) depo · (\d+) ödenmemiş dönem$/,{en:'$1 warehouses · $2 unpaid periods',sr:'$1 magacina · $2 neplaćenih perioda'}],
+ [/^(\d+) belge$/,{en:'$1 documents',sr:'$1 dokumenata'}],
+ [/^(\d+) kayıt$/,{en:'$1 records',sr:'$1 zapisa'}],
+ [/^(\d+) ürün$/,{en:'$1 products',sr:'$1 proizvoda'}],
+ [/^(\d+) kalem$/,{en:'$1 items',sr:'$1 stavki'}],
+ [/^(\d+) gün$/,{en:'$1 days',sr:'$1 dana'}],
+ [/^(.*) alacaklı$/,{en:'$1 credit',sr:'$1 u korist'}],
+ [/^stok (.*)$/,{en:'stock $1',sr:'zalihe $1'}],
+ [/^KDV dahil (.*)$/,{en:'incl. VAT $1',sr:'sa PDV $1'}],
+ [/^(\S+): sigorta (yakında bitiyor|bitmiş) \((.*)\)$/,{en:'$1: insurance $2 ($3)',sr:'$1: osiguranje $2 ($3)'}],
+ [/^(\S+): muayene (yakında|geçmiş) \((.*)\)$/,{en:'$1: inspection $2 ($3)',sr:'$1: registracija $2 ($3)'}],
+ [/^(.*): kira kontratı (.*) tarihinde bitiyor$/,{en:'$1: lease contract ends on $2',sr:'$1: ugovor o zakupu ističe $2'}],
+ [/^(.*): (\S+) kirası ödenmedi \((.*)\)$/,{en:'$1: rent for $2 unpaid ($3)',sr:'$1: zakup za $2 nije plaćen ($3)'}],
+ [/^Düşük stok: (.*) — (.*) \(min (.*)\)$/,{en:'Low stock: $1 — $2 (min $3)',sr:'Niske zalihe: $1 — $2 (min $3)'}],
+ [/^Vadesi geçti: (.*) — (.*), vade (.*)$/,{en:'Overdue: $1 — $2, due $3',sr:'Dospelo: $1 — $2, rok $3'}],
+ [/^Yeni (Tahsilat|Tedarikçi ödemesi|Gider)$/,{en:'New $1',sr:'Novo: $1'}],
+ [/^Düzenle: (.*)$/,{en:'Edit: $1',sr:'Izmeni: $1'}],
+ [/^(.*) kaydedildi$/,{en:'$1 saved',sr:'$1 sačuvano'}],
+ [/^(.*) · geçerli (.*) · fiyatlar (\S+), KDV hariç$/,{en:'$1 · valid from $2 · prices in $3, excl. VAT',sr:'$1 · važi od $2 · cene u $3, bez PDV'}],
+ [/^Tutar \((\S+)\)$/,{en:'Amount ($1)',sr:'Iznos ($1)'}],
+ [/^Aylık özet (\d{4})$/,{en:'Monthly summary $1',sr:'Mesečni pregled $1'}],
+ [/^Müşteri sıralaması (\d{4})$/,{en:'Customer ranking $1',sr:'Rang kupaca $1'}],
+ [/^Ürün satışları (\d{4})$/,{en:'Product sales $1',sr:'Prodaja po proizvodu $1'}],
+ [/^(\d{4}) satış \(KDV hariç\)$/,{en:'$1 sales (excl. VAT)',sr:'$1 prodaja (bez PDV)'}],
+ [/^(\S+)% marj$/,{en:'$1% margin',sr:'$1% marža'}],
+ [/^Ödendi (.*)$/,{en:'Paid $1',sr:'Plaćeno $1'}],
+ [/^(\d+) ürün güncellendi$/,{en:'$1 products updated',sr:'$1 proizvoda ažurirano'}],
+ [/^(\S+) · (Müşteri|Tedarikçi) · (.*)$/,{en:(m)=>m,sr:(m)=>m}],
+ [/^(Müşteri|Tedarikçi) · (.*)$/,{en:'$1 · $2',sr:'$1 · $2'}],
+ [/^(.*) · (\d+) cari · (\d+) ürün · (\d+) satış · (\d+) alış · (\d+) kasa hareketi · (\d+) araç · (\d+) depo$/,{en:'$1 · $2 accounts · $3 products · $4 sales · $5 purchases · $6 cash entries · $7 vehicles · $8 warehouses',sr:'$1 · $2 partnera · $3 proizvoda · $4 prodaja · $5 nabavki · $6 promena · $7 vozila · $8 magacina'}],
+ [/^(\d+) cari · (\d+) ürün · (\d+) satış · (\d+) alış · (\d+) kasa hareketi · (\d+) araç · (\d+) depo$/,{en:'$1 accounts · $2 products · $3 sales · $4 purchases · $5 cash entries · $6 vehicles · $7 warehouses',sr:'$1 partnera · $2 proizvoda · $3 prodaja · $4 nabavki · $5 promena · $6 vozila · $7 magacina'}],
+ [/^Toplam (satış|alış|tahsilat|ödeme)$/,{en:(m,a)=>({satış:'Total sales',alış:'Total purchases',tahsilat:'Total collections',ödeme:'Total payments'}[a]),sr:(m,a)=>({satış:'Ukupna prodaja',alış:'Ukupna nabavka',tahsilat:'Ukupna naplata',ödeme:'Ukupna plaćanja'}[a])}],
+ [/^Tahsilat (.*)$/,{en:'Collections $1',sr:'Naplata $1'}]
+];
+function tr(s,depth){ if(LANG==='tr'||!s||typeof s!=='string') return s; depth=depth||0; const d=I18N[LANG]; const k=s.trim(); if(!k) return s; if(d[k]!==undefined) return s.replace(k,d[k]); if(depth>2) return s; for(const [re,o] of I18N_PAT){ const m=k.match(re); if(m){ const r=o[LANG]; const g=m.slice(1).map(x=>tr(x,depth+1)); const out=typeof r==='function'?r(m[0],...g):r.replace(/\$(\d)/g,(_,i)=>g[+i-1]??''); return s.replace(k,out); } } return s; }
+function translateDOM(root){
+ if(LANG==='tr'||!root) return;
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null);
+ let n; const nodes=[];
+ while((n=w.nextNode())){ if(n.nodeType===3){ if(n.nodeValue.trim()&&!(n.parentElement&&n.parentElement.closest('[data-notr],script,style'))) nodes.push(n); } else { for(const a of ['placeholder','title']){ if(n.hasAttribute&&n.hasAttribute(a)) n.setAttribute(a,tr(n.getAttribute(a))); } } }
+ nodes.forEach(t=>{ const v=tr(t.nodeValue); if(v!==t.nodeValue) t.nodeValue=v; });
+}
+function langSwitcher(cls){ return `<div class="langsw ${cls||''}" data-notr>${Object.keys(LANGS).map(l=>`<button type="button" class="${l===LANG?'on':''}" onclick="setLang('${l}')" title="${LANGS[l]}">${l.toUpperCase()}</button>`).join('')}</div>`; }
+document.documentElement.lang=LANG;
+
+</script>
 <script>
 /* ===================== FIREBASE: GİRİŞ / KULLANICILAR ===================== */
 const FB_CFG={apiKey:"AIzaSyB6CPs28a7wWtiNzQ2a3oQ1fhB5WQh4IUY",authDomain:"dunasava-ee5f9.firebaseapp.com",projectId:"dunasava-ee5f9",storageBucket:"dunasava-ee5f9.firebasestorage.app",messagingSenderId:"607854232837",appId:"1:607854232837:web:1291517d6106f60bf8a36c"};
@@ -194,10 +447,10 @@ function showLogin(msg){
  <label><span>E-posta</span><input id="l_email" name="email" type="email" autocomplete="username" required placeholder="ad@dunasava.com"></label>
  <label><span>Şifre</span><input id="l_pw" name="pw" type="password" autocomplete="current-password" required minlength="6"></label>
  <label class="chk"><input id="l_rem" type="checkbox" checked> Bu cihazda oturumu açık tut</label>
- <div class="lerr" id="lerr">${msg||''}</div>
+ <div class="lerr" id="lerr">${tr(msg||'')}</div>
  <button class="btn pri" type="submit" id="lbtn">Giriş yap</button>
- <div class="actions"><button class="btn sm" type="button" onclick="sifremiUnuttum()">Şifremi unuttum</button></div></form>`;
- d.hidden=false;
+ <div class="actions" style="justify-content:space-between;align-items:center"><button class="btn sm" type="button" onclick="sifremiUnuttum()">Şifremi unuttum</button>${langSwitcher()}</div></form>`;
+ d.hidden=false; translateDOM(d);
  document.getElementById('lform').onsubmit=async e=>{ e.preventDefault(); const em=document.getElementById('l_email').value.trim().toLowerCase(); const pw=document.getElementById('l_pw').value; const btn=document.getElementById('lbtn'); btn.disabled=true; btn.textContent='Giriş yapılıyor…';
   try{ await auth.setPersistence(document.getElementById('l_rem').checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION); await auth.signInWithEmailAndPassword(em,pw); }
   catch(err){ const m={'auth/invalid-credential':'E-posta veya şifre hatalı.','auth/wrong-password':'E-posta veya şifre hatalı.','auth/user-not-found':'E-posta veya şifre hatalı.','auth/too-many-requests':'Çok fazla deneme; bir süre bekleyin veya şifre sıfırlayın.','auth/network-request-failed':'İnternet bağlantısı yok.'}[err.code]||('Giriş başarısız: '+err.code); document.getElementById('lerr').textContent=m; btn.disabled=false; btn.textContent='Giriş yap'; } };
@@ -218,7 +471,7 @@ auth.onAuthStateChanged(async u=>{
   document.getElementById('boot')?.remove();
   document.getElementById('login')?.setAttribute('hidden','');
   document.querySelector('.app').hidden=false;
-  document.getElementById('main').innerHTML='<div class="empty">Veriler yükleniyor…</div>';
+  document.getElementById('main').innerHTML='<div class="empty">'+tr('Veriler yükleniyor…')+'</div>';
   await loadAll();
   UNSUBS.push(fdb.collection('crm_users').onSnapshot(s=>{ USERS=s.docs.map(d=>({uid:d.id,...d.data()})); if(VIEW==='ayar'&&!MODAL) render(); }));
   render();
@@ -258,11 +511,12 @@ const ICON={
  arac:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l2-5h9l2 5M3 13v5h2M16 13h5v5h-2M5 18h11"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
  depo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-6 9 6v11H3z"/><path d="M8 21v-7h8v7M8 17h8"/></svg>',
  rapor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M6 16V9M11 16V4M16 16v-6"/></svg>',
+ teklif:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h2"/></svg>',
  ayar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.3 2h-4l-.4 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.5h4l.4-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>'
 };
 const NAV=[
  {g:'Genel'},{id:'ozet',t:'Özet',i:'ozet'},{id:'cari',t:'Cariler',i:'cari'},
- {g:'Ticaret'},{id:'satis',t:'Satış / Giden Mal',i:'satis'},{id:'alis',t:'Alış / Gelen Mal',i:'alis'},{id:'kasa',t:'Kasa & Tahsilat',i:'kasa'},
+ {g:'Ticaret'},{id:'satis',t:'Satış / Giden Mal',i:'satis'},{id:'alis',t:'Alış / Gelen Mal',i:'alis'},{id:'kasa',t:'Kasa & Tahsilat',i:'kasa'},{id:'teklif',t:'Teklif & Proforma',i:'teklif'},
  {g:'Ürün'},{id:'stok',t:'Stok',i:'stok'},{id:'fiyat',t:'Fiyat Listesi',i:'fiyat'},
  {g:'Varlıklar'},{id:'arac',t:'Araçlar',i:'arac'},{id:'depo',t:'Depo & Kira',i:'depo'},
  {g:'Yönetim'},{id:'rapor',t:'Raporlar',i:'rapor'},{id:'ayar',t:'Ayarlar & Yedek',i:'ayar'}
@@ -276,7 +530,7 @@ const n2=v=>Math.round((+v||0)*100)/100;
 function fmt(v,cur){ const c=cur||DB.ayar.paraBirimi; return new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(+v||0)+' '+c; }
 function fmtQ(v){ return new Intl.NumberFormat('de-DE',{maximumFractionDigits:2}).format(+v||0); }
 function dstr(d){ if(!d) return '—'; const [y,m,dd]=d.split('-'); return `${dd}.${m}.${y}`; }
-const AYLAR=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+const AYLAR=new Proxy([], {get:(t,k)=>AYLAR_L[LANG][k]});
 
 function seed(){
  const t=today();
@@ -284,7 +538,8 @@ function seed(){
  const p1=uid(),p2=uid(),p3=uid(),p4=uid(),p5=uid();
  const d1=uid(),d2=uid(); const a1=uid(),a2=uid();
  return {
-  ayar:{firma:'DunaSava d.o.o.',adres:'Hilandarska 141/1, Surčin, Beograd',email:'balkan@dunasava.com',paraBirimi:'EUR',kdv:20,satisNo:1003,alisNo:502,ornek:true},
+  teklif:[],
+  ayar:{...AYAR_VARSAYILAN,firma:'DunaSava d.o.o.',adres:'Hilandarska 141/1, Surčin, Beograd',email:'balkan@dunasava.com',paraBirimi:'EUR',kdv:20,satisNo:1003,alisNo:502,ornek:true},
   cari:[
    {id:c1,ad:'Putevi Srbije a.d.',tip:'musteri',sehir:'Beograd',ulke:'Srbija',tel:'+381 11 000 0000',email:'nabavka@putevi-srbije.rs',pib:'100001111',vade:30,notlar:'Örnek kayıt — otoyol projeleri'},
    {id:c2,ad:'Energoprojekt Niskogradnja',tip:'musteri',sehir:'Beograd',ulke:'Srbija',tel:'',email:'',pib:'100002222',vade:45,notlar:'Örnek kayıt'},
@@ -372,7 +627,7 @@ function seed(){
  };
 }
 /* ---- Firestore veri katmanı: crm/{koleksiyon}/items/{id}, ayarlar crm_meta/ayar ---- */
-const COLS=['cari','urun','alis','satis','kasa','stokHareket','arac','aracGider','depo','kira'];
+const COLS=['cari','urun','alis','satis','kasa','stokHareket','arac','aracGider','depo','kira','teklif'];
 let DB=null, SNAP={}, SAVING=false, DIRTY=false;
 const clone=o=>JSON.parse(JSON.stringify(o));
 async function loadAll(){
@@ -380,7 +635,7 @@ async function loadAll(){
  if(!ayarDoc.exists){ DB=seed(); SNAP={}; await save(true); return; }
  DB={ayar:ayarDoc.data()};
  for(const c of COLS){ const s=await fdb.collection('crm').doc(c).collection('items').get(); DB[c]=s.docs.map(d=>d.data()); }
- SNAP=snapOf(DB);
+ SNAP=snapOf(DB); ayarTamamla(); await save();
  // canlı eşitleme: başka cihazdan gelen değişiklikleri yansıt
  for(const c of COLS){ UNSUBS.push(fdb.collection('crm').doc(c).collection('items').onSnapshot(s=>{ if(SAVING) return; const arr=s.docs.map(d=>d.data()); const j=JSON.stringify(arr); if(j!==JSON.stringify(DB[c])){ DB[c]=arr; SNAP[c]=Object.fromEntries(arr.map(x=>[x.id,JSON.stringify(x)])); if(!MODAL) render(); } })); }
  UNSUBS.push(fdb.collection('crm_meta').doc('ayar').onSnapshot(d=>{ if(SAVING||!d.exists) return; if(JSON.stringify(d.data())!==JSON.stringify(DB.ayar)){ DB.ayar=d.data(); SNAP.ayar=JSON.stringify(DB.ayar); if(!MODAL) render(); } }));
@@ -436,7 +691,7 @@ function nextNo(tip){ if(tip==='satis'){ DB.ayar.satisNo=(DB.ayar.satisNo||1000)
 /* ===================== UI YARDIMCILARI ===================== */
 const $=s=>document.querySelector(s);
 let VIEW='ozet', PARAM=null;
-function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
+function toast(m){ const t=$('#toast'); t.textContent=tr(m); t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
 function go(v,p){ VIEW=v; PARAM=p||null; render(); window.scrollTo(0,0); }
 function renderNav(){
  $('#nav').innerHTML=NAV.map(n=>n.g?`<div class="grp">${n.g}</div>`:`<button class="${VIEW===n.id?'on':''}" onclick="go('${n.id}')">${ICON[n.i]}<span>${n.t}</span></button>`).join('');
@@ -457,7 +712,7 @@ function modal(title,bodyHtml,onOk,okLbl='Kaydet'){
  closeModal();
  const d=document.createElement('div'); d.className='modal-bg'; d.id='modalbg';
  d.innerHTML=`<div class="modal" role="dialog" aria-label="${esc(title)}"><header><h2>${title}</h2><button class="btn sm" onclick="closeModal()">Kapat</button></header><form id="mform" class="body"><div class="frm">${bodyHtml}</div></form><footer><button class="btn" type="button" onclick="closeModal()">Vazgeç</button><button class="btn pri" type="button" id="mok">${okLbl}</button></footer></div>`;
- document.body.appendChild(d); MODAL=d;
+ document.body.appendChild(d); MODAL=d; translateDOM(d);
  d.addEventListener('click',e=>{ if(e.target===d) closeModal(); });
  $('#mform').addEventListener('submit',e=>e.preventDefault());
  $('#mok').onclick=()=>{ const f=$('#mform'); const data={}; new FormData(f).forEach((v,k)=>data[k]=v); f.querySelectorAll('input[type=checkbox]').forEach(c=>data[c.name]=c.checked); const r=onOk(data,f); if(r!==false){ save(); closeModal(); render(); } };
@@ -519,13 +774,13 @@ function vCariDetay(id){
  const ekstre=[...belgeler.map(b=>({t:b.tarih,a:(c.tip==='musteri'?'Satış ':'Alış ')+b.no,borc:belgeToplam(b),alacak:0})),...odemeler.map(k=>({t:k.tarih,a:(k.tip==='tahsilat'?'Tahsilat':'Ödeme')+' · '+(k.hesap==='banka'?'Banka':'Kasa')+(k.aciklama?' · '+k.aciklama:''),borc:0,alacak:+k.tutar}))].sort((a,b)=>a.t.localeCompare(b.t)).map(r=>{ bak+=r.borc-r.alacak; return {...r,bak}; });
  return page(esc(c.ad),`${c.tip==='musteri'?'Müşteri':'Tedarikçi'} · ${esc(c.sehir||'')} ${esc(c.ulke||'')}`,`<button class="btn" onclick="go('cari')">← Liste</button><button class="btn" onclick="editCari('${id}')">Düzenle</button>${c.tip==='musteri'?`<button class="btn pri" onclick="editSatis(null,'${id}')">+ Satış</button><button class="btn" onclick="editKasa('tahsilat','${id}')">+ Tahsilat</button>`:`<button class="btn pri" onclick="editAlis(null,'${id}')">+ Alış</button><button class="btn" onclick="editKasa('odeme','${id}')">+ Ödeme</button>`}<button class="btn danger" onclick="delCari('${id}')">Sil</button>`,`
  <div class="tiles"><div class="tile ${cariBakiye(id)>0?'bad':'good'}"><div class="lbl">Bakiye</div><div class="val num">${fmt(cariBakiye(id))}</div></div><div class="tile"><div class="lbl">Toplam ${c.tip==='musteri'?'satış':'alış'}</div><div class="val num">${fmt(belgeler.reduce((a,b)=>a+belgeToplam(b),0))}</div></div><div class="tile"><div class="lbl">Toplam ${c.tip==='musteri'?'tahsilat':'ödeme'}</div><div class="val num">${fmt(odemeler.reduce((a,k)=>a+ +k.tutar,0))}</div></div></div>
- <div class="grid2"><div class="card"><header><h2>Bilgiler</h2></header><div class="body"><dl class="kv"><dt>Telefon</dt><dd>${esc(c.tel||'—')}</dd><dt>E-posta</dt><dd>${esc(c.email||'—')}</dd><dt>PIB / VKN</dt><dd>${esc(c.pib||'—')}</dd><dt>Vade</dt><dd>${c.vade||0} gün</dd><dt>Notlar</dt><dd>${esc(c.notlar||'—')}</dd></dl></div></div>
+ <div class="grid2"><div class="card"><header><h2>Bilgiler</h2></header><div class="body"><dl class="kv"><dt>Adres</dt><dd>${esc(c.adres||'—')}</dd><dt>Telefon</dt><dd>${esc(c.tel||'—')}</dd><dt>E-posta</dt><dd>${esc(c.email||'—')}</dd><dt>PIB / VKN</dt><dd>${esc(c.pib||'—')}</dd><dt>Vade</dt><dd>${c.vade||0} gün</dd><dt>Notlar</dt><dd>${esc(c.notlar||'—')}</dd></dl></div></div>
  <div class="card"><header><h2>Cari ekstre</h2></header>${tbl([{h:'Tarih',f:r=>dstr(r.t)},{h:'Açıklama',f:r=>esc(r.a),wrap:1},{h:'Borç',r:1,f:r=>r.borc?fmt(r.borc):''},{h:'Alacak',r:1,f:r=>r.alacak?fmt(r.alacak):''},{h:'Bakiye',r:1,f:r=>fmt(r.bak)}],ekstre)}</div></div>`);
 }
 function editCari(id){
  const c=id?cariById(id):{tip:'musteri',ulke:'Srbija',vade:30};
  modal(id?'Cariyi düzenle':'Yeni cari',
-  fld('Ad / Firma',inp('ad',c.ad),0,1)+fld('Tür',sel('tip',[{v:'musteri',t:'Müşteri'},{v:'tedarikci',t:'Tedarikçi'}],c.tip))+fld('Şehir',inp('sehir',c.sehir))+fld('Ülke',inp('ulke',c.ulke))+fld('Telefon',inp('tel',c.tel))+fld('E-posta',inp('email',c.email,'email'))+fld('PIB / VKN',inp('pib',c.pib))+fld('Vade (gün)',inp('vade',c.vade,'number'))+fld('Notlar',`<textarea name="notlar">${esc(c.notlar||'')}</textarea>`,1),
+  fld('Ad / Firma',inp('ad',c.ad),0,1)+fld('Tür',sel('tip',[{v:'musteri',t:'Müşteri'},{v:'tedarikci',t:'Tedarikçi'}],c.tip))+fld('Adres',inp('adres',c.adres),1)+fld('Şehir',inp('sehir',c.sehir))+fld('Ülke',inp('ulke',c.ulke))+fld('Telefon',inp('tel',c.tel))+fld('E-posta',inp('email',c.email,'email'))+fld('PIB / VKN',inp('pib',c.pib))+fld('Vade (gün)',inp('vade',c.vade,'number'))+fld('Notlar',`<textarea name="notlar">${esc(c.notlar||'')}</textarea>`,1),
   d=>{ if(!req(d,['ad'])) return false; d.vade=+d.vade||0; if(id) Object.assign(c,d); else DB.cari.push({id:uid(),...d}); toast('Cari kaydedildi'); });
 }
 function delCari(id){ confirmDel('Bu cari ve ona bağlı belge/ödeme kayıtlarının <b>tamamı</b> silinecek. Devam edilsin mi?',()=>{ DB.cari=DB.cari.filter(c=>c.id!==id); DB.satis=DB.satis.filter(s=>s.cariId!==id); DB.alis=DB.alis.filter(s=>s.cariId!==id); DB.kasa=DB.kasa.filter(k=>k.cariId!==id); PARAM=null; }); }
@@ -702,19 +957,120 @@ function vAyar(){
   <textarea id="yedekAlan" placeholder="Geri yüklemek için yedek JSON'u buraya yapıştırın" style="min-height:90px;font-family:var(--font-mono);font-size:12px"></textarea>
   <div class="actions"><button class="btn" onclick="yedekYukle()">Yedeği geri yükle</button>${a.ornek&&isAdmin()?`<button class="btn danger" onclick="ornekTemizle()">Örnek verileri temizle</button>`:''}${isAdmin()?`<button class="btn danger" onclick="sifirla()">Tüm verileri sil</button>`:''}</div>
  </div></div></div>
+ ${vFirmaEk()}
  ${vKullanicilar()}
  `);
 }
-function saveAyar(e){ e.preventDefault(); const d={}; new FormData(e.target).forEach((v,k)=>d[k]=v); d.kdv=+d.kdv||0; Object.assign(DB.ayar,d); save(); toast('Ayarlar kaydedildi'); render(); return false; }
+function saveAyar(e){ e.preventDefault(); const d={}; new FormData(e.target).forEach((v,k)=>d[k]=v); if('kdv' in d) d.kdv=+d.kdv||0; if('gecerlilik' in d) d.gecerlilik=+d.gecerlilik||0; Object.assign(DB.ayar,d); save(); toast('Ayarlar kaydedildi'); render(); return false; }
 function yedekKopyala(){ navigator.clipboard.writeText(JSON.stringify(DB)).then(()=>toast('Yedek panoya kopyalandı')).catch(()=>{ $('#yedekAlan').value=JSON.stringify(DB); toast('Pano kullanılamadı; yedek aşağıda gösterildi'); }); }
 function yedekIndir(){ $('#yedekAlan').value=JSON.stringify(DB,null,1); }
 function yedekYukle(){ try{ const j=JSON.parse($('#yedekAlan').value); if(!j.cari||!j.urun) throw 0; modal('Geri yükleme','<div class="full">Mevcut veriler yedekle değiştirilecek. Devam edilsin mi?</div>',()=>{ DB=j; save(); toast('Yedek yüklendi'); },'Evet, yükle'); }catch(e){ toast('Geçerli bir yedek JSON değil'); } }
 function ornekTemizle(){ modal('Örnek verileri temizle','<div class="full">Örnek cariler, ürünler, belgeler, araçlar ve depolar silinecek; firma ayarları korunur.</div>',()=>{ const a={...DB.ayar,ornek:false,satisNo:1000,alisNo:500}; DB=seed(); Object.keys(DB).forEach(k=>{ if(Array.isArray(DB[k])) DB[k]=[]; }); DB.ayar=a; save(); toast('Temiz başlangıç hazır'); },'Temizle'); }
 function sifirla(){ modal('Tüm verileri sil','<div class="full">Her şey silinecek ve uygulama örnek verilerle yeniden açılacak.</div>',()=>{ DB=seed(); save(); },'Sil'); }
 
+/* ===================== TEKLİF & PROFORMA ===================== */
+const AYAR_VARSAYILAN={pib:'114806397',maticni:'22072889',tel:'+381 63 8201207',web:'www.dunasava.com',imzalayan:'Senad Jašarević',logo:'',kase:'',teklifNo:0,proformaNo:0,
+ bankalar:[{id:'b_rsd',banka:'HALKBANK A.D. BEOGRAD',hesap:'155-91888-20',para:'RSD',iban:'',swift:''}],
+ teslimYeri:'Hilandarska 141/1, Surčin, Beograd',teslimSuresi:'Po potvrdi porudžbine',mensei:'Turska',odemeKosulu:'100% avans',gecerlilik:7};
+function ayarTamamla(){ DB.ayar={...AYAR_VARSAYILAN,...DB.ayar}; if(!Array.isArray(DB.ayar.bankalar)) DB.ayar.bankalar=AYAR_VARSAYILAN.bankalar; if(!DB.teklif) DB.teklif=[]; }
+const DURUM={taslak:{t:'Taslak',c:''},gonderildi:{t:'Gönderildi',c:'acc'},kabul:{t:'Kabul',c:'good'},red:{t:'Red',c:'bad'},satis:{t:'Satışa dönüştü',c:'good'}};
+const DOC_L={
+ sr:{teklif:'PONUDA',proforma:'PROFORMA INVOICE',no:'Broj',date:'Datum',valid:'Važi',days:'dana',buyer:'KUPAC',seller:'PRODAVAC',pib:'PIB',mat:'Matični broj',intro:'Sa zadovoljstvom dostavljamo našu ponudu za sledeće materijale prema Vašem zahtevu:',n:'Br.',desc:'OPIS',qty:'KOLIČINA',price:'JED. CENA',total:'UKUPNO BEZ PDV-a',tq:'UKUPNA KOLIČINA',base:'OSNOVICA',vat:'PDV',gt:'UKUPNO SA PDV-om',place:'Mesto isporuke',time:'Rok isporuke',origin:'Poreklo robe',pay:'Uslovi plaćanja',bank:'Banka:',acc:'Račun',regards:'Srdačan pozdrav:',note:'Ovaj dokument je proforma predračun i nije fiskalni niti komercijalni račun.',noteq:'Ovaj dokument je ponuda i nije fiskalni niti komercijalni račun.',disc:'Popust'},
+ en:{teklif:'QUOTATION',proforma:'PROFORMA INVOICE',no:'Invoice No',date:'Date',valid:'Validity',days:'days',buyer:'BUYER',seller:'SELLER',pib:'Tax ID (PIB)',mat:'Reg. No',intro:'We are pleased to submit our offer for the following materials as per your request:',n:'No.',desc:'DESCRIPTION',qty:'QUANTITY',price:'UNIT PRICE',total:'TOTAL EXCL. VAT',tq:'TOTAL QUANTITY',base:'NET AMOUNT',vat:'VAT',gt:'TOTAL INCL. VAT',place:'Place of delivery',time:'Delivery time',origin:'Origin of goods',pay:'Payment terms',bank:'Bank:',acc:'Account',regards:'Kind regards,',note:'This document is a proforma invoice and is not a fiscal or commercial invoice.',noteq:'This document is a quotation and is not a fiscal or commercial invoice.',disc:'Discount'},
+ tr:{teklif:'FİYAT TEKLİFİ',proforma:'PROFORMA FATURA',no:'Belge No',date:'Tarih',valid:'Geçerlilik',days:'gün',buyer:'ALICI',seller:'SATICI',pib:'PIB',mat:'Sicil No',intro:'Talebinize istinaden aşağıdaki malzemeler için teklifimizi sunarız:',n:'No',desc:'AÇIKLAMA',qty:'MİKTAR',price:'BİRİM FİYAT',total:'TOPLAM (KDV HARİÇ)',tq:'TOPLAM MİKTAR',base:'MATRAH',vat:'KDV',gt:'GENEL TOPLAM (KDV DAHİL)',place:'Teslim yeri',time:'Teslim süresi',origin:'Menşei',pay:'Ödeme koşulu',bank:'Banka:',acc:'Hesap',regards:'Saygılarımızla,',note:'Bu belge proforma faturadır; mali veya ticari fatura değildir.',noteq:'Bu belge fiyat teklifidir; mali veya ticari fatura değildir.',disc:'İskonto'}
+};
+const tkAra=k=>n2((+k.miktar||0)*(+k.fiyat||0)*(1-(+k.indirim||0)/100));
+const tkNet=t=>t.kalemler.reduce((a,k)=>a+tkAra(k),0);
+const tkKdv=t=>n2(tkNet(t)*(+t.kdv||0)/100);
+const tkTop=t=>n2(tkNet(t)+tkKdv(t));
+function tkNo(tip,tarih){ const d=tarih||today(); if(tip==='proforma'){ DB.ayar.proformaNo=(DB.ayar.proformaNo||0)+1; return `PI-${d.slice(8,10)}-${d.slice(5,7)}-${String(DB.ayar.proformaNo).padStart(3,'0')}`; } DB.ayar.teklifNo=(DB.ayar.teklifNo||0)+1; return `PN-${d.slice(0,4)}-${String(DB.ayar.teklifNo).padStart(3,'0')}`; }
+let tkFiltre='';
+function vTeklif(){
+ const list=DB.teklif.filter(t=>!tkFiltre||(tkFiltre==='teklif'||tkFiltre==='proforma'?t.tip===tkFiltre:t.durum===tkFiltre)).sort((a,b)=>b.tarih.localeCompare(a.tarih)||b.no.localeCompare(a.no));
+ const acik=DB.teklif.filter(t=>['taslak','gonderildi'].includes(t.durum));
+ const kabul=DB.teklif.filter(t=>t.durum==='kabul'||t.durum==='satis');
+ const bu=ym(today());
+ return page('Teklif & Proforma','Müşteriye fiyat teklifi hazırla, proformaya ve satışa dönüştür',`<button class="btn pri" onclick="editTeklif(null,'teklif')">+ Yeni teklif</button><button class="btn" onclick="editTeklif(null,'proforma')">+ Doğrudan proforma</button>`,`
+ <div class="tiles"><div class="tile warn"><div class="lbl">Açık teklifler</div><div class="val num">${acik.length}</div><div class="cap">${fmtCur(acik.reduce((a,t)=>a+tkTop(t),0),'EUR',acik)}</div></div><div class="tile good"><div class="lbl">Kabul edilen</div><div class="val num">${kabul.length}</div></div><div class="tile"><div class="lbl">Bu ay düzenlenen</div><div class="val num">${DB.teklif.filter(t=>ym(t.tarih)===bu).length}</div></div><div class="tile"><div class="lbl">Proformalar</div><div class="val num">${DB.teklif.filter(t=>t.tip==='proforma').length}</div></div></div>
+ <div class="card"><header><div class="search">${sel('tf',[{v:'',t:'Tümü'},{v:'teklif',t:'Teklifler'},{v:'proforma',t:'Proformalar'},{v:'taslak',t:'Taslak'},{v:'gonderildi',t:'Gönderildi'},{v:'kabul',t:'Kabul'},{v:'red',t:'Red'}],tkFiltre,`onchange="tkFiltre=this.value;render()" style="width:180px"`)}</div><span class="note">${list.length} belge</span></header>
+ ${tbl([{h:'No',f:t=>`<b>${esc(t.no)}</b><br><span class="pill ${t.tip==='proforma'?'acc':''}">${t.tip==='proforma'?'Proforma':'Teklif'}</span>`},{h:'Tarih',f:t=>dstr(t.tarih)},{h:'Müşteri',f:t=>esc(cariAd(t.cariId)),wrap:1},{h:'Kalem',f:t=>t.kalemler.map(k=>`${esc(k.ad||urunById(k.urunId)?.ad||'?')} × ${fmtQ(k.miktar)} ${esc(k.birim||'')}`).join('<br>'),wrap:1},{h:'Toplam',r:1,f:t=>`<b>${fmt(tkTop(t),t.para)}</b><br><span class="note">${fmt(tkNet(t),t.para)} + ${t.kdv||0}%</span>`},{h:'Geçerlilik',f:t=>dstr(addDays(t.tarih,+t.gecerlilik||0))},{h:'Durum',f:t=>`<span class="pill ${DURUM[t.durum]?.c||''}">${DURUM[t.durum]?.t||t.durum}</span>${t.satisId?`<br><span class="note">→ ${esc(DB.satis.find(s=>s.id===t.satisId)?.no||'')}</span>`:''}${t.proformaId?`<br><span class="note">→ ${esc(DB.teklif.find(s=>s.id===t.proformaId)?.no||'')}</span>`:''}`},{h:'',f:t=>`<div class="actions"><button class="btn sm pri" onclick="event.stopPropagation();yazdirTeklif('${t.id}')">Yazdır / PDF</button><button class="btn sm" onclick="event.stopPropagation();editTeklif('${t.id}')">Düzenle</button>${t.tip==='teklif'&&!t.proformaId?`<button class="btn sm" onclick="event.stopPropagation();proformayaDonustur('${t.id}')">Proformaya dönüştür</button>`:''}${t.durum!=='satis'?`<button class="btn sm" onclick="event.stopPropagation();satisaDonustur('${t.id}')">Satışa dönüştür</button>`:''}<button class="btn sm" onclick="event.stopPropagation();durumMenu('${t.id}')">Durum</button><button class="btn sm danger" onclick="event.stopPropagation();delTeklif('${t.id}')">Sil</button></div>`}],list,{empty:'Henüz teklif yok. "+ Yeni teklif" ile başlayın.'})}</div>`);
+}
+function fmtCur(v,cur,arr){ const paralar=[...new Set((arr||[]).map(t=>t.para))]; return paralar.length===1?fmt(v,paralar[0]):(paralar.length?paralar.map(p=>fmt((arr||[]).filter(t=>t.para===p).reduce((a,t)=>a+tkTop(t),0),p)).join(' · '):fmt(0,cur)); }
+function tkLineRows(kalemler){
+ const opts=[{v:'',t:'— ürün seç —'},...DB.urun.map(u=>({v:u.id,t:`${u.kod} · ${u.ad}`})),{v:'_serbest',t:'Serbest kalem'}];
+ return kalemler.map((k,i)=>`<tr data-i="${i}"><td style="min-width:260px">${sel('urun'+i,opts,k.urunId||'',`onchange="tkUrun(this)"`)}<input name="ad${i}" placeholder="Belge üzerindeki açıklama" value="${esc(k.ad||'')}" style="margin-top:4px"></td><td><input name="miktar${i}" type="number" step="any" value="${k.miktar??''}" oninput="tkTotal()" style="width:90px"></td><td><input name="birim${i}" value="${esc(k.birim||'m²')}" style="width:60px"></td><td><input name="fiyat${i}" type="number" step="0.01" value="${k.fiyat??''}" oninput="tkTotal()" style="width:100px"></td><td><input name="indirim${i}" type="number" step="0.1" value="${k.indirim??0}" oninput="tkTotal()" style="width:64px"></td><td class="r num" id="tl${i}">${fmt(tkAra(k),document.querySelector('[name=para]')?.value)}</td><td><button type="button" class="btn sm" onclick="tkDel(${i})">×</button></td></tr>`).join('');
+}
+function tkUrun(s){ const i=s.closest('tr').dataset.i; const u=urunById(s.value); const q=n=>document.querySelector(`[name=${n}${i}]`); if(u){ if(!q('ad').value) q('ad').value=u.ad+(u.spec?' — '+u.spec:''); if(!q('fiyat').value) q('fiyat').value=u.satisFiyat; q('birim').value=u.birim; } tkTotal(); }
+function tkTotal(){ const para=document.querySelector('[name=para]').value; let s=0,q=0; document.querySelectorAll('#tklines tr[data-i]').forEach(tr=>{ const i=tr.dataset.i; const g=n=>+document.querySelector(`[name=${n}${i}]`).value||0; const v=n2(g('miktar')*g('fiyat')*(1-g('indirim')/100)); s+=v; q+=g('miktar'); document.getElementById('tl'+i).textContent=fmt(v,para); }); const kdv=+document.querySelector('[name=kdv]').value||0; document.getElementById('tkAra').textContent=fmt(s,para); document.getElementById('tkKdv').textContent=fmt(n2(s*kdv/100),para); document.getElementById('tkTop').textContent=fmt(n2(s*(1+kdv/100)),para); }
+function tkAdd(){ const tb=document.getElementById('tklines'); const i=tb.querySelectorAll('tr[data-i]').length; tb.insertAdjacentHTML('beforeend',tkLineRows([{miktar:'',fiyat:'',indirim:0,birim:'m²'}]).replace(/data-i="0"/,`data-i="${i}"`).replace(/(urun|ad|miktar|birim|fiyat|indirim|tl)0|tkDel\(0\)/g,m=>m.replace('0',i))); translateDOM(tb); }
+function tkDel(i){ document.querySelector(`#tklines tr[data-i="${i}"]`)?.remove(); tkTotal(); }
+function tkRead(){ const out=[]; document.querySelectorAll('#tklines tr[data-i]').forEach(tr=>{ const i=tr.dataset.i; const g=n=>document.querySelector(`[name=${n}${i}]`).value; if(+g('miktar')) out.push({urunId:g('urun')==='_serbest'?'':g('urun'),ad:g('ad'),miktar:+g('miktar'),birim:g('birim'),fiyat:+g('fiyat'),indirim:+g('indirim')||0}); }); return out; }
+function editTeklif(id,tip){
+ ayarTamamla();
+ const a=DB.ayar;
+ const t=id?DB.teklif.find(x=>x.id===id):{tip:tip||'teklif',no:'',tarih:today(),cariId:'',para:'RSD',kdv:a.kdv,gecerlilik:a.gecerlilik,dil:'sr',teslimYeri:a.teslimYeri,teslimSuresi:a.teslimSuresi,mensei:a.mensei,odemeKosulu:a.odemeKosulu,bankaId:a.bankalar[0]?.id||'',imzalayan:a.imzalayan,not:'',durum:'taslak',kalemler:[{miktar:'',fiyat:'',indirim:0,birim:'m²'}]};
+ const caris=DB.cari.filter(c=>c.tip==='musteri').sort((a,b)=>a.ad.localeCompare(b.ad,'tr')).map(c=>({v:c.id,t:c.ad}));
+ modal(id?(t.tip==='proforma'?'Proformayı düzenle':'Teklifi düzenle'):(t.tip==='proforma'?'Yeni proforma':'Yeni teklif'),
+  fld('Belge türü',sel('tip',[{v:'teklif',t:'Teklif'},{v:'proforma',t:'Proforma'}],t.tip))+fld('Belge no (boşsa otomatik)',inp('no',t.no))+fld('Tarih',inp('tarih',t.tarih,'date'),0,1)+fld('Müşteri',sel('cariId',[{v:'',t:'— seç —'},...caris],t.cariId),0,1)+fld('Para birimi',sel('para',[{v:'RSD',t:'RSD'},{v:'EUR',t:'EUR'},{v:'USD',t:'USD'},{v:'TRY',t:'TRY'}],t.para,'onchange="tkTotal()"'))+fld('KDV (PDV) %',inp('kdv',t.kdv,'number','oninput="tkTotal()"'))+fld('Geçerlilik (gün)',inp('gecerlilik',t.gecerlilik,'number'))+fld('Belge dili',sel('dil',[{v:'sr',t:'Srpski'},{v:'en',t:'English'},{v:'tr',t:'Türkçe'}],t.dil))+fld('Teslim yeri',inp('teslimYeri',t.teslimYeri))+fld('Teslim süresi',inp('teslimSuresi',t.teslimSuresi))+fld('Menşei',inp('mensei',t.mensei))+fld('Ödeme koşulu',inp('odemeKosulu',t.odemeKosulu))+fld('Banka hesabı',sel('bankaId',[{v:'',t:'— gösterme —'},...a.bankalar.map(b=>({v:b.id,t:`${b.banka} · ${b.hesap||b.iban} (${b.para})`}))],t.bankaId))+fld('İmzalayan',inp('imzalayan',t.imzalayan))+fld('Durum',sel('durum',Object.entries(DURUM).filter(([k])=>k!=='satis').map(([k,v])=>({v:k,t:v.t})),t.durum))+fld('Not (belgede görünür)',`<textarea name="not">${esc(t.not||'')}</textarea>`,1)+
+  `<div class="lines"><table><thead><tr><th>Ürün / açıklama</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>İsk. %</th><th class="r">Tutar</th><th></th></tr></thead><tbody id="tklines">${tkLineRows(t.kalemler)}</tbody><tfoot><tr><td colspan="7"><button type="button" class="btn sm" onclick="tkAdd()">+ Kalem ekle</button></td></tr><tr><td colspan="5" class="r">Ara toplam</td><td class="r num" id="tkAra"></td><td></td></tr><tr><td colspan="5" class="r">KDV</td><td class="r num" id="tkKdv"></td><td></td></tr><tr><td colspan="5" class="r"><b>Genel toplam</b></td><td class="r num" id="tkTop"></td><td></td></tr></tfoot></table></div>`,
+  d=>{ const kal=tkRead(); if(!req(d,['tarih','cariId'])) return false; if(!kal.length){ toast('En az bir kalem girin'); return false; }
+   const rec={tip:d.tip,no:d.no||(id&&t.tip===d.tip?t.no:tkNo(d.tip,d.tarih)),tarih:d.tarih,cariId:d.cariId,para:d.para,kdv:+d.kdv||0,gecerlilik:+d.gecerlilik||0,dil:d.dil,teslimYeri:d.teslimYeri,teslimSuresi:d.teslimSuresi,mensei:d.mensei,odemeKosulu:d.odemeKosulu,bankaId:d.bankaId,imzalayan:d.imzalayan,not:d.not,durum:id&&t.durum==='satis'?'satis':d.durum,kalemler:kal};
+   if(id) Object.assign(t,rec); else DB.teklif.push({id:uid(),...rec,olusturma:today()}); toast('Belge kaydedildi'); });
+ tkTotal();
+}
+function durumMenu(id){ const t=DB.teklif.find(x=>x.id===id); modal('Durum güncelle',fld('Durum',sel('durum',Object.entries(DURUM).map(([k,v])=>({v:k,t:v.t})),t.durum),1),d=>{ t.durum=d.durum; toast('Durum güncellendi'); },'Kaydet'); }
+function proformayaDonustur(id){ const t=DB.teklif.find(x=>x.id===id); const p={...clone(t),id:uid(),tip:'proforma',no:tkNo('proforma',today()),tarih:today(),durum:'gonderildi',teklifId:t.id,olusturma:today()}; delete p.proformaId; DB.teklif.push(p); t.proformaId=p.id; if(t.durum==='taslak'||t.durum==='gonderildi') t.durum='kabul'; save(); render(); toast('Proforma oluşturuldu: '+p.no); yazdirTeklif(p.id); }
+function satisaDonustur(id){ const t=DB.teklif.find(x=>x.id===id); modal('Satışa dönüştür',`<div class="full">${esc(t.no)} belgesi satış belgesine dönüştürülecek: stoktan düşer, cariye borç yazar. Serbest kalemler hizmet olarak eklenir.</div>`+fld('Satış tarihi',inp('tarih',today(),'date'))+fld('Vade tarihi',inp('vade',addDays(today(),cariById(t.cariId)?.vade||0),'date')),d=>{ const kal=t.kalemler.map(k=>k.urunId?{urunId:k.urunId,miktar:k.miktar,fiyat:n2(k.fiyat*(1-(k.indirim||0)/100))}:{urunId:'_hizmet',ad:k.ad||'Hizmet',miktar:k.miktar,fiyat:n2(k.fiyat*(1-(k.indirim||0)/100))}); const s={id:uid(),no:nextNo('satis'),tarih:d.tarih,cariId:t.cariId,kalemler:kal,kdv:t.kdv,vade:d.vade,not:(t.tip==='proforma'?'Proforma ':'Teklif ')+t.no+(t.para!==DB.ayar.paraBirimi?' · '+t.para:'')}; DB.satis.push(s); t.durum='satis'; t.satisId=s.id; toast('Satış oluşturuldu: '+s.no); },'Dönüştür'); }
+function delTeklif(id){ confirmDel('Belge silinecek.',()=>{ DB.teklif=DB.teklif.filter(t=>t.id!==id); }); }
+/* ---- Yazdırılabilir belge ---- */
+function teklifHTML(t){
+ ayarTamamla(); const a=DB.ayar, L=DOC_L[t.dil]||DOC_L.sr, c=cariById(t.cariId)||{}, b=a.bankalar.find(x=>x.id===t.bankaId);
+ const f=v=>new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v)+' '+t.para;
+ const tq=t.kalemler.reduce((s,k)=>s+ +k.miktar,0), birimler=[...new Set(t.kalemler.map(k=>k.birim))];
+ const title=t.tip==='proforma'?L.proforma:L.teklif;
+ const logo=a.logo?`<img src="${a.logo}" style="max-height:150px;max-width:300px">`:`<div class="tlogo"><div class="wave"></div><b>DUNASAVA DOO</b><small>GEOSYNTHETICS</small></div>`;
+ const rows=t.kalemler.map((k,i)=>`<tr><td class="c">${i+1}</td><td>${esc(k.ad||urunById(k.urunId)?.ad||'')}${k.indirim?` <small>(${L.disc} ${k.indirim}%)</small>`:''}</td><td class="c">${fmtQ(k.miktar)} ${esc(k.birim||'')}</td><td class="c">${f(k.fiyat)}</td><td class="r">${f(tkAra(k))}</td></tr>`).join('');
+ return `<!doctype html><html lang="${t.dil}"><head><meta charset="utf-8"><title>${esc(title)} ${esc(t.no)}</title><style>
+ @page{size:A4;margin:14mm 12mm}*{box-sizing:border-box}body{font-family:"DejaVu Sans","Segoe UI",Arial,sans-serif;color:#1a1a1a;font-size:12.5px;margin:0;background:#fff}
+ .pg{max-width:800px;margin:0 auto;padding:18px 20px 0}.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+ .tlogo{width:190px;height:190px;border:3px solid #1e3a6e;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#1e3a6e;text-align:center}.tlogo b{font-size:19px;letter-spacing:.5px}.tlogo small{font-size:12px;letter-spacing:2px;margin-top:4px;border-top:2px solid #1e3a6e;padding-top:4px}.tlogo .wave{width:110px;height:34px;border-radius:50% 50% 0 0;border-top:5px solid #5aa0d8;border-bottom:5px solid #1e3a6e;margin-bottom:10px;opacity:.9}
+ .meta{flex:1;max-width:360px}.meta h1{font-size:34px;color:#1a3366;margin:34px 0 20px;letter-spacing:.5px;font-weight:800}.meta table{border-collapse:collapse}.meta td{padding:6px 10px 6px 0;font-weight:700;width:120px}.meta td+td{font-weight:400}
+ .boxes{display:flex;gap:30px;margin-top:10px}.box{flex:1;border:1px solid #cfd6e0}.box h3{margin:0;background:#1e3a6e;color:#fff;font-size:12px;letter-spacing:1px;padding:10px 12px}.box div{padding:14px 12px;min-height:150px;line-height:1.6}
+ .intro{margin:28px 0 12px}
+ table.it{width:100%;border-collapse:collapse}.it th{background:#1e3a6e;color:#fff;text-align:left;padding:12px 10px;font-size:12px;letter-spacing:.5px}.it td{padding:14px 10px;border:1px solid #d7dde6;vertical-align:middle}.it td.c{text-align:center}.it td.r{text-align:right}.it tfoot td{background:#f5f6f8;font-weight:700;border-color:#d7dde6}
+ .foot{display:flex;justify-content:space-between;gap:30px;margin-top:70px;align-items:flex-start}.terms{flex:1}.terms table td{padding:6px 10px 6px 0}.terms td:first-child{font-weight:700;width:150px}.terms td:nth-child(2){width:14px}
+ .bank{width:300px;border:1px solid #cfd6e0;border-top:7px solid #1e3a6e;position:relative}.bank table{width:100%;border-collapse:collapse}.bank td{padding:8px 10px;font-size:12px;border-bottom:1px solid #e3e7ed}.bank td+td{font-weight:700;font-size:15px;text-align:right}.bank td:first-child{color:#555}
+ .sig{display:flex;justify-content:space-between;align-items:flex-end;margin-top:60px}.sig .note{font-size:11px;color:#333;margin-top:18px}.kase{max-height:150px;max-width:300px}
+ .bot{background:#1e3a6e;color:#fff;display:flex;justify-content:space-between;padding:16px 36px;margin-top:40px;font-size:13px}
+ @media print{.noprint{display:none}}
+ </style></head><body><div class="pg">
+ <div class="hd">${logo}<div class="meta"><h1>${esc(title)}</h1><table><tr><td>${L.no}</td><td>${esc(t.no)}</td></tr><tr><td>${L.date}</td><td>${dstr(t.tarih)}</td></tr><tr><td>${L.valid}</td><td>${t.gecerlilik} ${L.days}</td></tr></table></div></div>
+ <div class="boxes"><div class="box"><h3>${L.buyer}</h3><div><b>${esc(c.ad||'')}</b><br><br>${esc(c.adres||'')}${c.adres?'<br>':''}${esc([c.sehir,c.ulke].filter(Boolean).join(', '))}${c.pib?`<br><br>${L.pib}: ${esc(c.pib)}`:''}</div></div><div class="box"><h3>${L.seller}</h3><div><b>${esc(a.firma||'DUNASAVA DOO')}</b><br><br>${esc(a.adres||'')}<br><br>${L.pib}: ${esc(a.pib||'')}<br>${L.mat}: ${esc(a.maticni||'')}</div></div></div>
+ <p class="intro">${L.intro}</p>
+ <table class="it"><thead><tr><th style="width:40px">${L.n}</th><th>${L.desc}</th><th style="width:110px;text-align:center">${L.qty}</th><th style="width:130px;text-align:center">${L.price}<br><small>(${t.para}${birimler.length===1?'/'+esc(birimler[0]):''})</small></th><th style="width:150px;text-align:right">${L.total}</th></tr></thead>
+ <tbody>${rows}</tbody>
+ <tfoot><tr><td></td><td class="c">${L.tq}</td><td class="c">${birimler.length===1?fmtQ(tq)+' '+esc(birimler[0]):''}</td><td class="c">${L.base}</td><td class="r">${f(tkNet(t))}</td></tr><tr><td></td><td></td><td></td><td class="c">${L.vat} ${t.kdv}%</td><td class="r">${f(tkKdv(t))}</td></tr><tr><td></td><td></td><td></td><td class="c">${L.gt}</td><td class="r">${f(tkTop(t))}</td></tr></tfoot></table>
+ ${t.not?`<p style="margin-top:14px;white-space:pre-line">${esc(t.not)}</p>`:''}
+ <div class="foot"><div class="terms"><table><tr><td>${L.place}</td><td>:</td><td>${esc(t.teslimYeri||'')}</td></tr><tr><td>${L.time}</td><td>:</td><td>${esc(t.teslimSuresi||'')}</td></tr><tr><td>${L.origin}</td><td>:</td><td>${esc(t.mensei||'')}</td></tr>${t.odemeKosulu?`<tr><td>${L.pay}</td><td>:</td><td>${esc(t.odemeKosulu)}</td></tr>`:''}</table></div>
+ ${b?`<div class="bank"><table><tr><td>${L.bank}</td><td>${esc(b.banka)}</td></tr>${b.hesap?`<tr><td>${L.acc} (${esc(b.para)}):</td><td>${esc(b.hesap)}</td></tr>`:''}${b.iban?`<tr><td>IBAN:</td><td style="font-size:13px">${esc(b.iban)}</td></tr>`:''}${b.swift?`<tr><td>SWIFT:</td><td>${esc(b.swift)}</td></tr>`:''}</table></div>`:''}</div>
+ <div class="sig"><div>${L.regards}<br><b>${esc(t.imzalayan||'')}</b><div class="note">${t.tip==='proforma'?L.note:L.noteq}</div></div><div>${a.kase?`<img class="kase" src="${a.kase}">`:''}</div></div>
+ </div><div class="bot"><span>${esc(a.email||'')}</span><span>${esc(a.tel||'')}</span><span>${esc(a.web||'')}</span></div>
+ <div class="noprint" style="text-align:center;padding:18px"><button onclick="print()" style="padding:10px 22px;font-size:14px;border:0;background:#1e3a6e;color:#fff;border-radius:6px;cursor:pointer">PDF / Print</button></div>
+ </body></html>`;
+}
+function yazdirTeklif(id){ const t=DB.teklif.find(x=>x.id===id); if(!t) return; const w=window.open('','_blank'); if(!w){ toast('Açılır pencere engellendi; tarayıcıda izin verin'); return; } w.document.open(); w.document.write(teklifHTML(t)); w.document.close(); }
+/* ---- Ayarlar: firma kimliği, banka hesapları, logo/kaşe ---- */
+function vFirmaEk(){
+ ayarTamamla(); const a=DB.ayar;
+ return `<div class="card"><header><h2>Belge kimliği (teklif / proforma)</h2></header><form class="body frm" onsubmit="return saveAyar(event)">${fld('PIB',inp('pib',a.pib))}${fld('Matični broj',inp('maticni',a.maticni))}${fld('Telefon',inp('tel',a.tel))}${fld('Web',inp('web',a.web))}${fld('İmzalayan',inp('imzalayan',a.imzalayan))}${fld('Teklif geçerliliği (gün)',inp('gecerlilik',a.gecerlilik,'number'))}${fld('Varsayılan teslim yeri',inp('teslimYeri',a.teslimYeri))}${fld('Varsayılan teslim süresi',inp('teslimSuresi',a.teslimSuresi))}${fld('Varsayılan menşei',inp('mensei',a.mensei))}${fld('Varsayılan ödeme koşulu',inp('odemeKosulu',a.odemeKosulu))}${fld('Logo (PNG/JPG)',`<input type="file" accept="image/*" onchange="resimAyar(this,'logo')">${a.logo?`<img src="${a.logo}" style="max-height:60px;margin-top:6px"> <button type="button" class="btn sm" onclick="DB.ayar.logo='';save();render()">Kaldır</button>`:'<span class="note">Yüklenmezse metin logo basılır</span>'}`)}${fld('Kaşe / imza (PNG)',`<input type="file" accept="image/*" onchange="resimAyar(this,'kase')">${a.kase?`<img src="${a.kase}" style="max-height:60px;margin-top:6px"> <button type="button" class="btn sm" onclick="DB.ayar.kase='';save();render()">Kaldır</button>`:''}`)}<div class="full"><button class="btn pri" type="submit">Kaydet</button></div></form></div>
+ <div class="card"><header><h2>Banka hesapları</h2><button class="btn sm pri" onclick="editBanka()">+ Hesap</button></header>${tbl([{h:'Banka',f:b=>`<b>${esc(b.banka)}</b>`},{h:'Hesap no',f:b=>esc(b.hesap||'—')},{h:'IBAN',f:b=>esc(b.iban||'—')},{h:'SWIFT',f:b=>esc(b.swift||'—')},{h:'Para birimi',f:b=>b.para},{h:'',f:b=>`<button class="btn sm" onclick="editBanka('${b.id}')">Düzenle</button> <button class="btn sm danger" onclick="DB.ayar.bankalar=DB.ayar.bankalar.filter(x=>x.id!=='${b.id}');save();render()">Sil</button>`}],a.bankalar,{empty:'Banka hesabı yok'})}</div>`;
+}
+function editBanka(id){ const b=id?DB.ayar.bankalar.find(x=>x.id===id):{para:'RSD'}; modal(id?'Hesabı düzenle':'Banka hesabı',fld('Banka adı',inp('banka',b.banka),0,1)+fld('Para birimi',sel('para',['RSD','EUR','USD','TRY'].map(x=>({v:x,t:x})),b.para))+fld('Hesap no (yerel)',inp('hesap',b.hesap))+fld('IBAN',inp('iban',b.iban))+fld('SWIFT / BIC',inp('swift',b.swift)),d=>{ if(!req(d,['banka'])) return false; if(id) Object.assign(b,d); else DB.ayar.bankalar.push({id:uid(),...d}); toast('Hesap kaydedildi'); }); }
+function resimAyar(inp_,alan){ const f=inp_.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{ const im=new Image(); im.onload=()=>{ const c=document.createElement('canvas'); const s=Math.min(1,600/im.width,300/im.height); c.width=im.width*s; c.height=im.height*s; c.getContext('2d').drawImage(im,0,0,c.width,c.height); DB.ayar[alan]=c.toDataURL('image/png'); save(); render(); toast('Görsel kaydedildi'); }; im.src=e.target.result; }; r.readAsDataURL(f); }
+
 /* ===================== RENDER ===================== */
-const VIEWS={ozet:vOzet,cari:vCari,satis:()=>vBelge('satis'),alis:()=>vBelge('alis'),kasa:vKasa,stok:vStok,fiyat:vFiyat,arac:vArac,depo:vDepo,rapor:vRapor,ayar:vAyar};
-function render(){ if(!ME||!DB) return; renderNav(); $('#main').innerHTML=(VIEWS[VIEW]||vOzet)(); const ui=$('#uinfo'); if(ui) ui.innerHTML=`<div><b>${esc(ME.ad||ME.email)}</b><span id="syncdot" class="syncdot"></span>${ME.rol==='admin'?'Yönetici':'Kullanıcı'} · bulut</div><button onclick="logout()">Çıkış</button>`; }
+const VIEWS={ozet:vOzet,cari:vCari,satis:()=>vBelge('satis'),alis:()=>vBelge('alis'),kasa:vKasa,stok:vStok,fiyat:vFiyat,arac:vArac,depo:vDepo,rapor:vRapor,ayar:vAyar,teklif:vTeklif};
+function render(){ if(!ME||!DB) return; renderNav(); $('#main').innerHTML=(VIEWS[VIEW]||vOzet)(); const ls=$('#langslot'); if(ls) ls.innerHTML=langSwitcher(); const ui=$('#uinfo'); if(ui) ui.innerHTML=`<div><b>${esc(ME.ad||ME.email)}</b><span id="syncdot" class="syncdot"></span>${ME.rol==='admin'?'Yönetici':'Kullanıcı'} · bulut</div><button onclick="logout()">Çıkış</button>`; translateDOM(document.querySelector('.app')); }
 try{ const h=location.hash.replace('#',''); if(VIEWS[h]) VIEW=h; }catch(e){}
 /* oturum: auth.onAuthStateChanged yönetir */
 
